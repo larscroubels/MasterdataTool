@@ -10,26 +10,28 @@
     <style>
         :root {
             --primary: #1e293b;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
+            --accent: #009639; /* FEBELCO GROEN */
+            --accent-hover: #007a2e;
             --bg: #f8fafc;
             --card: #ffffff;
             --text: #334155;
             --border: #e2e8f0;
             --tab-bg: #f1f5f9;
             --subtle-text: #64748b;
+            --printer-bg: #ffffff;
         }
 
         [data-theme="dark"] {
-            --primary: #f1f5f9;
-            --accent: #60a5fa;
-            --accent-hover: #3b82f6;
+            --primary: #f8fafc;
+            --accent: #00b344;
+            --accent-hover: #009639;
             --bg: #0f172a;
             --card: #1e293b;
-            --text: #cbd5e1;
+            --text: #e2e8f0;
             --border: #334155;
-            --tab-bg: #334155;
+            --tab-bg: #0f172a;
             --subtle-text: #94a3b8;
+            --printer-bg: #1e293b;
         }
 
         body {
@@ -43,21 +45,20 @@
             align-items: center;
             min-height: 100vh;
             padding: 40px 20px;
-            transition: background 0.3s, color 0.3s;
-            position: relative;
+            transition: all 0.3s ease;
         }
 
         .theme-switch-wrapper {
             position: absolute;
             top: 20px;
             right: 20px;
-            display: flex;
-            align-items: center;
             cursor: pointer;
             z-index: 100;
+            background: var(--card);
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
-        #theme-icon { font-size: 1.5rem; }
 
         .container {
             background: var(--card);
@@ -67,6 +68,7 @@
             width: 100%;
             max-width: 1100px;
             margin-bottom: 80px;
+            border: 1px solid var(--border);
         }
 
         h2 {
@@ -76,10 +78,6 @@
             font-weight: 900;
             letter-spacing: 2px;
             font-size: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
         }
 
         .nav-tabs {
@@ -89,6 +87,7 @@
             border-radius: 12px;
             margin-bottom: 35px;
             gap: 5px;
+            border: 1px solid var(--border);
         }
 
         .tab-btn {
@@ -132,12 +131,10 @@
             padding: 12px;
             border: 2px solid var(--border);
             border-radius: 8px;
-            font-size: 0.9rem;
             background-color: var(--card);
             color: var(--text);
-            outline: none;
-            text-transform: uppercase;
             font-weight: 600;
+            text-transform: uppercase;
         }
 
         .btn-calc {
@@ -153,6 +150,8 @@
             transition: all 0.2s;
         }
 
+        .btn-calc:hover { background: var(--accent-hover); }
+
         .results-container {
             margin-top: 40px;
             overflow-x: auto;
@@ -164,95 +163,71 @@
         th { background: var(--tab-bg); padding: 16px; font-size: 0.75rem; font-weight: 900; border-bottom: 2px solid var(--border); }
         td { padding: 18px 16px; font-size: 1rem; font-weight: 700; border-bottom: 1px solid var(--border); }
 
-        .badge-id {
-            background: #fef2f2;
-            color: #dc2626;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-weight: 900;
-        }
+        .badge-id { padding: 4px 10px; border-radius: 6px; font-family: monospace; }
+        .badge-red { background: #fef2f2; color: #dc2626; }
+        .badge-green { background: #f0fdf4; color: #009639; }
 
-        .subtle-tip {
-            margin-top: 15px;
-            font-size: 0.75rem;
-            color: var(--subtle-text);
-            font-weight: 700;
-            display: none;
-            align-items: center;
-            gap: 8px;
-        }
+        .subtle-tip { margin-top: 15px; font-size: 0.75rem; color: var(--subtle-text); font-weight: 700; display: none; align-items: center; gap: 8px; }
+        .assignment-dropdown { margin-top: 15px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: none; }
+        .dropdown-header { background: var(--tab-bg); padding: 12px 15px; cursor: pointer; display: flex; justify-content: space-between; font-weight: 900; font-size: 0.75rem; color: var(--accent); }
+        .dropdown-content { padding: 15px; font-size: 0.75rem; color: var(--text); font-weight: 700; display: none; line-height: 1.6; background: var(--card); border-top: 1px solid var(--border); }
+        .sub-info { display: block; margin-top: 5px; color: var(--accent); font-weight: 900; }
 
-        .assignment-dropdown {
-            margin-top: 15px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            display: none;
-        }
-
-        .dropdown-header {
-            background: var(--tab-bg);
-            padding: 12px 15px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 900;
-            font-size: 0.75rem;
-            color: var(--accent);
-        }
-
-        .dropdown-content {
-            padding: 15px;
-            font-size: 0.75rem;
-            color: var(--subtle-text);
-            font-weight: 700;
-            display: none;
-            line-height: 1.6;
-            background: var(--card);
-        }
-
-        .assignment-line {
-            display: block;
-            margin-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-
-        .assignment-line:last-child {
-            margin-bottom: 0;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .sub-info {
-            display: block;
-            margin-left: 15px;
-            color: var(--text);
-            font-weight: 800;
-        }
-
-        .footer-info {
+        .printer-hub {
             position: fixed;
-            bottom: 15px;
-            left: 20px;
-            font-size: 0.7rem;
-            opacity: 0.8;
-            font-weight: 700;
-            line-height: 1.4;
-            background: var(--tab-bg);
-            padding: 10px;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .printer-label {
+            background: var(--card);
+            color: var(--text);
+            padding: 8px 16px;
             border-radius: 8px;
+            font-weight: 900;
+            font-size: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border: 1px solid var(--border);
-            z-index: 50;
+            pointer-events: none;
         }
 
-        .footer-info b { color: var(--accent); font-weight: 900; }
-
-        @media (max-width: 600px) {
-            .footer-info { position: static; margin-top: 20px; width: fit-content; }
+        .printer-trigger {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
         }
+
+        .printer-popup {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            background: var(--printer-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .printer-hub.active .printer-popup { opacity: 1; visibility: visible; transform: translateY(0); }
+        .p-code { display: block; font-size: 1.1rem; color: var(--accent); font-weight: 900; }
     </style>
 </head>
 <body>
@@ -261,18 +236,33 @@
     <span id="theme-icon">☀️</span>
 </div>
 
+<div class="printer-hub" id="printerHub">
+    <div class="printer-label">LABELPRINTERS</div>
+    <div class="printer-popup">
+        <div style="margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+            <span style="font-size:0.65rem; font-weight:900; opacity:0.6;">LOGISTIEK RECEPTIE</span>
+            <span class="p-code">LT-0471</span>
+        </div>
+        <div>
+            <span style="font-size:0.65rem; font-weight:900; opacity:0.6;">BUREAU KURT</span>
+            <span class="p-code">PC-0455</span>
+        </div>
+    </div>
+    <div class="printer-trigger" onclick="togglePrinterHub()">🖨️</div>
+</div>
+
 <div class="container">
-    <h2><span>🔧</span> MASTERDATA TOOL IZEGEM</h2>
+    <h2>🔧 MASTERDATA TOOL IZEGEM</h2>
     
     <nav class="nav-tabs">
-        <button id="btn-dyn" class="tab-btn active" onclick="switchTab('dyn')">DYNAMISCHE LOCATIES</button>
+        <button id="btn-dyn" class="tab-btn active" onclick="switchTab('dyn')">DYNAMISCH</button>
         <button id="btn-fix" class="tab-btn" onclick="switchTab('fix')">FLOW RACKS</button>
         <button id="btn-gv" class="tab-btn" onclick="switchTab('gv')">GROTE VOLUMES</button>
     </nav>
 
     <div id="sec-dyn" class="section active">
         <div class="grid-fields">
-            <div class="field"><label>LOCATIE ZONE</label><select id="dynZone">
+            <div class="field"><label>ZONE</label><select id="dynZone">
                 <option value="D420">D420: DZ CYTO LVL 1,2+12</option>
                 <option value="D421">D421: DZ BOIRON LVL 3-11</option>
                 <option value="D422">D422: DZ APO LVL 1,2+12</option>
@@ -283,15 +273,12 @@
                 <option value="R443">R443: DZ2 44-50 LV 2-4+6-11</option>
                 <option value="R600">R600: DZ PICKING COOL</option>
             </select></div>
-            <div class="field"><label>VERVALDATUM (BBD)</label><select id="dynBBD">
-                <option value="nee">NEE</option>
-                <option value="ja">JA</option>
-            </select></div>
+            <div class="field"><label>BBD (VERVALDATUM)</label><select id="dynBBD"><option value="nee">NEE</option><option value="ja">JA</option></select></div>
         </div>
         <button class="btn-calc" onclick="calcDyn()">GEGEVENS GENEREREN</button>
         <div id="out-dyn" class="results-container" style="display:none;">
             <table>
-                <thead><tr><th>LV CODE</th><th>LV TYPE</th><th>HD TYPE</th><th>SIZE</th><th>STORAGE GROUP</th><th>PICKING ZONE</th></tr></thead>
+                <thead><tr><th>LV CODE</th><th>LV TYPE</th><th>HD TYPE</th><th>SIZE</th><th>STORAGE</th><th>ITEM GROUP</th><th>PICK ZONE</th></tr></thead>
                 <tbody id="res-body-dyn"></tbody>
             </table>
         </div>
@@ -299,95 +286,63 @@
 
     <div id="sec-fix" class="section">
         <div class="grid-fields">
-            <div class="field"><label>1. ZONE</label><select id="fixZone" onchange="filterKleur()"><option value="">SELECTEER...</option><option value="2200A-2700A">2200A-2700A</option><option value="3700B-3200B">3700B-3200B</option><option value="3700A-3200A">3700A-3200A</option><option value="4200A-5200A">4200A-5200A</option></select></div>
-            <div class="field"><label>2. KLEUR BAK</label><select id="fixKleur" disabled onchange="filterVerpakking()"><option value="">WACHT...</option></select></div>
-            <div class="field"><label>3. VERPAKKING</label><select id="fixVerpakking" disabled onchange="filterLiggers()"><option value="">WACHT...</option></select></div>
-            <div class="field"><label>4. LIGGER</label><select id="fixLigger" disabled><option value="">WACHT...</option></select></div>
+            <div class="field"><label>1. ZONE</label><select id="fixZone" onchange="filterKleur()"><option value="">KIES...</option><option value="2200A-2700A">2200A-2700A</option><option value="3700B-3200B">3700B-3200B</option><option value="3700A-3200A">3700A-3200A</option><option value="4200A-5200A">4200A-5200A</option></select></div>
+            <div class="field"><label>2. KLEUR BAK IN LIGGER</label><select id="fixKleur" disabled onchange="filterVerpakking()"><option value="">...</option></select></div>
+            <div class="field"><label>3. GEWENSTE LV</label><select id="fixVerpakking" disabled onchange="filterLiggers()"><option value="">...</option></select></div>
+            <div class="field"><label>4. LIGGER</label><select id="fixLigger" disabled><option value="">...</option></select></div>
         </div>
         <button class="btn-calc" onclick="calcFix()">GEGEVENS GENEREREN</button>
-        
         <div id="out-fix" class="results-container" style="display:none;">
             <table>
-                <thead><tr><th>HD TYPE</th><th>LOC SIZE</th><th>STORAGE GROUP</th><th>CEILING</th><th>TRESH</th></tr></thead>
+                <thead><tr><th>HD TYPE</th><th>LOC SIZE</th><th>STORAGE</th><th>ITEM GROUP</th><th>CEILING</th><th>TRESH</th></tr></thead>
                 <tbody id="res-body-fix"></tbody>
             </table>
         </div>
-        
         <div id="tip-fix" class="subtle-tip">ℹ️ CONTROLEER FLOW RACKS ENTRY LOCATIONS (HFEME0) OP HOLDS.</div>
-
         <div id="drop-fix" class="assignment-dropdown">
-            <div class="dropdown-header" onclick="toggleDropdown('content-fix')">
-                PICKING ASSIGNMENTS? <span>▼</span>
-            </div>
+            <div class="dropdown-header" onclick="toggleDropdown('content-fix')">DETAILS PICKING ASSIGNMENTS <span>▼</span></div>
             <div id="content-fix" class="dropdown-content">
-                <div class="assignment-line">
-                    • ASSIGNMENT 1:<br>
-                    <span class="sub-info">LOCATIE: <b>Z_CON_UNIT</b></span>
-                    <span class="sub-info">PICK UNIT: <b>UNIT</b></span>
-                    <span class="sub-info">PICK GROUP: <b>UNIT</b></span>
-                </div>
-                <div class="assignment-line">
-                    • ASSIGNMENT 2:<br>
-                    <span class="sub-info">LOCATIE: <b>Z_CON_CARTON</b></span>
-                    <span class="sub-info">PICK UNIT: <b id="lbl-pu">BLU/RED/CRT</b></span>
-                    <span class="sub-info">PICK GROUP: <b>CARTON</b></span>
-                </div>
+                • ASSIGNMENT 1: <span class="sub-info">LOCATIE: <b>Z_CON_UNIT</b> | PICK UNIT: <b>UNIT</b></span><br>
+                • ASSIGNMENT 2: <span class="sub-info">LOCATIE: <b>Z_CON_CARTON</b> | PICK UNIT: <b id="lbl-pu">...</b></span>
             </div>
         </div>
     </div>
 
     <div id="sec-gv" class="section">
         <div class="grid-fields">
-            <div class="field"><label>1. ZONE GROTE VOLUMES</label><select id="gvZone"><option value="">SELECTEER ZONE...</option><option value="7000-7010">7000-7010</option><option value="7050-7070">7050-7070</option><option value="7100-7150">7100-7150</option></select></div>
+            <div class="field"><label>SELECTEER ZONE</label><select id="gvZone"><option value="">KIES...</option><option value="7000-7010">7000-7010</option><option value="7050-7070">7050-7070</option><option value="7100-7150">7100-7150</option></select></div>
         </div>
         <button class="btn-calc" onclick="calcGV()">GEGEVENS GENEREREN</button>
-        
         <div id="out-gv" class="results-container" style="display:none;">
             <table>
-                <thead><tr><th>HD TYPE</th><th>LOC SIZE</th><th>STORAGE GROUP</th><th>PREP GROUP</th></tr></thead>
+                <thead><tr><th>HD TYPE</th><th>SIZE</th><th>STORAGE</th><th>ITEM GROUP</th><th>PREP</th></tr></thead>
                 <tbody id="res-body-gv"></tbody>
             </table>
         </div>
-
         <div id="tip-gv" class="subtle-tip">ℹ️ VERGEET NIET NAAR RACK LOCATIONS (HFEMS0) TE GAAN.</div>
-
         <div id="drop-gv" class="assignment-dropdown">
-            <div class="dropdown-header" onclick="toggleDropdown('content-gv')">
-                PICKING ASSIGNMENT? <span>▼</span>
-            </div>
+            <div class="dropdown-header" onclick="toggleDropdown('content-gv')">DETAILS PICKING ASSIGNMENT <span>▼</span></div>
             <div id="content-gv" class="dropdown-content">
-                <div class="assignment-line">
-                    • PICKING ASSIGNMENT (<span id="lbl-gv-zone">GV1/GV2</span>):<br>
-                    <span class="sub-info">PICK UNIT: <b>UNIT</b></span>
-                    <span class="sub-info">PICK GROUP: <b>UNIT</b></span>
-                </div>
+                • PICKING ASSIGNMENT (<span id="lbl-gv-zone">...</span>): <span class="sub-info">PICK UNIT: <b>UNIT</b> | PICK GROUP: <b>UNIT</b></span>
             </div>
         </div>
     </div>
 </div>
 
-<div class="footer-info">
-    LABELPRINTERS:<br>
-    RECEPTIE: <b>LT-0471</b><br>
-    BUREAU KURT: <b>PC-0455</b>
-</div>
-
 <script>
+    function togglePrinterHub() { document.getElementById('printerHub').classList.toggle('active'); }
     function toggleTheme() {
-        const root = document.documentElement;
-        const icon = document.getElementById('theme-icon');
-        if (root.getAttribute('data-theme') === 'dark') {
-            root.setAttribute('data-theme', 'light');
-            icon.innerText = '☀️';
-        } else {
-            root.setAttribute('data-theme', 'dark');
-            icon.innerText = '🌙';
-        }
+        const r = document.documentElement;
+        if (r.getAttribute('data-theme') === 'dark') { r.setAttribute('data-theme', 'light'); document.getElementById('theme-icon').innerText='☀️'; }
+        else { r.setAttribute('data-theme', 'dark'); document.getElementById('theme-icon').innerText='🌙'; }
     }
-
-    function toggleDropdown(id) {
-        const content = document.getElementById(id);
-        content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+    function toggleDropdown(id) { const c = document.getElementById(id); c.style.display = (c.style.display === 'block') ? 'none' : 'block'; }
+    
+    function switchTab(t) { 
+        document.querySelectorAll('.section').forEach(el => el.classList.remove('active')); 
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active')); 
+        document.getElementById('sec-' + t).classList.add('active'); 
+        document.getElementById('btn-' + t).classList.add('active'); 
     }
 
     const dynData = {
@@ -413,79 +368,76 @@
         { z: "4200A-5200A", l: ["2","4","6","7"], k: "ROOD", c: 6, t: 3, s: 11 }
     ];
 
-    function switchTab(t) {
-        document.querySelectorAll('.section, .tab-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById('sec-' + t).classList.add('active');
-        document.getElementById('btn-' + t).classList.add('active');
-    }
-
     function calcDyn() {
-        const zone = document.getElementById('dynZone').value;
-        const bbd = document.getElementById('dynBBD').value;
-        const d = dynData[zone][bbd];
+        const z = document.getElementById('dynZone').value; 
+        const b = document.getElementById('dynBBD').value; 
+        const d = dynData[z][b];
+        
+        const badgeClass = (b === "ja") ? "badge-green" : "badge-red";
+        const itemGroup = (z === "R600") ? "COO" : "CON";
+        
         document.getElementById('out-dyn').style.display = 'block';
-        document.getElementById('res-body-dyn').innerHTML = `<tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td><span class="badge-id">${d.id}</span></td></tr>`;
+        document.getElementById('res-body-dyn').innerHTML = `<tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${itemGroup}</td><td><span class="badge-id ${badgeClass}">${d.id}</span></td></tr>`;
     }
 
     function filterKleur() {
-        const zone = document.getElementById('fixZone').value;
+        const z = document.getElementById('fixZone').value; 
         const kSel = document.getElementById('fixKleur');
-        const vSel = document.getElementById('fixVerpakking');
-        const lSel = document.getElementById('fixLigger');
-        vSel.innerHTML = '<option value="">WACHT...</option>'; vSel.disabled = true;
-        lSel.innerHTML = '<option value="">WACHT...</option>'; lSel.disabled = true;
-        if (!zone) { kSel.disabled = true; return; }
-        const kleuren = [...new Set(fixData.filter(d => d.z === zone).map(d => d.k))];
         kSel.innerHTML = '<option value="">KLEUR...</option>';
-        kleuren.forEach(k => { let o = document.createElement('option'); o.value = k; o.text = k; kSel.add(o); });
-        kSel.disabled = false;
+        const kleuren = [...new Set(fixData.filter(d => d.z === z).map(d => d.k))];
+        kleuren.forEach(k => kSel.add(new Option(k, k))); kSel.disabled = false;
     }
 
-    function filterVerpakking() {
-        const kleur = document.getElementById('fixKleur').value;
-        const vSel = document.getElementById('fixVerpakking');
-        if (!kleur) { vSel.disabled = true; return; }
-        vSel.innerHTML = `<option value="">VERPAKKING?</option><option value="BAK">${kleur === 'ROOD' ? 'RODE BAK' : 'BLAUWE BAK'}</option><option value="KARTON">KARTON</option>`;
-        vSel.disabled = false;
+    function filterVerpakking() { 
+        document.getElementById('fixVerpakking').innerHTML = `<option value="">KEUZE...</option><option value="BAK">BAK</option><option value="KARTON">KARTON</option>`; 
+        document.getElementById('fixVerpakking').disabled = false; 
     }
 
     function filterLiggers() {
-        const zone = document.getElementById('fixZone').value;
-        const kleur = document.getElementById('fixKleur').value;
-        const v = document.getElementById('fixVerpakking').value;
+        const z = document.getElementById('fixZone').value; 
+        const k = document.getElementById('fixKleur').value; 
         const lSel = document.getElementById('fixLigger');
-        if (!v) { lSel.disabled = true; return; }
-        const match = fixData.find(d => d.z === zone && d.k === kleur);
         lSel.innerHTML = '<option value="">LIGGER...</option>';
-        if (match) { match.l.forEach(v => { let o = document.createElement('option'); o.value = v; o.text = "LIGGER " + v; lSel.add(o); }); lSel.disabled = false; }
+        const m = fixData.find(d => d.z === z && d.k === k);
+        if (m) { m.l.forEach(v => lSel.add(new Option("LIGGER " + v, v))); lSel.disabled = false; }
     }
 
     function calcFix() {
-        const z = document.getElementById('fixZone').value;
-        const k = document.getElementById('fixKleur').value;
-        const v = document.getElementById('fixVerpakking').value;
+        const z = document.getElementById('fixZone').value; 
+        const k = document.getElementById('fixKleur').value; 
+        const v = document.getElementById('fixVerpakking').value; 
         const l = document.getElementById('fixLigger').value;
         const m = fixData.find(d => d.z === z && d.k === k && d.l.includes(l));
         if(m) {
             let hd = (v === "KARTON") ? "CRT" : (k === "ROOD" ? "RED" : "BLU");
-            let size = (k === "ROOD") ? "RED" : "BLU";
             document.getElementById('lbl-pu').innerText = hd;
-            document.getElementById('out-fix').style.display = 'block';
-            document.getElementById('tip-fix').style.display = 'flex';
+            document.getElementById('out-fix').style.display = 'block'; 
+            document.getElementById('tip-fix').style.display = 'flex'; 
             document.getElementById('drop-fix').style.display = 'block';
-            document.getElementById('res-body-fix').innerHTML = `<tr><td>${hd}</td><td>${size}</td><td>${m.s}</td><td>${m.c}</td><td>${m.t}</td></tr>`;
+            document.getElementById('res-body-fix').innerHTML = `<tr><td>${hd}</td><td>${hd}</td><td>${m.s}</td><td>CON</td><td>${m.c}</td><td>${m.t}</td></tr>`;
         }
     }
 
     function calcGV() {
-        const zone = document.getElementById('gvZone').value;
-        if(!zone) return;
-        let storage = (zone === "7000-7010") ? "GV1" : "GV2";
-        document.getElementById('lbl-gv-zone').innerText = storage;
-        document.getElementById('out-gv').style.display = 'block';
-        document.getElementById('tip-gv').style.display = 'flex';
+        const z = document.getElementById('gvZone').value; 
+        if(!z) return;
+        let storage = "GV2";
+        let prep = "GV2";
+        let assignment = "GV2";
+
+        if (z === "7000-7010") {
+            storage = "GV1"; prep = "GV1"; assignment = "GV1";
+        } else if (z === "7100-7150") {
+            storage = "GV3"; prep = "GV2"; assignment = "GV2";
+        }
+        
+        let itemGroup = prep;
+
+        document.getElementById('lbl-gv-zone').innerText = assignment;
+        document.getElementById('out-gv').style.display = 'block'; 
+        document.getElementById('tip-gv').style.display = 'flex'; 
         document.getElementById('drop-gv').style.display = 'block';
-        document.getElementById('res-body-gv').innerHTML = `<tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>${storage}</td></tr>`;
+        document.getElementById('res-body-gv').innerHTML = `<tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>${itemGroup}</td><td>${prep}</td></tr>`;
     }
 </script>
 </body>
