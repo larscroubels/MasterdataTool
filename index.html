@@ -702,11 +702,11 @@
 }
 
     function openCalc(rekBreedte) {
-  const doosBreedte = prompt("WAT IS DE BREEDTE VAN DE DOOS/BAK IN CM?");
+  const doosBreedte = prompt("WAT IS DE BREEDTE/LENGTE IN CM?");
   
   if (doosBreedte !== null && doosBreedte > 0) {
     const aantal = Math.floor(rekBreedte / doosBreedte);
-    alert(`BIJ EEN DOOSBREEDTE VAN ${doosBreedte} CM PASSEN ER MAXIMAAL ${aantal} DOZEN OP DEZE LIGGER.`);
+    alert(`BIJ EEN DOOS VAN ${doosBreedte} CM PASSEN ER MAXIMAAL ${aantal} DOZEN OP DEZE LIGGER.`);
   } else if (doosBreedte !== null) {
     alert("VOER AUB EEN GELDIG GETAL IN.");
   }
