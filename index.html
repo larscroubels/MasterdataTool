@@ -469,9 +469,9 @@
         <div class="field">
           <label>1. ZONE</label>
           <select id="afmZone" onchange="updateAfmLiggers()">
-            <option value="">KIES ZONE...</option>
-            <option value="20DOZEN">20 DOZEN AISLE</option>
-          </select>
+  <option value="">KIES ZONE...</option>
+  <option value="20DOZEN">20 DOZEN AISLE</option>
+  <option value="AFRAME">AFRAME</option> </select>
         </div>
         <div class="field">
           <label>2. LIGGER</label>
@@ -549,7 +549,10 @@
       { z: "AISLE24-27", l: ["1", "2", "3", "4", "5"], k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "007", ig: "CON" }
     ];
 
-    const afmData = { "20DOZEN": { name: "20 DOZEN AISLE", liggers: { "1": "409 cm", "2": "394 cm", "3": "394 cm", "4": "394 cm", "5": "394 cm" } } };
+   const afmData = { 
+  "20DOZEN": { name: "20 DOZEN AISLE", liggers: { "1": "409 cm", "2": "394 cm", "3": "394 cm", "4": "394 cm", "5": "394 cm" } },
+  "AFRAME": { name: "AFRAME", liggers: { "1": "394 cm", "2": "394 cm", "3": "394 cm", "4": "394 cm", "5": "394 cm" } } 
+};
 
     function calcDyn() {
       const z = document.getElementById('dynZone').value;
