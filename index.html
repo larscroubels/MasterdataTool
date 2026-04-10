@@ -10,7 +10,6 @@
     :root {
       --primary: #1e293b;
       --accent: #009639;
-      /* FEBELCO GROEN */
       --accent-hover: #007a2e;
       --bg: #f8fafc;
       --card: #ffffff;
@@ -119,15 +118,8 @@
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .grid-fields {
@@ -201,21 +193,10 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .badge-id {
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-family: monospace;
-    }
-
-    .badge-red {
-      background: #fef2f2;
-      color: #dc2626;
-    }
-
-    .badge-green {
-      background: #f0fdf4;
-      color: #009639;
-    }
+    .badge-id { padding: 4px 10px; border-radius: 6px; font-family: monospace; }
+    .badge-red { background: #fef2f2; color: #dc2626; }
+    .badge-green { background: #f0fdf4; color: #009639; }
+    .badge-size { padding: 8px 15px; background: #f0fdf4; color: #009639; border-radius: 8px; font-family: monospace; font-size: 1.2rem; }
 
     .subtle-tip {
       margin-top: 15px;
@@ -257,12 +238,7 @@
       border-top: 1px solid var(--border);
     }
 
-    .sub-info {
-      display: block;
-      margin-top: 5px;
-      color: var(--accent);
-      font-weight: 900;
-    }
+    .sub-info { display: block; margin-top: 5px; color: var(--accent); font-weight: 900; }
 
     .printer-hub {
       position: fixed;
@@ -317,18 +293,8 @@
       transition: all 0.3s ease;
     }
 
-    .printer-hub.active .printer-popup {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .p-code {
-      display: block;
-      font-size: 1.1rem;
-      color: var(--accent);
-      font-weight: 900;
-    }
+    .printer-hub.active .printer-popup { opacity: 1; visibility: visible; transform: translateY(0); }
+    .p-code { display: block; font-size: 1.1rem; color: var(--accent); font-weight: 900; }
   </style>
 </head>
 
@@ -356,13 +322,15 @@
       <button id="btn-dyn" class="tab-btn active" onclick="switchTab('dyn')">DYNAMISCH</button>
       <button id="btn-fix" class="tab-btn" onclick="switchTab('fix')">FLOW RACKS</button>
       <button id="btn-gv" class="tab-btn" onclick="switchTab('gv')">GROTE VOLUMES</button>
+      <button id="btn-afm" class="tab-btn" onclick="switchTab('afm')">AFMETINGEN FLOW RACKS</button>
     </nav>
+
     <div id="sec-dyn" class="section active">
       <div class="grid-fields">
         <div class="field">
           <label>ZONE</label>
-        <select id="dynZone">
-    <option value="D420">APO CYTO LVL 1,2+12 (D420)</option>
+          <select id="dynZone">
+            <option value="D420">APO CYTO LVL 1,2+12 (D420)</option>
             <option value="D421">APO BOIRON LVL 3-11 (D421)</option>
             <option value="D422">APO HOOG LVL 1,2+12 (D422)</option>
             <option value="D423">APO LAAG LVL 3-11 (D423)</option>
@@ -371,7 +339,7 @@
             <option value="R442">DEP HOOG 44-50 LVL 1 + 5 (R442)</option>
             <option value="R443">DEP LAAG 44-50 LV 2-4 + 6-11 (R443)</option>
             <option value="R600">DEP COOL (R600)</option>
-</select>
+          </select>
         </div>
         <div class="field">
           <label>BBD (VERVALDATUM)</label>
@@ -395,11 +363,11 @@
               <th>PICK ZONE</th>
             </tr>
           </thead>
-          <tbody id="res-body-dyn">
-          </tbody>
+          <tbody id="res-body-dyn"></tbody>
         </table>
       </div>
     </div>
+
     <div id="sec-fix" class="section">
       <div class="grid-fields">
         <div class="field">
@@ -444,21 +412,19 @@
               <th>TRESH</th>
             </tr>
           </thead>
-          <tbody id="res-body-fix">
-          </tbody>
+          <tbody id="res-body-fix"></tbody>
         </table>
       </div>
       <div id="tip-fix" class="subtle-tip">ℹ️ CONTROLEER FLOW RACKS ENTRY LOCATIONS (HFEME0) OP HOLDS.</div>
       <div id="drop-fix" class="assignment-dropdown">
-        <div class="dropdown-header" onclick="toggleDropdown('content-fix')">DETAILS PICKING ASSIGNMENTS <span>▼</span>
-        </div>
-        <div id="content-fix" class="dropdown-content"> • ASSIGNMENT 1: <span class="sub-info">LOCATIE: <b>Z_CON_UNIT</b> | PICK UNIT: <b>UNIT</b>
-          </span>
-          <br> • ASSIGNMENT 2: <span class="sub-info">LOCATIE: <b>Z_CON_CARTON</b> | PICK UNIT: <b id="lbl-pu">...</b>
-          </span>
+        <div class="dropdown-header" onclick="toggleDropdown('content-fix')">DETAILS PICKING ASSIGNMENTS <span>▼</span></div>
+        <div id="content-fix" class="dropdown-content">
+          • ASSIGNMENT 1: <span class="sub-info">LOCATIE: <b>Z_CON_UNIT</b> | PICK UNIT: <b>UNIT</b></span>
+          <br> • ASSIGNMENT 2: <span class="sub-info">LOCATIE: <b>Z_CON_CARTON</b> | PICK UNIT: <b id="lbl-pu">...</b></span>
         </div>
       </div>
     </div>
+
     <div id="sec-gv" class="section">
       <div class="grid-fields">
         <div class="field">
@@ -483,24 +449,52 @@
               <th>PREP</th>
             </tr>
           </thead>
-          <tbody id="res-body-gv">
-          </tbody>
+          <tbody id="res-body-gv"></tbody>
         </table>
       </div>
       <div id="tip-gv" class="subtle-tip">ℹ️ VERGEET NIET NAAR RACK LOCATIONS (HFEMS0) TE GAAN.</div>
       <div id="drop-gv" class="assignment-dropdown">
-        <div class="dropdown-header" onclick="toggleDropdown('content-gv')">DETAILS PICKING ASSIGNMENT <span>▼</span>
-        </div>
-        <div id="content-gv" class="dropdown-content"> • PICKING ASSIGNMENT (<span id="lbl-gv-zone">...</span>): <span class="sub-info">PICK UNIT: <b>UNIT</b> | PICK GROUP: <b>UNIT</b>
-          </span>
+        <div class="dropdown-header" onclick="toggleDropdown('content-gv')">DETAILS PICKING ASSIGNMENT <span>▼</span></div>
+        <div id="content-gv" class="dropdown-content">
+          • PICKING ASSIGNMENT (<span id="lbl-gv-zone">...</span>): <span class="sub-info">PICK UNIT: <b>UNIT</b> | PICK GROUP: <b>UNIT</b></span>
         </div>
       </div>
     </div>
+
+    <div id="sec-afm" class="section">
+      <div class="grid-fields">
+        <div class="field">
+          <label>1. ZONE</label>
+          <select id="afmZone" onchange="updateAfmLiggers()">
+            <option value="">KIES ZONE...</option>
+            <option value="20DOZEN">20 DOZEN AISLE</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>2. LIGGER</label>
+          <select id="afmLigger" disabled>
+            <option value="">...</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-calc" onclick="calcAfm()">TOON AFMETING</button>
+      <div id="out-afm" class="results-container" style="display:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>ZONE</th>
+              <th>LIGGER</th>
+              <th>AFMETING (CM)</th>
+            </tr>
+          </thead>
+          <tbody id="res-body-afm"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
+
   <script>
-    function togglePrinterHub() {
-      document.getElementById('printerHub').classList.toggle('active');
-    }
+    function togglePrinterHub() { document.getElementById('printerHub').classList.toggle('active'); }
 
     function toggleTheme() {
       const r = document.documentElement;
@@ -524,246 +518,39 @@
       document.getElementById('sec-' + t).classList.add('active');
       document.getElementById('btn-' + t).classList.add('active');
     }
+
     const dynData = {
-      "D420": {
-        nee: {
-          code: "45",
-          type: "450",
-          hd: "AB2",
-          size: "2A2",
-          storage: "016",
-          id: "D420NOTBBD"
-        },
-        ja: {
-          code: "45",
-          type: "50",
-          hd: "AB2",
-          size: "2A2",
-          storage: "016",
-          id: "D420YESBBD"
-        }
-      },
-      "D421": {
-        nee: {
-          code: "40",
-          type: "400",
-          hd: "AB1",
-          size: "2A1",
-          storage: "017",
-          id: "D421NOTBBD"
-        },
-        ja: {
-          code: "40",
-          type: "400",
-          hd: "AB1",
-          size: "2A1",
-          storage: "017",
-          id: "D421YESBBD"
-        }
-      },
-      "D422": {
-        nee: {
-          code: "45",
-          type: "450",
-          hd: "AB2",
-          size: "2A2",
-          storage: "018",
-          id: "D422NOTBBD"
-        },
-        ja: {
-          code: "45",
-          type: "450",
-          hd: "AB2",
-          size: "2A2",
-          storage: "018",
-          id: "D422YESBBD"
-        }
-      },
-      "D423": {
-        nee: {
-          code: "40",
-          type: "400",
-          hd: "AB1",
-          size: "2A1",
-          storage: "019",
-          id: "D423NOTBBD"
-        },
-        ja: {
-          code: "40",
-          type: "400",
-          hd: "AB1",
-          size: "2A1",
-          storage: "019",
-          id: "D423YESBBD"
-        }
-      },
-      "R440": {
-        nee: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DH",
-          storage: "042",
-          id: "R440NOTBBD"
-        },
-        ja: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DH",
-          storage: "042",
-          id: "R440YESBBD"
-        }
-      },
-      "R441": {
-        nee: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DL",
-          storage: "043",
-          id: "R441NOTBBD"
-        },
-        ja: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DL",
-          storage: "043",
-          id: "R441YESBBD"
-        }
-      },
-      "R442": {
-        nee: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DH",
-          storage: "044",
-          id: "R442NOTBBD"
-        },
-        ja: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DH",
-          storage: "044",
-          id: "R442YESBBD"
-        }
-      },
-      "R443": {
-        nee: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DL",
-          storage: "045",
-          id: "R443NOTBBD"
-        },
-        ja: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DL",
-          storage: "045",
-          id: "R443YESBBD"
-        }
-      },
-      "R600": {
-        nee: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DH",
-          storage: "049",
-          id: "R600NOTBBD"
-        },
-        ja: {
-          code: "27",
-          type: "270",
-          hd: "DB5",
-          size: "7DH",
-          storage: "049",
-          id: "R600YESBBD"
-        }
-      }
+      "D420": { nee: { code: "45", type: "450", hd: "AB2", size: "2A2", storage: "016", id: "D420NOTBBD" }, ja: { code: "45", type: "50", hd: "AB2", size: "2A2", storage: "016", id: "D420YESBBD" } },
+      "D421": { nee: { code: "40", type: "400", hd: "AB1", size: "2A1", storage: "017", id: "D421NOTBBD" }, ja: { code: "40", type: "400", hd: "AB1", size: "2A1", storage: "017", id: "D421YESBBD" } },
+      "D422": { nee: { code: "45", type: "450", hd: "AB2", size: "2A2", storage: "018", id: "D422NOTBBD" }, ja: { code: "45", type: "450", hd: "AB2", size: "2A2", storage: "018", id: "D422YESBBD" } },
+      "D423": { nee: { code: "40", type: "400", hd: "AB1", size: "2A1", storage: "019", id: "D423NOTBBD" }, ja: { code: "40", type: "400", hd: "AB1", size: "2A1", storage: "019", id: "D423YESBBD" } },
+      "R440": { nee: { code: "27", type: "270", hd: "DB5", size: "7DH", storage: "042", id: "R440NOTBBD" }, ja: { code: "27", type: "270", hd: "DB5", size: "7DH", storage: "042", id: "R440YESBBD" } },
+      "R441": { nee: { code: "27", type: "270", hd: "DB5", size: "7DL", storage: "043", id: "R441NOTBBD" }, ja: { code: "27", type: "270", hd: "DB5", size: "7DL", storage: "043", id: "R441YESBBD" } },
+      "R442": { nee: { code: "27", type: "270", hd: "DB5", size: "7DH", storage: "044", id: "R442NOTBBD" }, ja: { code: "27", type: "270", hd: "DB5", size: "7DH", storage: "044", id: "R442YESBBD" } },
+      "R443": { nee: { code: "27", type: "270", hd: "DB5", size: "7DL", storage: "045", id: "R443NOTBBD" }, ja: { code: "27", type: "270", hd: "DB5", size: "7DL", storage: "045", id: "R443YESBBD" } },
+      "R600": { nee: { code: "27", type: "270", hd: "DB5", size: "7DH", storage: "049", id: "R600NOTBBD" }, ja: { code: "27", type: "270", hd: "DB5", size: "7DH", storage: "049", id: "R600YESBBD" } }
     };
-   const fixData = [{
-      z: "2200A-2700A",
-      l: ["2", "3", "4", "5", "6"],
-      k: "ROOD",
-      c: 5,
-      t: 3,
-      s: 9
-    }, {
-      z: "2200A-2700A",
-      l: ["1"],
-      k: "BLAUW",
-      c: 5,
-      t: 3,
-      s: 8
-    }, {
-      z: "3700B-3200B",
-      l: ["1", "2", "3", "4", "5", "6", "8"],
-      k: "BLAUW",
-      c: 3,
-      t: 2,
-      s: 8
-    }, {
-      z: "3700B-3200B",
-      l: ["7"],
-      k: "ROOD",
-      c: 3,
-      t: 2,
-      s: 9
-    }, {
-      z: "3700A-3200A",
-      l: ["1", "3", "5"],
-      k: "BLAUW",
-      c: 4,
-      t: 2,
-      s: 10
-    }, {
-      z: "3700A-3200A",
-      l: ["2", "4", "6", "7"],
-      k: "ROOD",
-      c: 5,
-      t: 3,
-      s: 11
-    }, {
-      z: "4200A-5200A",
-      l: ["1", "3", "5"],
-      k: "BLAUW",
-      c: 4,
-      t: 2,
-      s: 10
-    }, {
-      z: "4200A-5200A",
-      l: ["2", "4", "6", "7"],
-      k: "ROOD",
-      c: 6,
-      t: 3,
-      s: 11
-    }];
+
+    const fixData = [
+      { z: "2200A-2700A", l: ["2", "3", "4", "5", "6"], k: "ROOD", c: 5, t: 3, s: 9 },
+      { z: "2200A-2700A", l: ["1"], k: "BLAUW", c: 5, t: 3, s: 8 },
+      { z: "3700B-3200B", l: ["1", "2", "3", "4", "5", "6", "8"], k: "BLAUW", c: 3, t: 2, s: 8 },
+      { z: "3700B-3200B", l: ["7"], k: "ROOD", c: 3, t: 2, s: 9 },
+      { z: "3700A-3200A", l: ["1", "3", "5"], k: "BLAUW", c: 4, t: 2, s: 10 },
+      { z: "3700A-3200A", l: ["2", "4", "6", "7"], k: "ROOD", c: 5, t: 3, s: 11 },
+      { z: "4200A-5200A", l: ["1", "3", "5"], k: "BLAUW", c: 4, t: 2, s: 10 },
+      { z: "4200A-5200A", l: ["2", "4", "6", "7"], k: "ROOD", c: 6, t: 3, s: 11 }
+    ];
+
+    const afmData = { "20DOZEN": { name: "20 DOZEN AISLE", liggers: { "1": "409 cm", "2": "394 cm", "3": "394 cm", "4": "394 cm", "5": "394 cm" } } };
 
     function calcDyn() {
       const z = document.getElementById('dynZone').value;
       const b = document.getElementById('dynBBD').value;
       const d = dynData[z][b];
       const badgeClass = (b === "ja") ? "badge-green" : "badge-red";
-      const itemGroup = (z === "R600") ? "COO" : "CON";
       document.getElementById('out-dyn').style.display = 'block';
-      document.getElementById('res-body-dyn').innerHTML = `<tr>
-<td>${d.code}</td>
-<td>${d.type}</td>
-<td>${d.hd}</td>
-<td>${d.size}</td>
-<td>${d.storage}</td>
-<td>${itemGroup}</td>
-<td>
-<span class="badge-id ${badgeClass}">${d.id}</span>
-</td>
-</tr>`;
+      document.getElementById('res-body-dyn').innerHTML = `<tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${z === "R600" ? "COO" : "CON"}</td><td><span class="badge-id ${badgeClass}">${d.id}</span></td></tr>`;
     }
 
     function filterKleur() {
@@ -776,9 +563,7 @@
     }
 
     function filterVerpakking() {
-      document.getElementById('fixVerpakking').innerHTML = `<option value="">KEUZE...</option>
-<option value="BAK">BAK</option>
-<option value="KARTON">KARTON</option>`;
+      document.getElementById('fixVerpakking').innerHTML = `<option value="">KEUZE...</option><option value="BAK">BAK</option><option value="KARTON">KARTON</option>`;
       document.getElementById('fixVerpakking').disabled = false;
     }
 
@@ -788,69 +573,54 @@
       const lSel = document.getElementById('fixLigger');
       lSel.innerHTML = '<option value="">LIGGER...</option>';
       const m = fixData.find(d => d.z === z && d.k === k);
-      if (m) {
-        m.l.forEach(v => lSel.add(new Option("LIGGER " + v, v)));
-        lSel.disabled = false;
-      }
+      if (m) { m.l.forEach(v => lSel.add(new Option("LIGGER " + v, v))); lSel.disabled = false; }
     }
 
-   function calcFix() {
+    function calcFix() {
       const z = document.getElementById('fixZone').value;
       const k = document.getElementById('fixKleur').value;
       const v = document.getElementById('fixVerpakking').value;
       const l = document.getElementById('fixLigger').value;
       const m = fixData.find(d => d.z === z && d.k === k && d.l.includes(l));
-
       if (m) {
-        // Bepaal de HD TYPE (CRT voor karton, anders kleur)
         let hd = (v === "KARTON") ? "CRT" : (k === "ROOD" ? "RED" : "BLU");
-        
-        // Bepaal de LOC SIZE (altijd RED of BLU op basis van de gekozen kleur)
-        let locSize = (k === "ROOD" ? "RED" : "BLU");
-
         document.getElementById('lbl-pu').innerText = hd;
         document.getElementById('out-fix').style.display = 'block';
         document.getElementById('tip-fix').style.display = 'flex';
         document.getElementById('drop-fix').style.display = 'block';
-        
-        document.getElementById('res-body-fix').innerHTML = `<tr>
-          <td>${hd}</td>
-          <td>${locSize}</td>
-          <td>${m.s}</td>
-          <td>CON</td>
-          <td>${m.c}</td>
-          <td>${m.t}</td>
-        </tr>`;
+        document.getElementById('res-body-fix').innerHTML = `<tr><td>${hd}</td><td>${k === "ROOD" ? "RED" : "BLU"}</td><td>${m.s}</td><td>CON</td><td>${m.c}</td><td>${m.t}</td></tr>`;
       }
     }
 
     function calcGV() {
       const z = document.getElementById('gvZone').value;
       if (!z) return;
-      let storage = "GV2";
-      let prep = "GV2";
-      let assignment = "GV2";
-      if (z === "7000-7010") {
-        storage = "GV1";
-        prep = "GV1";
-        assignment = "GV1";
-      } else if (z === "7100-7150") {
-        storage = "GV3";
-        prep = "GV2";
-        assignment = "GV2";
-      }
-      let itemGroup = prep;
+      let storage = "GV2", prep = "GV2", assignment = "GV2";
+      if (z === "7000-7010") { storage = "GV1"; prep = "GV1"; assignment = "GV1"; }
+      else if (z === "7100-7150") { storage = "GV3"; prep = "GV2"; assignment = "GV2"; }
       document.getElementById('lbl-gv-zone').innerText = assignment;
       document.getElementById('out-gv').style.display = 'block';
       document.getElementById('tip-gv').style.display = 'flex';
       document.getElementById('drop-gv').style.display = 'block';
-      document.getElementById('res-body-gv').innerHTML = `<tr>
-<td>LABEL</td>
-<td>CRT</td>
-<td>${storage}</td>
-<td>${itemGroup}</td>
-<td>${prep}</td>
-</tr>`;
+      document.getElementById('res-body-gv').innerHTML = `<tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>GV2</td><td>${prep}</td></tr>`;
+    }
+
+    function updateAfmLiggers() {
+      const zoneKey = document.getElementById('afmZone').value;
+      const lSel = document.getElementById('afmLigger');
+      lSel.innerHTML = '<option value="">KIES LIGGER...</option>';
+      if (zoneKey && afmData[zoneKey]) {
+        Object.keys(afmData[zoneKey].liggers).forEach(l => { lSel.add(new Option("LIGGER " + l, l)); });
+        lSel.disabled = false;
+      } else { lSel.disabled = true; }
+    }
+
+    function calcAfm() {
+      const zKey = document.getElementById('afmZone').value;
+      const lKey = document.getElementById('afmLigger').value;
+      if (!zKey || !lKey) return;
+      document.getElementById('out-afm').style.display = 'block';
+      document.getElementById('res-body-afm').innerHTML = `<tr><td>${afmData[zKey].name}</td><td>LIGGER ${lKey}</td><td><span class="badge-size">${afmData[zKey].liggers[lKey]}</span></td></tr>`;
     }
   </script>
 </body>
