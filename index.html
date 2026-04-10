@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="nl">
-  
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -595,14 +595,26 @@
     function calcGV() {
       const z = document.getElementById('gvZone').value;
       if (!z) return;
-      let storage = "GV2", prep = "GV2", assignment = "GV2";
-      if (z === "7000-7010") { storage = "GV1"; prep = "GV1"; assignment = "GV1"; }
-      else if (z === "7100-7150") { storage = "GV3"; prep = "GV2"; assignment = "GV2"; }
+      let storage = "GV2", prep = "GV2", assignment = "GV2", group = "GV2";
+      
+      if (z === "7000-7010") { 
+        storage = "GV1"; 
+        prep = "GV1"; 
+        assignment = "GV1";
+        group = "GV1"; 
+      }
+      else if (z === "7100-7150") { 
+        storage = "GV3"; 
+        prep = "GV2"; 
+        assignment = "GV2";
+        group = "GV2";
+      }
+      
       document.getElementById('lbl-gv-zone').innerText = assignment;
       document.getElementById('out-gv').style.display = 'block';
       document.getElementById('tip-gv').style.display = 'flex';
       document.getElementById('drop-gv').style.display = 'block';
-      document.getElementById('res-body-gv').innerHTML = `<tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>GV2</td><td>${prep}</td></tr>`;
+      document.getElementById('res-body-gv').innerHTML = `<tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>${group}</td><td>${prep}</td></tr>`;
     }
 
     function updateAfmLiggers() {
