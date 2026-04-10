@@ -677,9 +677,31 @@
   if (!zKey || !lKey) return;
   
   const label = (lKey.includes('-') || lKey.includes(',')) ? "LIGGERS " + lKey : "LIGGER " + lKey;
-  
+  const afmetingTekst = afmData[zKey].liggers[lKey];
+  // Haal enkel het getal op (bijv. 245 uit "245 cm (5st)")
+  const totaalCm = parseInt(afmetingTekst.split(' ')[0]);
+
   document.getElementById('out-afm').style.display = 'block';
-  document.getElementById('res-body-afm').innerHTML = `<tr><td>${afmData[zKey].name}</td><td>${label}</td><td><span class="badge-size">${afmData[zKey].liggers[lKey]}</span></td></tr>`;
+  document.getElementById('res-body-afm').innerHTML = `
+    <tr>
+      <td>${afmData[zKey].name}</td>
+      <td>${label}</td>
+      <td>
+        <span class="badge-size">${afmetingTekst}</span>
+        <button onclick="openCalc(${totaalCm})" style="margin-left:10px; cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Bereken aantal dozen">🧮</button>
+      </td>
+    </tr>`;
+}
+
+    function openCalc(rekBreedte) {
+  const doosBreedte = prompt("WAT IS DE BREEDTE VAN DE DOOS/BAK IN CM?");
+  
+  if (doosBreedte !== null && doosBreedte > 0) {
+    const aantal = Math.floor(rekBreedte / doosBreedte);
+    alert(`BIJ EEN DOOSBREEDTE VAN ${doosBreedte} CM PASSEN ER MAXIMAAL ${aantal} DOZEN OP DEZE LIGGER.`);
+  } else if (doosBreedte !== null) {
+    alert("VOER AUB EEN GELDIG GETAL IN.");
+  }
 }
   </script>
 </body>
