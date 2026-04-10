@@ -554,13 +554,13 @@
       { z: "AISLE24-27", l: ["1", "2", "3", "4", "5"], k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "007", ig: "CON" }
     ];
 
-   const afmData = { 
-  "2200A-2700A": { name: "2200A-2700A", liggers: { "1": "245 cm (5st)", "2": "245 cm (5st)", "3": "245 cm (5st)", "4": "245 cm (5st)", "5": "245 cm (5st)", "6": "245 cm (5st)" } },
-  "3700B-3200B": { name: "3700B-3200B", liggers: { "1": "147 cm (3st)", "2": "147 cm (3st)", "3": "147 cm (3st)", "4": "147 cm (3st)", "5": "147 cm (3st)", "6": "147 cm (3st)", "7": "147 cm (3st)", "8": "147 cm (3st)" } },
-  "3700A-3200A": { name: "3700A-3200A", liggers: { "1": "196 cm (4st)", "2": "245 cm (5st)", "3": "196 cm (4st)", "4": "245 cm (5st)", "5": "196 cm (4st)", "6": "245 cm (5st)", "7": "245 cm (5st)" } },
-  "4200A-5200A": { name: "4200A-5200A", liggers: { "1": "196 cm (4st)", "2": "294 cm (6st)", "3": "196 cm (4st)", "4": "294 cm (6st)", "5": "196 cm (4st)", "6": "294 cm (6st)", "7": "294 cm (6st)" } },
-  "20DOZEN": { name: "20 DOZEN AISLE", liggers: { "1": "409 cm", "2": "394 cm", "3": "394 cm", "4": "394 cm", "5": "394 cm" } },
-  "AFRAME": { name: "AFRAME", liggers: { "1": "394 cm", "2": "394 cm", "3": "394 cm", "4": "394 cm", "5": "394 cm" } } 
+  const afmData = { 
+  "2200A-2700A": { name: "2200A-2700A", liggers: { "1-6": "245 cm (5st)" } },
+  "3700B-3200B": { name: "3700B-3200B", liggers: { "1-8": "147 cm (3st)" } },
+  "3700A-3200A": { name: "3700A-3200A", liggers: { "1, 3, 5": "196 cm (4st)", "2, 4, 6, 7": "245 cm (5st)" } },
+  "4200A-5200A": { name: "4200A-5200A", liggers: { "1, 3, 5": "196 cm (4st)", "2, 4, 6, 7": "294 cm (6st)" } },
+  "20DOZEN": { name: "20 DOZEN AISLE", liggers: { "1": "409 cm", "2-5": "394 cm" } },
+  "AFRAME": { name: "AFRAME", liggers: { "1-5": "394 cm" } } 
 };
 
     function calcDyn() {
@@ -654,23 +654,33 @@
       document.getElementById('res-body-gv').innerHTML = `<tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>${group}</td><td>${prep}</td></tr>`;
     }
 
-    function updateAfmLiggers() {
-      const zoneKey = document.getElementById('afmZone').value;
-      const lSel = document.getElementById('afmLigger');
-      lSel.innerHTML = '<option value="">KIES LIGGER...</option>';
-      if (zoneKey && afmData[zoneKey]) {
-        Object.keys(afmData[zoneKey].liggers).forEach(l => { lSel.add(new Option("LIGGER " + l, l)); });
-        lSel.disabled = false;
-      } else { lSel.disabled = true; }
-    }
+   function updateAfmLiggers() {
+  const zoneKey = document.getElementById('afmZone').value;
+  const lSel = document.getElementById('afmLigger');
+  lSel.innerHTML = '<option value="">KIES LIGGER(S)...</option>';
+  
+  if (zoneKey && afmData[zoneKey]) {
+    Object.keys(afmData[zoneKey].liggers).forEach(l => { 
+      // Voeg 'S' toe aan LIGGER als het een groep is (bevat een streepje of komma)
+      const label = (l.includes('-') || l.includes(',')) ? "LIGGERS " + l : "LIGGER " + l;
+      lSel.add(new Option(label, l)); 
+    });
+    lSel.disabled = false;
+  } else { 
+    lSel.disabled = true; 
+  }
+}
 
     function calcAfm() {
-      const zKey = document.getElementById('afmZone').value;
-      const lKey = document.getElementById('afmLigger').value;
-      if (!zKey || !lKey) return;
-      document.getElementById('out-afm').style.display = 'block';
-      document.getElementById('res-body-afm').innerHTML = `<tr><td>${afmData[zKey].name}</td><td>LIGGER ${lKey}</td><td><span class="badge-size">${afmData[zKey].liggers[lKey]}</span></td></tr>`;
-    }
+  const zKey = document.getElementById('afmZone').value;
+  const lKey = document.getElementById('afmLigger').value;
+  if (!zKey || !lKey) return;
+  
+  const label = (lKey.includes('-') || lKey.includes(',')) ? "LIGGERS " + lKey : "LIGGER " + lKey;
+  
+  document.getElementById('out-afm').style.display = 'block';
+  document.getElementById('res-body-afm').innerHTML = `<tr><td>${afmData[zKey].name}</td><td>${label}</td><td><span class="badge-size">${afmData[zKey].liggers[lKey]}</span></td></tr>`;
+}
   </script>
 </body>
 
