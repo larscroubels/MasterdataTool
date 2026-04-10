@@ -687,8 +687,16 @@
       <td>${afmData[zKey].name}</td>
       <td>${label}</td>
       <td>
-        <span class="badge-size">${afmetingTekst}</span>
-        <button onclick="openCalc(${totaalCm})" style="margin-left:10px; cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Bereken aantal dozen">🧮</button>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <span class="badge-size">${afmetingTekst}</span>
+          <button onclick="openCalc(${totaalCm})" 
+                  style="cursor:pointer; background: var(--tab-bg); border: 1px solid var(--border); 
+                         padding: 5px 10px; border-radius: 6px; font-weight: 900; font-size: 0.7rem; 
+                         color: var(--accent); display: flex; align-items: center; gap: 5px;" 
+                  title="Bereken aantal dozen">
+            🧮 BEREKEN CAPACITEIT
+          </button>
+        </div>
       </td>
     </tr>`;
 }
