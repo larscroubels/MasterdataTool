@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="nl">
-  
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -378,6 +378,9 @@
             <option value="3700B-3200B">3700B-3200B</option>
             <option value="3700A-3200A">3700A-3200A</option>
             <option value="4200A-5200A">4200A-5200A</option>
+            <option value="AISLE22-23-AFR">001-006 AFR</option>
+            <option value="AISLE22-23-CON">22-23CRT</option>
+            <option value="AISLE24-27">24-27 CRT</option>
           </select>
         </div>
         <div class="field">
@@ -539,7 +542,11 @@
       { z: "3700A-3200A", l: ["1", "3", "5"], k: "BLAUW", c: 4, t: 2, s: 10 },
       { z: "3700A-3200A", l: ["2", "4", "6", "7"], k: "ROOD", c: 5, t: 3, s: 11 },
       { z: "4200A-5200A", l: ["1", "3", "5"], k: "BLAUW", c: 4, t: 2, s: 10 },
-      { z: "4200A-5200A", l: ["2", "4", "6", "7"], k: "ROOD", c: 6, t: 3, s: 11 }
+      { z: "4200A-5200A", l: ["2", "4", "6", "7"], k: "ROOD", c: 6, t: 3, s: 11 },
+      // Nieuwe zones
+      { z: "AISLE22-23-AFR", l: ["1", "2", "3", "4", "5"], k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "006", ig: "AFR" },
+      { z: "AISLE22-23-CON", l: ["1", "2", "3", "4", "5"], k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "006", ig: "CON" },
+      { z: "AISLE24-27", l: ["1", "2", "3", "4", "5"], k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "007", ig: "CON" }
     ];
 
     const afmData = { "20DOZEN": { name: "20 DOZEN AISLE", liggers: { "1": "409 cm", "2": "394 cm", "3": "394 cm", "4": "394 cm", "5": "394 cm" } } };
@@ -563,8 +570,16 @@
     }
 
     function filterVerpakking() {
-      document.getElementById('fixVerpakking').innerHTML = `<option value="">KEUZE...</option><option value="BAK">BAK</option><option value="KARTON">KARTON</option>`;
-      document.getElementById('fixVerpakking').disabled = false;
+      const z = document.getElementById('fixZone').value;
+      const vSel = document.getElementById('fixVerpakking');
+      vSel.innerHTML = '<option value="">KEUZE...</option>';
+      
+      if (z.startsWith("AISLE")) {
+          ["CRT SSL", "CRT LSL", "RED", "BLU"].forEach(v => vSel.add(new Option(v, v)));
+      } else {
+          ["BAK", "KARTON"].forEach(v => vSel.add(new Option(v, v)));
+      }
+      vSel.disabled = false;
     }
 
     function filterLiggers() {
@@ -582,13 +597,23 @@
       const v = document.getElementById('fixVerpakking').value;
       const l = document.getElementById('fixLigger').value;
       const m = fixData.find(d => d.z === z && d.k === k && d.l.includes(l));
+      
       if (m) {
-        let hd = (v === "KARTON") ? "CRT" : (k === "ROOD" ? "RED" : "BLU");
+        let hd, locSize, itemGroup = m.ig || "CON";
+        
+        if (z.startsWith("AISLE")) {
+            hd = v;
+            locSize = "CRT";
+        } else {
+            hd = (v === "KARTON") ? "CRT" : (k === "ROOD" ? "RED" : "BLU");
+            locSize = (k === "ROOD" ? "RED" : "BLU");
+        }
+
         document.getElementById('lbl-pu').innerText = hd;
         document.getElementById('out-fix').style.display = 'block';
         document.getElementById('tip-fix').style.display = 'flex';
         document.getElementById('drop-fix').style.display = 'block';
-        document.getElementById('res-body-fix').innerHTML = `<tr><td>${hd}</td><td>${k === "ROOD" ? "RED" : "BLU"}</td><td>${m.s}</td><td>CON</td><td>${m.c}</td><td>${m.t}</td></tr>`;
+        document.getElementById('res-body-fix').innerHTML = `<tr><td>${hd}</td><td>${locSize}</td><td>${m.s}</td><td>${itemGroup}</td><td>${m.c}</td><td>${m.t}</td></tr>`;
       }
     }
 
