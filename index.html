@@ -794,26 +794,33 @@
       }
     }
 
-    function calcFix() {
+   function calcFix() {
       const z = document.getElementById('fixZone').value;
       const k = document.getElementById('fixKleur').value;
       const v = document.getElementById('fixVerpakking').value;
       const l = document.getElementById('fixLigger').value;
       const m = fixData.find(d => d.z === z && d.k === k && d.l.includes(l));
+
       if (m) {
+        // Bepaal de HD TYPE (CRT voor karton, anders kleur)
         let hd = (v === "KARTON") ? "CRT" : (k === "ROOD" ? "RED" : "BLU");
+        
+        // Bepaal de LOC SIZE (altijd RED of BLU op basis van de gekozen kleur)
+        let locSize = (k === "ROOD" ? "RED" : "BLU");
+
         document.getElementById('lbl-pu').innerText = hd;
         document.getElementById('out-fix').style.display = 'block';
         document.getElementById('tip-fix').style.display = 'flex';
         document.getElementById('drop-fix').style.display = 'block';
+        
         document.getElementById('res-body-fix').innerHTML = `<tr>
-<td>${hd}</td>
-<td>${hd}</td>
-<td>${m.s}</td>
-<td>CON</td>
-<td>${m.c}</td>
-<td>${m.t}</td>
-</tr>`;
+          <td>${hd}</td>
+          <td>${locSize}</td>
+          <td>${m.s}</td>
+          <td>CON</td>
+          <td>${m.c}</td>
+          <td>${m.t}</td>
+        </tr>`;
       }
     }
 
