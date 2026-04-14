@@ -538,27 +538,51 @@
       "R600": { nee: { code: "27", type: "270", hd: "DB5", size: "7DH", storage: "049", id: "R600NOTBBD" }, ja: { code: "27", type: "270", hd: "DB5", size: "7DH", storage: "049", id: "R600YESBBD" } }
     };
 
-   const fixData = [
-  { z: "2200A-2700A", l: "1-6", k: "ROOD", c: 5, t: 3, s: 9, hd: "RED" },
-  { z: "2200A-2700A", l: "1", k: "BLAUW", c: 5, t: 3, s: 8, hd: "BLU" },
-  { z: "3700B-3200B", l: "1-6, 8", k: "BLAUW", c: 3, t: 2, s: 8, hd: "BLU" },
-  { z: "3700B-3200B", l: "7", k: "ROOD", c: 3, t: 2, s: 9, hd: "RED" },
-  { z: "3700A-3200A", l: "1, 3, 5", k: "BLAUW", c: 4, t: 2, s: 10, hd: "BLU" },
-  { z: "3700A-3200A", l: "2, 4, 6, 7", k: "ROOD", c: 5, t: 3, s: 11, hd: "RED" },
-  { z: "4200A-5200A", l: "1, 3, 5", k: "BLAUW", c: 4, t: 2, s: 10, hd: "BLU" },
-  { z: "4200A-5200A", l: "2, 4, 6, 7", k: "ROOD", c: 6, t: 3, s: 11, hd: "RED" },
-  { z: "AISLE22-23-AFR", l: "1-5", k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "006", ig: "AFR" },
-  { z: "AISLE22-23-CON", l: "1-5", k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "006", ig: "CON" },
-  { z: "AISLE24-27", l: "1-5", k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "007", ig: "CON" }
-];
- const afmData = { 
-  "2200A-2700A": { name: "2200A-2700A", liggers: { "1-6": "245 cm" } },
-  "3700B-3200B": { name: "3700B-3200B", liggers: { "1-8": "147 cm" } },
-  "3700A-3200A": { name: "3700A-3200A", liggers: { "1, 3, 5": "196 cm", "2, 4, 6, 7": "245 cm" } },
-  "4200A-5200A": { name: "4200A-5200A", liggers: { "1, 3, 5": "196 cm", "2, 4, 6, 7": "294 cm" } },
-  "20DOZEN": { name: "20 DOZEN AISLE", liggers: { "1": "409 cm", "2-5": "394 cm" } },
-  "AFRAME": { name: "AFRAME", liggers: { "1-5": "394 cm" } } 
-};
+    // tresh = ceil(ceiling / 3)
+    const fixData = [
+      // 2200A-2700A
+      { z: "2200A-2700A", l: "1",     k: "BLAUW", c: 5, t: 2, s: 8,   hd: "BLU" },
+      { z: "2200A-2700A", l: "2",     k: "ROOD",  c: 6, t: 2, s: 9,   hd: "RED" },
+      { z: "2200A-2700A", l: "3",     k: "ROOD",  c: 4, t: 2, s: 9,   hd: "RED" },
+      { z: "2200A-2700A", l: "4, 5, 6", k: "ROOD", c: 5, t: 2, s: 9,  hd: "RED" },
+
+      // 3700B-3200B
+      { z: "3700B-3200B", l: "1, 2, 3, 4, 5, 6, 8", k: "BLAUW", c: 3, t: 1, s: 8, hd: "BLU" },
+      { z: "3700B-3200B", l: "7",     k: "ROOD",  c: 3, t: 1, s: 9,   hd: "RED" },
+
+      // 3700A-3200A
+      { z: "3700A-3200A", l: "1",     k: "BLAUW", c: 6, t: 2, s: 10,  hd: "BLU" },
+      { z: "3700A-3200A", l: "3",     k: "BLAUW", c: 4, t: 2, s: 10,  hd: "BLU" },
+      { z: "3700A-3200A", l: "5",     k: "BLAUW", c: 4, t: 2, s: 10,  hd: "BLU" },
+      { z: "3700A-3200A", l: "2",     k: "ROOD",  c: 6, t: 2, s: 11,  hd: "RED" },
+      { z: "3700A-3200A", l: "4",     k: "ROOD",  c: 4, t: 2, s: 11,  hd: "RED" },
+      { z: "3700A-3200A", l: "6, 7",  k: "ROOD",  c: 5, t: 2, s: 11,  hd: "RED" },
+
+      // 4200A-5200A
+      { z: "4200A-5200A", l: "1",     k: "BLAUW", c: 5, t: 2, s: 10,  hd: "BLU" },
+      { z: "4200A-5200A", l: "3",     k: "BLAUW", c: 4, t: 2, s: 10,  hd: "BLU" },
+      { z: "4200A-5200A", l: "5",     k: "BLAUW", c: 5, t: 2, s: 10,  hd: "BLU" },
+      { z: "4200A-5200A", l: "2",     k: "ROOD",  c: 6, t: 2, s: 11,  hd: "RED" },
+      { z: "4200A-5200A", l: "3",     k: "ROOD",  c: 4, t: 2, s: 11,  hd: "RED" },
+      { z: "4200A-5200A", l: "4",     k: "ROOD",  c: 4, t: 2, s: 11,  hd: "RED" },
+      { z: "4200A-5200A", l: "5",     k: "ROOD",  c: 4, t: 2, s: 11,  hd: "RED" },
+      { z: "4200A-5200A", l: "6",     k: "ROOD",  c: 5, t: 2, s: 11,  hd: "RED" },
+      { z: "4200A-5200A", l: "7",     k: "ROOD",  c: 5, t: 2, s: 11,  hd: "RED" },
+
+      // AISLE zones (ongewijzigd)
+      { z: "AISLE22-23-AFR", l: "1-5", k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "006", ig: "AFR" },
+      { z: "AISLE22-23-CON", l: "1-5", k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "006", ig: "CON" },
+      { z: "AISLE24-27",     l: "1-5", k: "CRT", c: "ZIE AFM", t: "ZIE AFM", s: "007", ig: "CON" }
+    ];
+
+    const afmData = { 
+      "2200A-2700A": { name: "2200A-2700A", liggers: { "1-6": "245 cm" } },
+      "3700B-3200B": { name: "3700B-3200B", liggers: { "1-8": "147 cm" } },
+      "3700A-3200A": { name: "3700A-3200A", liggers: { "1, 3, 5": "196 cm", "2, 4, 6, 7": "245 cm" } },
+      "4200A-5200A": { name: "4200A-5200A", liggers: { "1, 3, 5": "196 cm", "2, 4, 6, 7": "294 cm" } },
+      "20DOZEN": { name: "20 DOZEN AISLE", liggers: { "1": "409 cm", "2-5": "394 cm" } },
+      "AFRAME": { name: "AFRAME", liggers: { "1-5": "394 cm" } } 
+    };
 
     function calcDyn() {
       const z = document.getElementById('dynZone').value;
@@ -591,53 +615,54 @@
       vSel.disabled = false;
     }
 
-   function filterLiggers() {
-  const z = document.getElementById('fixZone').value;
-  const k = document.getElementById('fixKleur').value;
-  const lSel = document.getElementById('fixLigger');
-  lSel.innerHTML = '<option value="">LIGGER(S)...</option>';
-  
-  const matches = fixData.filter(d => d.z === z && d.k === k);
-  matches.forEach(m => {
-    const label = (m.l.includes('-') || m.l.includes(',')) ? "LIGGERS " + m.l : "LIGGER " + m.l;
-    lSel.add(new Option(label, m.l));
-  });
-  lSel.disabled = false;
-}
-
-   function calcFix() {
-  const z = document.getElementById('fixZone').value;
-  const k = document.getElementById('fixKleur').value;
-  const v = document.getElementById('fixVerpakking').value;
-  const l = document.getElementById('fixLigger').value;
-  const m = fixData.find(d => d.z === z && d.k === k && d.l === l);
-  
-  if (m) {
-    let hd, locSize, itemGroup = m.ig || "CON";
-    
-    if (z.startsWith("AISLE")) {
-        hd = v;
-        locSize = "CRT";
-    } else {
-        hd = (v === "KARTON") ? "CRT" : m.hd;
-        locSize = (k === "ROOD" ? "RED" : "BLU");
+    function filterLiggers() {
+      const z = document.getElementById('fixZone').value;
+      const k = document.getElementById('fixKleur').value;
+      const lSel = document.getElementById('fixLigger');
+      lSel.innerHTML = '<option value="">LIGGER(S)...</option>';
+      
+      const matches = fixData.filter(d => d.z === z && d.k === k);
+      matches.forEach(m => {
+        const label = (m.l.includes('-') || m.l.includes(',')) ? "LIGGERS " + m.l : "LIGGER " + m.l;
+        lSel.add(new Option(label, m.l));
+      });
+      lSel.disabled = false;
     }
 
-    document.getElementById('lbl-pu').innerText = hd;
-    document.getElementById('out-fix').style.display = 'block';
-    document.getElementById('tip-fix').style.display = 'flex';
-    document.getElementById('drop-fix').style.display = 'block';
-    document.getElementById('res-body-fix').innerHTML = `
-      <tr>
-        <td>${hd}</td>
-        <td>${locSize}</td>
-        <td>${m.s}</td>
-        <td>${itemGroup}</td>
-        <td>${m.c}</td>
-        <td>${m.t}</td>
-      </tr>`;
-  }
-}
+    function calcFix() {
+      const z = document.getElementById('fixZone').value;
+      const k = document.getElementById('fixKleur').value;
+      const v = document.getElementById('fixVerpakking').value;
+      const l = document.getElementById('fixLigger').value;
+      const m = fixData.find(d => d.z === z && d.k === k && d.l === l);
+      
+      if (m) {
+        let hd, locSize, itemGroup = m.ig || "CON";
+        
+        if (z.startsWith("AISLE")) {
+            hd = v;
+            locSize = "CRT";
+        } else {
+            hd = (v === "KARTON") ? "CRT" : m.hd;
+            locSize = (k === "ROOD" ? "RED" : "BLU");
+        }
+
+        document.getElementById('lbl-pu').innerText = hd;
+        document.getElementById('out-fix').style.display = 'block';
+        document.getElementById('tip-fix').style.display = 'flex';
+        document.getElementById('drop-fix').style.display = 'block';
+        document.getElementById('res-body-fix').innerHTML = `
+          <tr>
+            <td>${hd}</td>
+            <td>${locSize}</td>
+            <td>${m.s}</td>
+            <td>${itemGroup}</td>
+            <td>${m.c}</td>
+            <td>${m.t}</td>
+          </tr>`;
+      }
+    }
+
     function calcGV() {
       const z = document.getElementById('gvZone').value;
       if (!z) return;
@@ -663,63 +688,61 @@
       document.getElementById('res-body-gv').innerHTML = `<tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>${group}</td><td>${prep}</td></tr>`;
     }
 
-   function updateAfmLiggers() {
-  const zoneKey = document.getElementById('afmZone').value;
-  const lSel = document.getElementById('afmLigger');
-  lSel.innerHTML = '<option value="">KIES LIGGER(S)...</option>';
-  
-  if (zoneKey && afmData[zoneKey]) {
-    Object.keys(afmData[zoneKey].liggers).forEach(l => { 
-      // Voeg 'S' toe aan LIGGER als het een groep is (bevat een streepje of komma)
-      const label = (l.includes('-') || l.includes(',')) ? "LIGGERS " + l : "LIGGER " + l;
-      lSel.add(new Option(label, l)); 
-    });
-    lSel.disabled = false;
-  } else { 
-    lSel.disabled = true; 
-  }
-}
+    function updateAfmLiggers() {
+      const zoneKey = document.getElementById('afmZone').value;
+      const lSel = document.getElementById('afmLigger');
+      lSel.innerHTML = '<option value="">KIES LIGGER(S)...</option>';
+      
+      if (zoneKey && afmData[zoneKey]) {
+        Object.keys(afmData[zoneKey].liggers).forEach(l => { 
+          const label = (l.includes('-') || l.includes(',')) ? "LIGGERS " + l : "LIGGER " + l;
+          lSel.add(new Option(label, l)); 
+        });
+        lSel.disabled = false;
+      } else { 
+        lSel.disabled = true; 
+      }
+    }
 
     function calcAfm() {
-  const zKey = document.getElementById('afmZone').value;
-  const lKey = document.getElementById('afmLigger').value;
-  if (!zKey || !lKey) return;
-  
-  const label = (lKey.includes('-') || lKey.includes(',')) ? "LIGGERS " + lKey : "LIGGER " + lKey;
-  const afmetingTekst = afmData[zKey].liggers[lKey];
-  // Haal enkel het getal op (bijv. 245 uit "245 cm (5st)")
-  const totaalCm = parseInt(afmetingTekst.split(' ')[0]);
+      const zKey = document.getElementById('afmZone').value;
+      const lKey = document.getElementById('afmLigger').value;
+      if (!zKey || !lKey) return;
+      
+      const label = (lKey.includes('-') || lKey.includes(',')) ? "LIGGERS " + lKey : "LIGGER " + lKey;
+      const afmetingTekst = afmData[zKey].liggers[lKey];
+      const totaalCm = parseInt(afmetingTekst.split(' ')[0]);
 
-  document.getElementById('out-afm').style.display = 'block';
-  document.getElementById('res-body-afm').innerHTML = `
-    <tr>
-      <td>${afmData[zKey].name}</td>
-      <td>${label}</td>
-      <td>
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <span class="badge-size">${afmetingTekst}</span>
-          <button onclick="openCalc(${totaalCm})" 
-                  style="cursor:pointer; background: var(--tab-bg); border: 1px solid var(--border); 
-                         padding: 5px 10px; border-radius: 6px; font-weight: 900; font-size: 0.7rem; 
-                         color: var(--accent); display: flex; align-items: center; gap: 5px;" 
-                  title="Bereken aantal dozen">
-            🧮 BEREKEN CAPACITEIT
-          </button>
-        </div>
-      </td>
-    </tr>`;
-}
+      document.getElementById('out-afm').style.display = 'block';
+      document.getElementById('res-body-afm').innerHTML = `
+        <tr>
+          <td>${afmData[zKey].name}</td>
+          <td>${label}</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 15px;">
+              <span class="badge-size">${afmetingTekst}</span>
+              <button onclick="openCalc(${totaalCm})" 
+                      style="cursor:pointer; background: var(--tab-bg); border: 1px solid var(--border); 
+                             padding: 5px 10px; border-radius: 6px; font-weight: 900; font-size: 0.7rem; 
+                             color: var(--accent); display: flex; align-items: center; gap: 5px;" 
+                      title="Bereken aantal dozen">
+                🧮 BEREKEN CAPACITEIT
+              </button>
+            </div>
+          </td>
+        </tr>`;
+    }
 
     function openCalc(rekBreedte) {
-  const doosBreedte = prompt("WAT IS DE BREEDTE/LENGTE VAN JE KARTON IN CM?");
-  
-  if (doosBreedte !== null && doosBreedte > 0) {
-    const aantal = Math.floor(rekBreedte / doosBreedte);
-    alert(`BIJ EEN DOOS VAN ${doosBreedte} CM PASSEN ER MAXIMAAL ${aantal} DOZEN OP DEZE LIGGER.`);
-  } else if (doosBreedte !== null) {
-    alert("VOER AUB EEN GELDIG GETAL IN.");
-  }
-}
+      const doosBreedte = prompt("WAT IS DE BREEDTE/LENGTE VAN JE KARTON IN CM?");
+      
+      if (doosBreedte !== null && doosBreedte > 0) {
+        const aantal = Math.floor(rekBreedte / doosBreedte);
+        alert(`BIJ EEN DOOS VAN ${doosBreedte} CM PASSEN ER MAXIMAAL ${aantal} DOZEN OP DEZE LIGGER.`);
+      } else if (doosBreedte !== null) {
+        alert("VOER AUB EEN GELDIG GETAL IN.");
+      }
+    }
   </script>
 </body>
 
