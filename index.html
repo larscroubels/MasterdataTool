@@ -1,20 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="nl">
-
-  
-
-<head>
-
-  <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>MASTERDATA TOOL IZEGEM 🔧</title>
-
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23009639'/%3E%3Ctext y='75' x='50' text-anchor='middle' font-size='80' fill='white' font-family='Arial, sans-serif' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E">
-
-  <style>
+	<head>
+		<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>MASTERDATA TOOL IZEGEM 🔧</title>
+				<link rel="icon" href="data:image/svg+xml,%3Csvg
+					xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23009639'/%3E%3Ctext y='75' x='50' text-anchor='middle' font-size='80' fill='white' font-family='Arial, sans-serif' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E">
+					<style>
 
     :root {
 
@@ -44,22 +36,22 @@
 
     [data-theme="dark"] {
 
-      --primary: #f8fafc;
+      --primary: #ffffff;
 
       --accent: #00b344;
 
       --accent-hover: #009639;
 
-      --bg: #0f172a;
-
-      --card: #1e293b;
+      --bg: #11100f;
+      
+      --card: #1f1f1f;
 
       --text: #e2e8f0;
 
-      --border: #334155;
+      --border: #323130;
 
-      --tab-bg: #0f172a;
-
+      --tab-bg: #292929;
+      
       --subtle-text: #94a3b8;
 
       --printer-bg: #1e293b;
@@ -593,418 +585,225 @@
     .p-code { display: block; font-size: 1.1rem; color: var(--accent); font-weight: 900; }
 
   </style>
-
-</head>
-
-
-
-<body>
-
-  <div class="theme-switch-wrapper" onclick="toggleTheme()">
-
-    <span id="theme-icon">☀️</span>
-
-  </div>
-
-  <div class="printer-hub" id="printerHub">
-
-    <div class="printer-label">LABELPRINTERS</div>
-
-    <div class="printer-popup">
-
-      <div style="margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
-
-        <span style="font-size:0.65rem; font-weight:900; opacity:0.6;">RECEPTIE MAARTEN</span>
-
-        <span class="p-code">LT-0471</span>
-
-      </div>
-
-      <div>
-
-        <span style="font-size:0.65rem; font-weight:900; opacity:0.6;">BUREAU KURT</span>
-
-        <span class="p-code">PC-0455</span>
-
-      </div>
-
-    </div>
-
-    <div class="printer-trigger" onclick="togglePrinterHub()">🖨️</div>
-
-  </div>
-
-  <div class="container">
-
-    <h2>🔧 MASTERDATA TOOL IZEGEM</h2>
-
-    <nav class="nav-tabs">
-
-      <button id="btn-dyn" class="tab-btn active" onclick="switchTab('dyn')">DYNAMISCH</button>
-
-      <button id="btn-fix" class="tab-btn" onclick="switchTab('fix')">FLOW RACKS</button>
-
-      <button id="btn-afm" class="tab-btn" onclick="switchTab('afm')">AFMETINGEN FLOW RACKS</button>
-
-      <button id="btn-gv" class="tab-btn" onclick="switchTab('gv')">GROTE VOLUMES</button>
-
-    </nav>
-
-
-
-    <div id="sec-dyn" class="section active">
-
-      <div class="grid-fields">
-
-        <div class="field">
-
-          <label>ZONE</label>
-
-          <select id="dynZone">
-
-            <option value="D420">APO CYTO LVL 1,2+12 (D420)</option>
-
-            <option value="D421">APO BOIRON LVL 3-11 (D421)</option>
-
-            <option value="D422">APO HOOG LVL 1,2+12 (D422)</option>
-
-            <option value="D423">APO LAAG LVL 3-11 (D423)</option>
-
-            <option value="R440">DEP HOOG 44-50 LVL 1 + 5 (R440)</option>
-
-            <option value="R441">DEP LAAG 44-50 LV 2-4 + 6-11 (R441)</option>
-
-            <option value="R442">DEP HOOG 44-50 LVL 1 + 5 (R442)</option>
-
-            <option value="R443">DEP LAAG 44-50 LV 2-4 + 6-11 (R443)</option>
-
-            <option value="R600">DEP COOL (R600)</option>
-
-          </select>
-
-        </div>
-
-        <div class="field">
-
-          <label>BBD (VERVALDATUM)</label>
-
-          <select id="dynBBD">
-
-            <option value="nee">NEE</option>
-
-            <option value="ja">JA</option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-      <button class="btn-calc" onclick="calcDyn()">GEGEVENS GENEREREN</button>
-
-      <div id="out-dyn" class="results-container" style="display:none;">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>LV CODE</th>
-
-              <th>LV TYPE</th>
-
-              <th>HD TYPE</th>
-
-              <th>SIZE</th>
-
-              <th>STORAGE</th>
-
-              <th>ITEM GROUP</th>
-
-              <th>PICK ZONE</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody id="res-body-dyn"></tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-
-
-    <div id="sec-fix" class="section">
-
-      <div class="grid-fields">
-
-        <div class="field">
-
-          <label>1. ZONE</label>
-
-          <select id="fixZone" onchange="filterKleur()">
-
-            <option value="">KIES...</option>
-
-            <option value="2200A-2700A">2200A-2700A</option>
-
-            <option value="3700B-3200B">3700B-3200B</option>
-
-            <option value="3700A-3200A">3700A-3200A</option>
-
-            <option value="4200A-5200A">4200A-5200A</option>
-
-            <option value="AISLE22-23-AFR">001-006 AFR</option>
-
-            <option value="AISLE22-23-CON">2200B-2300B CRT</option>
-
-            <option value="AISLE24-27">2400B-2700B CRT</option>
-
-          </select>
-
-        </div>
-
-        <div class="field">
-
-          <label>2. KLEUR BAK IN LIGGER</label>
-
-          <select id="fixKleur" disabled onchange="filterVerpakking()">
-
-            <option value="">...</option>
-
-          </select>
-
-        </div>
-
-        <div class="field">
-
-          <label>3. GEWENSTE LV</label>
-
-          <select id="fixVerpakking" disabled onchange="filterLiggers()">
-
-            <option value="">...</option>
-
-          </select>
-
-        </div>
-
-        <div class="field">
-
-          <label>4. LIGGER</label>
-
-          <select id="fixLigger" disabled>
-
-            <option value="">...</option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-      <button class="btn-calc" onclick="calcFix()">GEGEVENS GENEREREN</button>
-
-      <div id="out-fix" class="results-container" style="display:none;">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>HD TYPE</th>
-
-              <th>LOC SIZE</th>
-
-              <th>STORAGE</th>
-
-              <th>ITEM GROUP</th>
-
-              <th>CEILING</th>
-
-              <th>TRESH</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody id="res-body-fix"></tbody>
-
-        </table>
-
-      </div>
-
-      <div id="tip-fix" class="subtle-tip">ℹ️ CONTROLEER FLOW RACKS ENTRY LOCATIONS (HFEME0) OP HOLDS.</div>
-
-      <div id="drop-fix" class="assignment-dropdown">
-
-        <div class="dropdown-header" onclick="toggleDropdown('content-fix')">DETAILS PICKING ASSIGNMENTS <span>▼</span></div>
-
-        <div id="content-fix" class="dropdown-content">
-
-          • ASSIGNMENT 1: <span class="sub-info">LOCATIE: <b>Z_CON_UNIT</b> | PICK UNIT: <b>UNIT</b></span>
-
-          <br> • ASSIGNMENT 2: <span class="sub-info">LOCATIE: <b>Z_CON_CARTON</b> | PICK UNIT: <b id="lbl-pu">...</b></span>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-
-    <div id="sec-gv" class="section">
-
-      <div class="grid-fields">
-
-        <div class="field">
-
-          <label>SELECTEER ZONE</label>
-
-          <select id="gvZone">
-
-            <option value="">KIES...</option>
-
-            <option value="7000-7010">7000-7010</option>
-
-            <option value="7050-7070">7050-7070</option>
-
-            <option value="7100-7150">7100-7150</option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-      <button class="btn-calc" onclick="calcGV()">GEGEVENS GENEREREN</button>
-
-      <div id="out-gv" class="results-container" style="display:none;">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>HD TYPE</th>
-
-              <th>SIZE</th>
-
-              <th>STORAGE</th>
-
-              <th>ITEM GROUP</th>
-
-              <th>PREP</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody id="res-body-gv"></tbody>
-
-        </table>
-
-      </div>
-
-      <div id="tip-gv" class="subtle-tip">ℹ️ VERGEET NIET NAAR RACK LOCATIONS (HFEMS0) TE GAAN.</div>
-
-      <div id="drop-gv" class="assignment-dropdown">
-
-        <div class="dropdown-header" onclick="toggleDropdown('content-gv')">DETAILS PICKING ASSIGNMENT <span>▼</span></div>
-
-        <div id="content-gv" class="dropdown-content">
-
-          • PICKING ASSIGNMENT (<span id="lbl-gv-zone">...</span>): <span class="sub-info">PICK UNIT: <b>UNIT</b> | PICK GROUP: <b>UNIT</b></span>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-
-    <div id="sec-afm" class="section">
-
-      <div class="grid-fields">
-
-        <div class="field">
-
-          <label>1. ZONE</label>
-
-         <select id="afmZone" onchange="updateAfmLiggers()">
-
-  <option value="">KIES ZONE...</option>
-
-  <option value="2200A-2700A">2200A-2700A</option>
-
-  <option value="3700B-3200B">3700B-3200B</option>
-
-  <option value="3700A-3200A">3700A-3200A</option>
-
-  <option value="4200A-5200A">4200A-5200A</option>
-
-  <option value="20DOZEN">20 DOZEN AISLE</option>
-
-  <option value="AFRAME">AFRAME</option>
-
-</select>
-
-        </div>
-
-        <div class="field">
-
-          <label>2. LIGGER</label>
-
-          <select id="afmLigger" disabled>
-
-            <option value="">...</option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-      <button class="btn-calc" onclick="calcAfm()">TOON AFMETING</button>
-
-      <div id="out-afm" class="results-container" style="display:none;">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>ZONE</th>
-
-              <th>LIGGER</th>
-
-              <th>AFMETING (CM)</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody id="res-body-afm"></tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <script>
+				</head>
+				<body>
+					<div class="theme-switch-wrapper" onclick="toggleTheme()">
+						<span id="theme-icon">☀️</span>
+					</div>
+					<div class="printer-hub" id="printerHub">
+						<div class="printer-label">LABELPRINTERS</div>
+						<div class="printer-popup">
+							<div style="margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+								<span style="font-size:0.65rem; font-weight:900; opacity:0.6;">RECEPTIE MAARTEN</span>
+								<span class="p-code">LT-0471</span>
+							</div>
+							<div>
+								<span style="font-size:0.65rem; font-weight:900; opacity:0.6;">BUREAU KURT</span>
+								<span class="p-code">PC-0455</span>
+							</div>
+						</div>
+						<div class="printer-trigger" onclick="togglePrinterHub()">🖨️</div>
+					</div>
+					<div class="container">
+						<h2>🔧 MASTERDATA TOOL IZEGEM</h2>
+						<nav class="nav-tabs">
+							<button id="btn-dyn" class="tab-btn active" onclick="switchTab('dyn')">DYNAMISCH</button>
+							<button id="btn-fix" class="tab-btn" onclick="switchTab('fix')">FLOW RACKS</button>
+							<button id="btn-afm" class="tab-btn" onclick="switchTab('afm')">AFMETINGEN FLOW RACKS</button>
+							<button id="btn-gv" class="tab-btn" onclick="switchTab('gv')">GROTE VOLUMES</button>
+						</nav>
+						<div id="sec-dyn" class="section active">
+							<div class="grid-fields">
+								<div class="field">
+									<label>ZONE</label>
+									<select id="dynZone">
+										<option value="D420">APO CYTO LVL 1,2+12 (D420)</option>
+										<option value="D421">APO BOIRON LVL 3-11 (D421)</option>
+										<option value="D422">APO HOOG LVL 1,2+12 (D422)</option>
+										<option value="D423">APO LAAG LVL 3-11 (D423)</option>
+										<option value="R440">DEP HOOG 44-50 LVL 1 + 5 (R440)</option>
+										<option value="R441">DEP LAAG 44-50 LV 2-4 + 6-11 (R441)</option>
+										<option value="R442">DEP HOOG 44-50 LVL 1 + 5 (R442)</option>
+										<option value="R443">DEP LAAG 44-50 LV 2-4 + 6-11 (R443)</option>
+										<option value="R600">DEP COOL (R600)</option>
+									</select>
+								</div>
+								<div class="field">
+									<label>BBD (VERVALDATUM)</label>
+									<select id="dynBBD">
+										<option value="nee">NEE</option>
+										<option value="ja">JA</option>
+									</select>
+								</div>
+							</div>
+							<button class="btn-calc" onclick="calcDyn()">GEGEVENS GENEREREN</button>
+							<div id="out-dyn" class="results-container" style="display:none;">
+								<table>
+									<thead>
+										<tr>
+											<th>LV CODE</th>
+											<th>LV TYPE</th>
+											<th>HD TYPE</th>
+											<th>SIZE</th>
+											<th>STORAGE</th>
+											<th>ITEM GROUP</th>
+											<th>PICK ZONE</th>
+										</tr>
+									</thead>
+									<tbody id="res-body-dyn"></tbody>
+								</table>
+							</div>
+						</div>
+						<div id="sec-fix" class="section">
+							<div class="grid-fields">
+								<div class="field">
+									<label>1. ZONE</label>
+									<select id="fixZone" onchange="filterKleur()">
+										<option value="">KIES...</option>
+										<option value="2200A-2700A">2200A-2700A</option>
+										<option value="3700B-3200B">3700B-3200B</option>
+										<option value="3700A-3200A">3700A-3200A</option>
+										<option value="4200A-5200A">4200A-5200A</option>
+										<option value="AISLE22-23-AFR">001-006 AFR</option>
+										<option value="AISLE22-23-CON">2200B-2300B CRT</option>
+										<option value="AISLE24-27">2400B-2700B CRT</option>
+									</select>
+								</div>
+								<div class="field">
+									<label>2. KLEUR BAK IN LIGGER</label>
+									<select id="fixKleur" disabled onchange="filterVerpakking()">
+										<option value="">...</option>
+									</select>
+								</div>
+								<div class="field">
+									<label>3. GEWENSTE LV</label>
+									<select id="fixVerpakking" disabled onchange="filterLiggers()">
+										<option value="">...</option>
+									</select>
+								</div>
+								<div class="field">
+									<label>4. LIGGER</label>
+									<select id="fixLigger" disabled>
+										<option value="">...</option>
+									</select>
+								</div>
+							</div>
+							<button class="btn-calc" onclick="calcFix()">GEGEVENS GENEREREN</button>
+							<div id="out-fix" class="results-container" style="display:none;">
+								<table>
+									<thead>
+										<tr>
+											<th>HD TYPE</th>
+											<th>LOC SIZE</th>
+											<th>STORAGE</th>
+											<th>ITEM GROUP</th>
+											<th>CEILING</th>
+											<th>TRESH</th>
+										</tr>
+									</thead>
+									<tbody id="res-body-fix"></tbody>
+								</table>
+							</div>
+							<div id="tip-fix" class="subtle-tip">ℹ️ CONTROLEER FLOW RACKS ENTRY LOCATIONS (HFEME0) OP HOLDS.</div>
+							<div id="drop-fix" class="assignment-dropdown">
+								<div class="dropdown-header" onclick="toggleDropdown('content-fix')">DETAILS PICKING ASSIGNMENTS 
+									<span>▼</span>
+								</div>
+								<div id="content-fix" class="dropdown-content">
+
+          • ASSIGNMENT 1: 
+									<span class="sub-info">LOCATIE: 
+										<b>Z_CON_UNIT</b> | PICK UNIT: 
+										<b>UNIT</b>
+									</span>
+									<br> • ASSIGNMENT 2: 
+										<span class="sub-info">LOCATIE: 
+											<b>Z_CON_CARTON</b> | PICK UNIT: 
+											<b id="lbl-pu">...</b>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div id="sec-gv" class="section">
+								<div class="grid-fields">
+									<div class="field">
+										<label>SELECTEER ZONE</label>
+										<select id="gvZone">
+											<option value="">KIES...</option>
+											<option value="7000-7010">7000-7010</option>
+											<option value="7050-7070">7050-7070</option>
+											<option value="7100-7150">7100-7150</option>
+										</select>
+									</div>
+								</div>
+								<button class="btn-calc" onclick="calcGV()">GEGEVENS GENEREREN</button>
+								<div id="out-gv" class="results-container" style="display:none;">
+									<table>
+										<thead>
+											<tr>
+												<th>HD TYPE</th>
+												<th>SIZE</th>
+												<th>STORAGE</th>
+												<th>ITEM GROUP</th>
+												<th>PREP</th>
+											</tr>
+										</thead>
+										<tbody id="res-body-gv"></tbody>
+									</table>
+								</div>
+								<div id="tip-gv" class="subtle-tip">ℹ️ VERGEET NIET NAAR RACK LOCATIONS (HFEMS0) TE GAAN.</div>
+								<div id="drop-gv" class="assignment-dropdown">
+									<div class="dropdown-header" onclick="toggleDropdown('content-gv')">DETAILS PICKING ASSIGNMENT 
+										<span>▼</span>
+									</div>
+									<div id="content-gv" class="dropdown-content">
+
+          • PICKING ASSIGNMENT (
+										<span id="lbl-gv-zone">...</span>): 
+										<span class="sub-info">PICK UNIT: 
+											<b>UNIT</b> | PICK GROUP: 
+											<b>UNIT</b>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div id="sec-afm" class="section">
+								<div class="grid-fields">
+									<div class="field">
+										<label>1. ZONE</label>
+										<select id="afmZone" onchange="updateAfmLiggers()">
+											<option value="">KIES ZONE...</option>
+											<option value="2200A-2700A">2200A-2700A</option>
+											<option value="3700B-3200B">3700B-3200B</option>
+											<option value="3700A-3200A">3700A-3200A</option>
+											<option value="4200A-5200A">4200A-5200A</option>
+											<option value="20DOZEN">20 DOZEN AISLE</option>
+											<option value="AFRAME">AFRAME</option>
+										</select>
+									</div>
+									<div class="field">
+										<label>2. LIGGER</label>
+										<select id="afmLigger" disabled>
+											<option value="">...</option>
+										</select>
+									</div>
+								</div>
+								<button class="btn-calc" onclick="calcAfm()">TOON AFMETING</button>
+								<div id="out-afm" class="results-container" style="display:none;">
+									<table>
+										<thead>
+											<tr>
+												<th>ZONE</th>
+												<th>LIGGER</th>
+												<th>AFMETING (CM)</th>
+											</tr>
+										</thead>
+										<tbody id="res-body-afm"></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<script>
 
     function togglePrinterHub() { document.getElementById('printerHub').classList.toggle('active'); }
 
@@ -1136,7 +935,18 @@
 
       document.getElementById('out-dyn').style.display = 'block';
 
-      document.getElementById('res-body-dyn').innerHTML = `<tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${z === "R600" ? "COO" : "CON"}</td><td><span class="badge-id ${badgeClass}">${d.id}</span></td></tr>`;
+      document.getElementById('res-body-dyn').innerHTML = `
+							<tr>
+								<td>${d.code}</td>
+								<td>${d.type}</td>
+								<td>${d.hd}</td>
+								<td>${d.size}</td>
+								<td>${d.storage}</td>
+								<td>${z === "R600" ? "COO" : "CON"}</td>
+								<td>
+									<span class="badge-id ${badgeClass}">${d.id}</span>
+								</td>
+							</tr>`;
 
     }
 
@@ -1148,7 +958,8 @@
 
       const kSel = document.getElementById('fixKleur');
 
-      kSel.innerHTML = '<option value="">KLEUR...</option>';
+      kSel.innerHTML = '
+							<option value="">KLEUR...</option>';
 
       const kleuren = [...new Set(fixData.filter(d => d.z === z).map(d => d.k))];
 
@@ -1166,7 +977,8 @@
 
       const vSel = document.getElementById('fixVerpakking');
 
-      vSel.innerHTML = '<option value="">KEUZE...</option>';
+      vSel.innerHTML = '
+							<option value="">KEUZE...</option>';
 
       
 
@@ -1194,7 +1006,8 @@
 
   const lSel = document.getElementById('fixLigger');
 
-  lSel.innerHTML = '<option value="">LIGGER(S)...</option>';
+  lSel.innerHTML = '
+							<option value="">LIGGER(S)...</option>';
 
   
 
@@ -1260,21 +1073,15 @@
 
     document.getElementById('res-body-fix').innerHTML = `
 
-      <tr>
-
-        <td>${hd}</td>
-
-        <td>${locSize}</td>
-
-        <td>${m.s}</td>
-
-        <td>${itemGroup}</td>
-
-        <td>${m.c}</td>
-
-        <td>${m.t}</td>
-
-      </tr>`;
+      
+							<tr>
+								<td>${hd}</td>
+								<td>${locSize}</td>
+								<td>${m.s}</td>
+								<td>${itemGroup}</td>
+								<td>${m.c}</td>
+								<td>${m.t}</td>
+							</tr>`;
 
   }
 
@@ -1324,7 +1131,14 @@
 
       document.getElementById('drop-gv').style.display = 'block';
 
-      document.getElementById('res-body-gv').innerHTML = `<tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>${group}</td><td>${prep}</td></tr>`;
+      document.getElementById('res-body-gv').innerHTML = `
+							<tr>
+								<td>LABEL</td>
+								<td>CRT</td>
+								<td>${storage}</td>
+								<td>${group}</td>
+								<td>${prep}</td>
+							</tr>`;
 
     }
 
@@ -1336,7 +1150,8 @@
 
   const lSel = document.getElementById('afmLigger');
 
-  lSel.innerHTML = '<option value="">KIES LIGGER(S)...</option>';
+  lSel.innerHTML = '
+							<option value="">KIES LIGGER(S)...</option>';
 
   
 
@@ -1388,19 +1203,14 @@
 
   document.getElementById('res-body-afm').innerHTML = `
 
-    <tr>
-
-      <td>${afmData[zKey].name}</td>
-
-      <td>${label}</td>
-
-      <td>
-
-        <div style="display: flex; align-items: center; gap: 15px;">
-
-          <span class="badge-size">${afmetingTekst}</span>
-
-          <button onclick="openCalc(${totaalCm})" 
+    
+							<tr>
+								<td>${afmData[zKey].name}</td>
+								<td>${label}</td>
+								<td>
+									<div style="display: flex; align-items: center; gap: 15px;">
+										<span class="badge-size">${afmetingTekst}</span>
+										<button onclick="openCalc(${totaalCm})" 
 
                   style="cursor:pointer; background: var(--tab-bg); border: 1px solid var(--border); 
 
@@ -1413,12 +1223,9 @@
             🧮 BEREKEN CAPACITEIT
 
           </button>
-
-        </div>
-
-      </td>
-
-    </tr>`;
+									</div>
+								</td>
+							</tr>`;
 
 }
 
@@ -1444,10 +1251,7 @@
 
 }
 
-  </script>
-
-</body>
-
-
-
-</html>
+  
+						</script>
+					</body>
+				</html>
