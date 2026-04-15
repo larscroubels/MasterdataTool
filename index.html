@@ -547,11 +547,32 @@
     .printer-fab:hover { transform: scale(1.08); }
 
     /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      #sec-fix .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      #sec-fix .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
     @media (max-width: 640px) {
       .nav-tabs { grid-template-columns: repeat(2, 1fr); }
       .card-body { padding: 24px; }
       h1 { font-size: 1.8rem; }
       body { font-size: 16px; }
+      #sec-fix .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      #sec-fix .form-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
