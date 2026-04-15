@@ -160,7 +160,7 @@
       border-radius: 24px;
       border: 2px solid var(--border);
       box-shadow: 0 8px 32px var(--shadow-color), 0 1px 0 rgba(255,255,255,0.05) inset;
-      overflow: hidden;
+      overflow: visible;
     }
 
     /* ── TABS ── */
@@ -222,10 +222,17 @@
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 24px;
       margin-bottom: 32px;
+      position: relative;
+      z-index: 10;
     }
 
     #sec-fix .form-grid {
       grid-template-columns: repeat(4, 1fr) !important;
+    }
+
+    .form-group {
+      position: relative;
+      z-index: 1;
     }
 
     .form-group label {
@@ -256,6 +263,8 @@
       background-size: 20px;
       transition: all 0.2s ease;
       line-height: 1.6;
+      position: relative;
+      z-index: 2;
     }
 
     select:focus {
@@ -555,12 +564,19 @@
 
     @media (max-width: 640px) {
       .nav-tabs { grid-template-columns: repeat(2, 1fr); }
-      .card-body { padding: 24px; }
+      .card-body { padding: 24px; position: relative; z-index: 1; }
       h1 { font-size: 1.8rem; }
       body { font-size: 16px; }
       #sec-fix .form-grid {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 16px;
+        overflow: visible !important;
+      }
+      .form-grid {
+        overflow: visible !important;
+      }
+      .form-group {
+        overflow: visible !important;
       }
       .form-group label {
         font-size: 0.95rem;
@@ -569,6 +585,7 @@
       select {
         font-size: 1rem;
         padding: 12px 40px 12px 14px;
+        overflow: visible !important;
       }
     }
   </style>
