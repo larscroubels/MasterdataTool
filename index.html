@@ -931,13 +931,14 @@
       const hd = z.startsWith('AISLE') ? v : (v === 'KARTON' ? 'CRT' : m.hd);
       const locSize = z.startsWith('AISLE') ? 'CRT' : (k === 'ROOD' ? 'RED' : 'BLU');
       const ig = m.ig || 'CON';
+      const tresh = Math.ceil(m.c * 2 / 3);
 
       document.getElementById('lbl-pu').textContent = hd;
       document.getElementById('out-fix').classList.add('show');
       document.getElementById('tip-fix').classList.add('show');
       document.getElementById('drop-fix').classList.add('show');
       document.getElementById('res-fix').innerHTML = `
-        <tr><td>${hd}</td><td>${locSize}</td><td>${m.s}</td><td>${ig}</td><td>${m.c}</td><td>${m.t}</td></tr>`;
+        <tr><td>${hd}</td><td>${locSize}</td><td>${m.s}</td><td>${ig}</td><td>${m.c}</td><td>${tresh}</td></tr>`;
     }
 
     // ── AFMETINGEN ──
