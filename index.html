@@ -75,10 +75,6 @@
 
     /* ── THEME TOGGLE ── */
     .theme-btn {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 200;
       width: 56px;
       height: 56px;
       border-radius: 50%;
@@ -486,13 +482,29 @@
     /* ── PRINTER HUB ── */
     .printer-hub {
       position: fixed;
-      bottom: 32px;
-      right: 32px;
-      z-index: 100;
+      bottom: 20px;
+      left: 32px;
+      z-index: 9999;
       display: flex;
       align-items: flex-end;
+      flex-direction: row;
+      gap: 20px;
+    }
+
+    .button-item {
+      display: flex;
       flex-direction: column;
-      gap: 10px;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .button-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      white-space: nowrap;
     }
 
     .printer-popup {
@@ -539,22 +551,22 @@
     }
 
     .printer-fab {
-      width: 64px;
-      height: 64px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
-      border: none;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      color: #fff;
-      font-size: 1.6rem;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.5rem;
       cursor: pointer;
-      box-shadow: 0 6px 24px var(--shadow-accent);
+      box-shadow: 0 4px 16px var(--shadow-color);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
     }
 
-    .printer-fab:hover { transform: scale(1.08); }
+    .printer-fab:hover { transform: scale(1.1); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1200px) {
@@ -596,10 +608,19 @@
 </head>
 
 <body>
-  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Thema wisselen">☀️</button>
-
-  <!-- Printer Hub -->
   <div class="printer-hub" id="printerHub">
+    <div class="button-item">
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Thema wisselen">☀️</button>
+      <span class="button-label">Thema</span>
+    </div>
+    <div class="button-item">
+      <button class="printer-fab" onclick="togglePrinter()" title="Labelprinters">🖨️</button>
+      <span class="button-label">Printers</span>
+    </div>
+    <div class="button-item">
+      <a href="https://reflex.febelco.be/reflex/env/production" target="_blank" class="printer-fab" title="Reflex"><img src="https://reflex.febelco.be/reflex/favicon.ico" alt="Reflex" style="width: 24px; height: 24px;"></a>
+      <span class="button-label">Reflex</span>
+    </div>
     <div class="printer-popup">
       <div class="printer-row">
         <span class="printer-row-label">Receptie Maarten</span>
@@ -610,7 +631,6 @@
         <span class="printer-row-code">PC-0455</span>
       </div>
     </div>
-    <button class="printer-fab" onclick="togglePrinter()" title="Labelprinters">🖨️</button>
   </div>
 
   <div class="page-wrapper">
