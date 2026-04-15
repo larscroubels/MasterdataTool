@@ -931,7 +931,7 @@
       const hd = z.startsWith('AISLE') ? v : (v === 'KARTON' ? 'CRT' : m.hd);
       const locSize = z.startsWith('AISLE') ? 'CRT' : (k === 'ROOD' ? 'RED' : 'BLU');
       const ig = m.ig || 'CON';
-      const tresh = Math.ceil(m.c * 2 / 3);
+      const tresh = Math.ceil(m.c / 3);
 
       document.getElementById('lbl-pu').textContent = hd;
       document.getElementById('out-fix').classList.add('show');
