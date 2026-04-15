@@ -225,7 +225,7 @@
     }
 
     #sec-fix .form-grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, 1fr) !important;
     }
 
     .form-group label {
@@ -547,15 +547,9 @@
     .printer-fab:hover { transform: scale(1.08); }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 1024px) {
+    @media (max-width: 1200px) {
       #sec-fix .form-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      #sec-fix .form-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
       }
     }
 
@@ -565,13 +559,16 @@
       h1 { font-size: 1.8rem; }
       body { font-size: 16px; }
       #sec-fix .form-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px;
       }
-    }
-
-    @media (max-width: 480px) {
-      #sec-fix .form-grid {
-        grid-template-columns: 1fr;
+      .form-group label {
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+      }
+      select {
+        font-size: 1rem;
+        padding: 12px 40px 12px 14px;
       }
     }
   </style>
@@ -795,8 +792,10 @@
     function switchTab(tab) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('sec-' + tab).classList.add('active');
-      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      const targetSection = document.getElementById('sec-' + tab);
+      const targetButton = document.querySelector('[data-tab="' + tab + '"]');
+      if (targetSection) targetSection.classList.add('active');
+      if (targetButton) targetButton.classList.add('active');
     }
 
     // ── DROPDOWN ──
