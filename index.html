@@ -761,15 +761,15 @@
               </select>
             </div>
             <div class="form-group">
-              <label>2. Ligger</label>
+              <label>2. Ligger(s)</label>
               <select id="afmLigger" disabled><option value="">...</option></select>
             </div>
           </div>
-          <button class="btn-primary" onclick="calcAfm()">Toon Afmeting</button>
+          <button class="btn-primary" onclick="calcAfm()">Bereken Afmeting</button>
           <div id="out-afm" class="results">
             <table>
               <thead>
-                <tr><th>Zone</th><th>Ligger</th><th>Afmeting</th></tr>
+                <tr><th>Zone</th><th>Ligger(s)</th><th>Aantal in rek</th></tr>
               </thead>
               <tbody id="res-afm"></tbody>
             </table>
@@ -1035,7 +1035,7 @@
         <tr>
           <td>${afmData[zk].name}</td>
           <td>${lbl}</td>
-          <td>${capaciteit} stuks (${val} cm)</td>
+          <td>${capaciteit} stuks (crt =${val} cm)</td>
           <td>${threshold}</td>
         </tr>`;
     }
