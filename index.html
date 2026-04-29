@@ -688,7 +688,7 @@
           <div id="out-dyn" class="results">
             <table>
               <thead>
-                <tr><th>LV Code</th><th>LV Type</th><th>HD Type</th><th>Size</th><th>Storage</th><th>Item Group</th><th>Pick Zone</th></tr>
+                <tr><th>LV Code</th><th>LV Type</th><th>HD Type</th><th>Location Size</th><th>Storage group</th><th>Item Group</th><th>Pick Zone</th></tr>
               </thead>
               <tbody id="res-dyn"></tbody>
             </table>
@@ -769,8 +769,9 @@
           <div id="out-afm" class="results">
             <table>
               <thead>
-                <tr><th>Zone</th><th>Ligger(s)</th><th>Aantal in rek</th></tr>
-              </thead>
+<thead>
+  <tr><th>Zone</th><th>Ligger(s)</th><th>Aantal in rek</th><th>Tresh</th></tr>
+</thead>              </thead>
               <tbody id="res-afm"></tbody>
             </table>
           </div>
@@ -861,9 +862,17 @@
       header.classList.toggle('open');
     }
 
-    // ── DATA ──
+    // ── DATA & MAPPING ──
+    const hdMapping = {
+      'UNIT': '001', 'SUPCAR': '100', 'RED': '110', 'ROOD': '110',
+      'BLU': '120', 'BLAUW': '120', 'BLU FRIGO': '130', 'DEPOT BOX': '270',
+      'LABEL': '300', 'APOBOX LAAG': '400', 'APOBOX HOOG': '450',
+      'SSL': '510', 'LSL': '520', 'CRT SSL': '510', 'CRT LSL': '520',
+      'PALLET': '900', 'KARTON': '300'
+    };
+
     const dynData = {
-      D420: { nee: { code:"45", type:"450", hd:"AB2", size:"2A2", storage:"016", id:"D420NOTBBD" }, ja: { code:"45", type:"50",  hd:"AB2", size:"2A2", storage:"016", id:"D420YESBBD" } },
+      D420: { nee: { code:"45", type:"450", hd:"AB2", size:"2A2", storage:"016", id:"D420NOTBBD" }, ja: { code:"45", type:"450",  hd:"AB2", size:"2A2", storage:"016", id:"D420YESBBD" } },
       D421: { nee: { code:"40", type:"400", hd:"AB1", size:"2A1", storage:"017", id:"D421NOTBBD" }, ja: { code:"40", type:"400", hd:"AB1", size:"2A1", storage:"017", id:"D421YESBBD" } },
       D422: { nee: { code:"45", type:"450", hd:"AB2", size:"2A2", storage:"018", id:"D422NOTBBD" }, ja: { code:"45", type:"450", hd:"AB2", size:"2A2", storage:"018", id:"D422YESBBD" } },
       D423: { nee: { code:"40", type:"400", hd:"AB1", size:"2A1", storage:"019", id:"D423NOTBBD" }, ja: { code:"40", type:"400", hd:"AB1", size:"2A1", storage:"019", id:"D423YESBBD" } },
@@ -891,7 +900,7 @@
       { z:"4200A-5200A", l:"3",           k:"BLAUW", c:4, t:2, s:10, hd:"BLU" },
       { z:"4200A-5200A", l:"5",           k:"BLAUW", c:5, t:2, s:10, hd:"BLU" },
       { z:"4200A-5200A", l:"2",           k:"ROOD",  c:6, t:2, s:11, hd:"RED" },
-      { z:"4200A-5200A", l:"3",           k:"ROOD",  c:4, t:2, s:11, Bird:"RED" },
+      { z:"4200A-5200A", l:"3",           k:"ROOD",  c:4, t:2, s:11, hd:"RED" },
       { z:"4200A-5200A", l:"4",           k:"ROOD",  c:4, t:2, s:11, hd:"RED" },
       { z:"4200A-5200A", l:"5",           k:"ROOD",  c:4, t:2, s:11, hd:"RED" },
       { z:"4200A-5200A", l:"6",           k:"ROOD",  c:5, t:2, s:11, hd:"RED" },
@@ -902,12 +911,12 @@
     ];
 
     const afmData = {
-      "2200A-2700A": { name:"2200A-2700A",   liggers:{ "1-6":"245 cm" } },
-      "3700B-3200B": { name:"3700B-3200B",   liggers:{ "1-8":"147 cm" } },
-      "3700A-3200A": { name:"3700A-3200A",   liggers:{ "1, 3, 5":"196 cm", "2, 4, 6, 7":"245 cm" } },
-      "4200A-5200A": { name:"4200A-5200A",   liggers:{ "1, 3, 5":"196 cm", "2, 4, 6, 7":"294 cm" } },
-      "20DOZEN":     { name:"20 Dozen Aisle",liggers:{ "1":"409 cm", "2-5":"394 cm" } },
-      "AFRAME":      { name:"Aframe",        liggers:{ "1-5":"394 cm" } }
+      "2200A-2700A": { name:"2200A-2700A",   liggers:{ "1-6":"245" } },
+      "3700B-3200B": { name:"3700B-3200B",   liggers:{ "1-8":"147" } },
+      "3700A-3200A": { name:"3700A-3200A",   liggers:{ "1, 3, 5":"196", "2, 4, 6, 7":"245" } },
+      "4200A-5200A": { name:"4200A-5200A",   liggers:{ "1, 3, 5":"196", "2, 4, 6, 7":"294" } },
+      "20DOZEN":     { name:"20 Dozen Aisle",liggers:{ "1":"409", "2-5":"394" } },
+      "AFRAME":      { name:"Aframe",        liggers:{ "1-5":"394" } }
     };
 
     // ── DYNAMISCH ──
@@ -918,12 +927,7 @@
       const cls = b === 'ja' ? 'badge-green' : 'badge-red';
       document.getElementById('out-dyn').classList.add('show');
       document.getElementById('res-dyn').innerHTML = `
-        <tr>
-          <td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td>
-          <td>${d.size}</td><td>${d.storage}</td>
-          <td>${z === 'R600' ? 'COO' : 'CON'}</td>
-          <td><span class="badge ${cls}">${d.id}</span></td>
-        </tr>`;
+        <tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${z === 'R600' ? 'COO' : 'CON'}</td><td><span class="badge ${cls}">${d.id}</span></td></tr>`;
     }
 
     // ── FLOW RACKS ──
@@ -940,9 +944,7 @@
       const z = document.getElementById('fixZone').value;
       const vSel = document.getElementById('fixVerpakking');
       vSel.innerHTML = '<option value="">Keuze...</option>';
-      const choices = z.startsWith('AISLE') 
-        ? ['CRT SSL','CRT LSL','RED','BLU'] 
-        : ['RED', 'BLU', 'LSL', 'SSL'];
+      const choices = z.startsWith('AISLE') ? ['CRT SSL','CRT LSL','RED','BLU'] : ['RED', 'BLU', 'LSL', 'SSL'];
       choices.forEach(v => vSel.add(new Option(v, v)));
       vSel.disabled = false;
       resetSelect('fixLigger');
@@ -968,25 +970,81 @@
       const m = fixData.find(d => d.z === z && d.k === k && d.l === l);
       if (!m) return;
 
-      let hd = v.replace('CRT ', ''); 
+      let hdName = v.replace('CRT ', ''); 
+      let hdCode = hdMapping[v] || hdMapping[hdName] || '???';
+      let lvCode = hdCode.length > 1 ? hdCode.slice(0, -1) : hdCode;
       let locSize = z.startsWith('AISLE') ? 'CRT' : (k === 'ROOD' ? 'RED' : 'BLU');
       let storage = m.s;
-      
-      if (z === "3700B-3200B") {
-          storage = 8;
-          locSize = "BLU";
-      }
-
+      if (z === "3700B-3200B") { storage = 8; locSize = "BLU"; }
       const ig = m.ig || 'CON';
-      const linkAfm = (val) => val === "ZIE AFM" ? `<a href="javascript:void(0)" onclick="switchTab('afm')" style="color: var(--primary); font-weight: bold; text-decoration: underline;">ZIE AFM</a>` : val;
+      const displayCap = (m.c === "ZIE AFM") ? `<a href="javascript:void(0)" onclick="switchTab('afm')" style="color: var(--primary); font-weight: bold; text-decoration: underline;">ZIE AFM</a>` : m.c;
+      const displayTresh = (m.t === "ZIE AFM") ? `<a href="javascript:void(0)" onclick="switchTab('afm')" style="color: var(--primary); font-weight: bold; text-decoration: underline;">ZIE AFM</a>` : Math.ceil(m.c / 3);
 
-      const displayCap = linkAfm(m.c);
-      const displayTresh = (m.t === "ZIE AFM") ? linkAfm(m.t) : Math.ceil(m.c / 3);
+      const out = document.getElementById('out-fix');
+      out.classList.add('show');
+      out.querySelector('table').innerHTML = `
+        <thead>
+          <tr>
+            <th>LV Code</th>
+            <th>HD Type</th>
+            <th>Loc. Size</th>
+            <th>Storage</th>
+            <th>Item Group</th>
+            <th style="background: rgba(0, 150, 57, 0.15); text-align: center; border-left: 2px solid var(--border);">Ceiling</th>
+            <th style="background: rgba(0, 150, 57, 0.15); text-align: center;">Tresh</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">${lvCode}</td>
+            <td style="white-space: nowrap;">${hdName} / ${hdCode}</td>
+            <td style="font-weight: 600;">${locSize}</td>
+            <td>${pad(storage)}</td>
+            <td>${ig}</td>
+            <td style="background: rgba(0,0,0,0.06); text-align: center; border-left: 2px solid var(--border); font-weight: 700;">${displayCap}</td>
+            <td style="background: rgba(0,0,0,0.06); text-align: center; font-weight: 700;">${displayTresh}</td>
+          </tr>
+        </tbody>`;
+    }
 
-      document.getElementById('lbl-pu').textContent = hd;
-      document.getElementById('out-fix').classList.add('show');
-      document.getElementById('res-fix').innerHTML = `
-        <tr><td>${hd}</td><td>${locSize}</td><td>${pad(storage)}</td><td>${ig}</td><td>${displayCap}</td><td>${displayTresh}</td></tr>`;
+    // ── GROTE VOLUMES ──
+    function calcGV() {
+      const z = document.getElementById('gvZone').value;
+      if (!z) return;
+      
+      let storageNum = 2;
+      let prepVal = 'GV2';
+      // Bepaal de waarden op basis van zone
+      if (z === '7000-7010') { storageNum = 1; prepVal = 'GV1'; }
+      else if (z === '7100-7150') { storageNum = 3; prepVal = 'GV2'; }
+
+      // Item Group moet hetzelfde zijn als Prep
+      const itemGroup = prepVal;
+
+      const out = document.getElementById('out-gv');
+      out.classList.add('show');
+      
+      out.querySelector('table').innerHTML = `
+        <thead>
+          <tr>
+            <th>LV Code</th>
+            <th>HD Type</th>
+            <th>Loc. Size</th>
+            <th>Storage</th>
+            <th>Preperation group</th>
+            <th>Item Group</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">30</td>
+            <td>LABEL / 300</td>
+            <td style="font-weight: 600;">CRT</td>
+            <td>GV${storageNum}</td>
+            <td>${prepVal}</td>
+            <td style="color: var(--accent); font-weight: 800;">${itemGroup}</td>
+          </tr>
+        </tbody>`;
     }
 
     // ── AFMETINGEN ──
@@ -996,63 +1054,37 @@
       lSel.innerHTML = '<option value="">Kies ligger(s)...</option>';
       if (zk && afmData[zk]) {
         Object.keys(afmData[zk].liggers).forEach(l => {
-          const lbl = (l.includes('-') || l.includes(',')) ? 'Liggers ' + l : 'Ligger ' + l;
-          lSel.add(new Option(lbl, l));
+          lSel.add(new Option((l.includes('-') || l.includes(',')) ? 'Liggers ' + l : 'Ligger ' + l, l));
         });
         lSel.disabled = false;
       } else { lSel.disabled = true; }
     }
 
-    function calcAfm() {
+   function calcAfm() {
       const zk = document.getElementById('afmZone').value;
       const lk = document.getElementById('afmLigger').value;
       if (!zk || !lk) return;
       
-      const lbl = (lk.includes('-') || lk.includes(',')) ? 'Liggers ' + lk : 'Ligger ' + lk;
-      const afm = afmData[zk].liggers[lk];
-      const cmLigger = parseInt(afm);
+      const cmLigger = parseInt(afmData[zk].liggers[lk]);
+      const breedte = prompt('Breedte/lengte karton (cm)?');
+      if (breedte === null) return;
+      const val = parseFloat(breedte);
+      if (!val || val <= 0) { alert('Ongeldig getal.'); return; }
 
-      const doosBreedte = prompt('Wat is de breedte/lengte van je karton in cm?');
-      if (doosBreedte === null) return;
-      const val = parseFloat(doosBreedte);
+      const cap = Math.floor(cmLigger / val);
+      const tresh = Math.ceil(cap / 3);
       
-      if (!val || val <= 0) { 
-        alert('Voer a.u.b. een geldig getal in.'); 
-        return; 
-      }
-
-      const capaciteit = Math.floor(cmLigger / val);
-      const threshold = Math.ceil(capaciteit / 3);
-
       document.getElementById('out-afm').classList.add('show');
-      // Tabel headers bijwerken (zorg dat de tabel in je HTML een extra <th>Tresh</th> heeft)
-      const tableHead = document.querySelector('#out-afm thead tr');
-      if (tableHead && tableHead.cells.length < 4) {
-          tableHead.innerHTML += '<th>Tresh</th>';
-      }
-
       document.getElementById('res-afm').innerHTML = `
         <tr>
           <td>${afmData[zk].name}</td>
-          <td>${lbl}</td>
-          <td>${capaciteit} stuks (crt =${val} cm)</td>
-          <td>${threshold}</td>
+          <td>${lk}</td>
+          <td style="font-weight: 600;">
+            <span style="color: var(--accent); font-weight: 800;">${cap}</span> (${val} cm)
+          </td>
+          <td style="font-weight: 800; color: var(--accent);">${tresh}</td>
         </tr>`;
     }
-
-    // ── GROTE VOLUMES ──
-    function calcGV() {
-      const z = document.getElementById('gvZone').value;
-      if (!z) return;
-      let storageNum = 2, prep = 'GV2', assignment = 'GV2', group = 'GV2';
-      if (z === '7000-7010') { storageNum = 1; prep = assignment = group = 'GV1'; }
-      else if (z === '7100-7150') { storageNum = 3; }
-
-      document.getElementById('lbl-gv-zone').textContent = assignment;
-      document.getElementById('out-gv').classList.add('show');
-      document.getElementById('res-gv').innerHTML = `
-        <tr><td>LABEL</td><td>CRT</td><td>GV${storageNum}</td><td>${group}</td><td>${prep}</td></tr>`;
-    }
-  </script>
+</script>
   </body>
 </html>
