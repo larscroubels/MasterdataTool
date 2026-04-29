@@ -653,7 +653,7 @@
       <nav class="nav-tabs">
         <button class="tab-btn active" data-tab="dyn" onclick="switchTab('dyn')">Dynamisch</button>
         <button class="tab-btn" data-tab="fix" onclick="switchTab('fix')">Flow Racks</button>
-        <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">Afmetingen</button>
+        <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">Afmetingen voor crt</button>
         <button class="tab-btn" data-tab="gv" onclick="switchTab('gv')">Grote Volumes</button>
       </nav>
 
@@ -712,7 +712,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label>2. Kleur Bak</label>
+              <label>2. Kleur ligger</label>
               <select id="fixKleur" disabled onchange="filterVerpakking()"><option value="">...</option></select>
             </div>
             <div class="form-group">
@@ -814,7 +814,18 @@
     </div>
   </div>
 
-  <script>
+<script>
+    // ── HELPERS ──
+    function pad(num) {
+      return num.toString().padStart(3, '0');
+    }
+
+    function resetSelect(id) {
+      const el = document.getElementById(id);
+      el.innerHTML = '<option value="">...</option>';
+      el.disabled = true;
+    }
+
     // ── THEME ──
     function toggleTheme() {
       const html = document.documentElement;
@@ -841,6 +852,7 @@
       const targetButton = document.querySelector('[data-tab="' + tab + '"]');
       if (targetSection) targetSection.classList.add('active');
       if (targetButton) targetButton.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // ── DROPDOWN ──
@@ -879,7 +891,7 @@
       { z:"4200A-5200A", l:"3",           k:"BLAUW", c:4, t:2, s:10, hd:"BLU" },
       { z:"4200A-5200A", l:"5",           k:"BLAUW", c:5, t:2, s:10, hd:"BLU" },
       { z:"4200A-5200A", l:"2",           k:"ROOD",  c:6, t:2, s:11, hd:"RED" },
-      { z:"4200A-5200A", l:"3",           k:"ROOD",  c:4, t:2, s:11, hd:"RED" },
+      { z:"4200A-5200A", l:"3",           k:"ROOD",  c:4, t:2, s:11, Bird:"RED" },
       { z:"4200A-5200A", l:"4",           k:"ROOD",  c:4, t:2, s:11, hd:"RED" },
       { z:"4200A-5200A", l:"5",           k:"ROOD",  c:4, t:2, s:11, hd:"RED" },
       { z:"4200A-5200A", l:"6",           k:"ROOD",  c:5, t:2, s:11, hd:"RED" },
@@ -928,7 +940,10 @@
       const z = document.getElementById('fixZone').value;
       const vSel = document.getElementById('fixVerpakking');
       vSel.innerHTML = '<option value="">Keuze...</option>';
-      (z.startsWith('AISLE') ? ['CRT SSL','CRT LSL','RED','BLU'] : ['BAK','KARTON']).forEach(v => vSel.add(new Option(v, v)));
+      const choices = z.startsWith('AISLE') 
+        ? ['CRT SSL','CRT LSL','RED','BLU'] 
+        : ['RED', 'BLU', 'LSL', 'SSL'];
+      choices.forEach(v => vSel.add(new Option(v, v)));
       vSel.disabled = false;
       resetSelect('fixLigger');
     }
@@ -953,17 +968,25 @@
       const m = fixData.find(d => d.z === z && d.k === k && d.l === l);
       if (!m) return;
 
-      const hd = z.startsWith('AISLE') ? v : (v === 'KARTON' ? 'CRT' : m.hd);
-      const locSize = z.startsWith('AISLE') ? 'CRT' : (k === 'ROOD' ? 'RED' : 'BLU');
+      let hd = v.replace('CRT ', ''); 
+      let locSize = z.startsWith('AISLE') ? 'CRT' : (k === 'ROOD' ? 'RED' : 'BLU');
+      let storage = m.s;
+      
+      if (z === "3700B-3200B") {
+          storage = 8;
+          locSize = "BLU";
+      }
+
       const ig = m.ig || 'CON';
-      const tresh = Math.ceil(m.c / 3);
+      const linkAfm = (val) => val === "ZIE AFM" ? `<a href="javascript:void(0)" onclick="switchTab('afm')" style="color: var(--primary); font-weight: bold; text-decoration: underline;">ZIE AFM</a>` : val;
+
+      const displayCap = linkAfm(m.c);
+      const displayTresh = (m.t === "ZIE AFM") ? linkAfm(m.t) : Math.ceil(m.c / 3);
 
       document.getElementById('lbl-pu').textContent = hd;
       document.getElementById('out-fix').classList.add('show');
-      document.getElementById('tip-fix').classList.add('show');
-      document.getElementById('drop-fix').classList.add('show');
       document.getElementById('res-fix').innerHTML = `
-        <tr><td>${hd}</td><td>${locSize}</td><td>${m.s}</td><td>${ig}</td><td>${m.c}</td><td>${tresh}</td></tr>`;
+        <tr><td>${hd}</td><td>${locSize}</td><td>${pad(storage)}</td><td>${ig}</td><td>${displayCap}</td><td>${displayTresh}</td></tr>`;
     }
 
     // ── AFMETINGEN ──
@@ -984,53 +1007,52 @@
       const zk = document.getElementById('afmZone').value;
       const lk = document.getElementById('afmLigger').value;
       if (!zk || !lk) return;
+      
       const lbl = (lk.includes('-') || lk.includes(',')) ? 'Liggers ' + lk : 'Ligger ' + lk;
       const afm = afmData[zk].liggers[lk];
-      const cm  = parseInt(afm);
+      const cmLigger = parseInt(afm);
+
+      const doosBreedte = prompt('Wat is de breedte/lengte van je karton in cm?');
+      if (doosBreedte === null) return;
+      const val = parseFloat(doosBreedte);
+      
+      if (!val || val <= 0) { 
+        alert('Voer a.u.b. een geldig getal in.'); 
+        return; 
+      }
+
+      const capaciteit = Math.floor(cmLigger / val);
+      const threshold = Math.ceil(capaciteit / 3);
+
       document.getElementById('out-afm').classList.add('show');
+      // Tabel headers bijwerken (zorg dat de tabel in je HTML een extra <th>Tresh</th> heeft)
+      const tableHead = document.querySelector('#out-afm thead tr');
+      if (tableHead && tableHead.cells.length < 4) {
+          tableHead.innerHTML += '<th>Tresh</th>';
+      }
+
       document.getElementById('res-afm').innerHTML = `
         <tr>
           <td>${afmData[zk].name}</td>
           <td>${lbl}</td>
-          <td>
-            <div class="size-display">
-              <span class="badge badge-size">${afm}</span>
-              <button class="calc-btn" onclick="openCalc(${cm})">🧮 Bereken capaciteit</button>
-            </div>
-          </td>
+          <td>${capaciteit} stuks (${val} cm)</td>
+          <td>${threshold}</td>
         </tr>`;
-    }
-
-    function openCalc(breedte) {
-      const input = prompt('Wat is de breedte/lengte van je karton in cm?');
-      if (input === null) return;
-      const val = parseFloat(input);
-      if (!val || val <= 0) { alert('Voer a.u.b. een geldig getal in.'); return; }
-      alert(`Bij een doos van ${val} cm passen er maximaal ${Math.floor(breedte / val)} dozen op deze ligger.`);
     }
 
     // ── GROTE VOLUMES ──
     function calcGV() {
       const z = document.getElementById('gvZone').value;
       if (!z) return;
-      let storage = 'GV2', prep = 'GV2', assignment = 'GV2', group = 'GV2';
-      if (z === '7000-7010') { storage = prep = assignment = group = 'GV1'; }
-      else if (z === '7100-7150') { storage = 'GV3'; }
+      let storageNum = 2, prep = 'GV2', assignment = 'GV2', group = 'GV2';
+      if (z === '7000-7010') { storageNum = 1; prep = assignment = group = 'GV1'; }
+      else if (z === '7100-7150') { storageNum = 3; }
 
       document.getElementById('lbl-gv-zone').textContent = assignment;
       document.getElementById('out-gv').classList.add('show');
-      document.getElementById('tip-gv').classList.add('show');
-      document.getElementById('drop-gv').classList.add('show');
       document.getElementById('res-gv').innerHTML = `
-        <tr><td>LABEL</td><td>CRT</td><td>${storage}</td><td>${group}</td><td>${prep}</td></tr>`;
-    }
-
-    // ── HELPERS ──
-    function resetSelect(id) {
-      const el = document.getElementById(id);
-      el.innerHTML = '<option value="">...</option>';
-      el.disabled = true;
+        <tr><td>LABEL</td><td>CRT</td><td>GV${storageNum}</td><td>${group}</td><td>${prep}</td></tr>`;
     }
   </script>
-</body>
+  </body>
 </html>
