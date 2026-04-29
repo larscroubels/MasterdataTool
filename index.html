@@ -977,8 +977,17 @@
       let storage = m.s;
       if (z === "3700B-3200B") { storage = 8; locSize = "BLU"; }
       const ig = m.ig || 'CON';
-      const displayCap = (m.c === "ZIE AFM") ? `<a href="javascript:void(0)" onclick="switchTab('afm')" style="color: var(--primary); font-weight: bold; text-decoration: underline;">ZIE AFM</a>` : m.c;
-      const displayTresh = (m.t === "ZIE AFM") ? `<a href="javascript:void(0)" onclick="switchTab('afm')" style="color: var(--primary); font-weight: bold; text-decoration: underline;">ZIE AFM</a>` : Math.ceil(m.c / 3);
+
+      // Logica voor LSL/SSL link naar afmetingen
+      let displayCap, displayTresh;
+      if (v === 'LSL' || v === 'SSL' || m.c === "ZIE AFM") {
+        const linkHTML = `<a href="javascript:void(0)" onclick="switchTab('afm')" style="color: var(--accent); font-weight: 800; text-decoration: underline;">ZIE AFM</a>`;
+        displayCap = linkHTML;
+        displayTresh = linkHTML;
+      } else {
+        displayCap = m.c;
+        displayTresh = Math.ceil(m.c / 3);
+      }
 
       const out = document.getElementById('out-fix');
       out.classList.add('show');
@@ -996,7 +1005,7 @@
         </thead>
         <tbody>
           <tr>
-            <td style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">${lvCode}</td>
+            <td style="font-weight: 800; color: var(--accent); font-size: 1.1rem;">${lvCode}</td>
             <td style="white-space: nowrap;">${hdName} / ${hdCode}</td>
             <td style="font-weight: 600;">${locSize}</td>
             <td>${pad(storage)}</td>
