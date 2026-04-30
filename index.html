@@ -904,7 +904,6 @@ function calcGV() {
     let sGroup = "";
     let pZone = "";
 
-    // Logica aanpassing: GV3 krijgt Prep Zone GV2[cite: 5]
     if (z === '7000-7010') { 
       sGroup = "023"; 
       pZone = "GV1"; 
@@ -912,8 +911,8 @@ function calcGV() {
       sGroup = "074"; 
       pZone = "GV2"; 
     } else if (z === '7100-7150') { 
-      sGroup = "062"; // Storage group blijft gelijk[cite: 5]
-      pZone = "GV2";   // Prep zone aangepast van GV3 naar GV2
+      sGroup = "062"; 
+      pZone = "GV2"; // Prep zone aangepast naar GV2
     }
 
     document.getElementById('res-gv').innerHTML = `
@@ -922,7 +921,7 @@ function calcGV() {
         <td>LAB / 300</td>
         <td style="font-weight:700;">CRT</td>
         <td>${sGroup}</td>
-        <td>CON</td>
+        <td>${pZone}</td> <!-- Item Group is nu gelijk aan Prep Zone -->
         <td><span class="badge badge-green">${pZone}</span></td>
       </tr>`;
       
@@ -931,7 +930,9 @@ function calcGV() {
     const tipGv = document.getElementById('tip-gv');
     if(tipGv) tipGv.classList.add('show');
   });
-}         function showLoading(type, callback) {
+}
+         
+         function showLoading(type, callback) {
            const container = document.getElementById('prog-' + type);
            const bar = container.querySelector('.progress-bar');
            const results = document.getElementById('out-' + type);
@@ -1093,36 +1094,43 @@ function calcGV() {
          });
          }
          function calcGV() {
-         showLoading('gv', () => {
-         const z = document.getElementById('gvZone').value;
-         if (!z) {
-           alert("Selecteer een zone.");
-           return;
-         }
-         
-         let sGroup = "";
-         let pZone = "";
-         
-         if (z === '7000-7010') { sGroup = "023"; pZone = "GV1"; }
-         else if (z === '7050-7070') { sGroup = "074"; pZone = "GV2"; }
-         else if (z === '7100-7150') { sGroup = "062"; pZone = "GV3"; }
-         
-         document.getElementById('res-gv').innerHTML = `
-           <tr>
-             <td>30</td>
-             <td>LAB / 300</td>
-             <td style="font-weight:700;">CRT</td>
-             <td>${sGroup}</td>
-             <td>CON</td>
-             <td><span class="badge badge-green">${pZone}</span></td>
-           </tr>`;
-           
-         document.getElementById('out-gv').classList.add('show');
-         
-         const tipGv = document.getElementById('tip-gv');
-         if(tipGv) tipGv.classList.add('show');
-         });
-         }
+  showLoading('gv', () => {
+    const z = document.getElementById('gvZone').value;
+    if (!z) {
+      alert("Selecteer een zone.");
+      return;
+    }
+
+    let sGroup = "";
+    let pZone = "";
+
+    if (z === '7000-7010') { 
+      sGroup = "023"; 
+      pZone = "GV1"; 
+    } else if (z === '7050-7070') { 
+      sGroup = "074"; 
+      pZone = "GV2"; 
+    } else if (z === '7100-7150') { 
+      sGroup = "062"; 
+      pZone = "GV2"; // Prep zone aangepast naar GV2
+    }
+
+    document.getElementById('res-gv').innerHTML = `
+      <tr>
+        <td>30</td>
+        <td>LAB / 300</td>
+        <td style="font-weight:700;">CRT</td>
+        <td>${sGroup}</td>
+        <td>${pZone}</td> <!-- Item Group is nu gelijk aan Prep Zone -->
+        <td><span class="badge badge-green">${pZone}</span></td>
+      </tr>`;
+      
+    document.getElementById('out-gv').classList.add('show');
+    
+    const tipGv = document.getElementById('tip-gv');
+    if(tipGv) tipGv.classList.add('show');
+  });
+}
          function showLoading(type, callback) {
          const container = document.getElementById('prog-' + type);
          const bar = container.querySelector('.progress-bar');
