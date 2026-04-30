@@ -865,7 +865,7 @@ function calcFixEfficient() {
 
     if (!match) {
       table.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">❌ GEEN MATCH</td></tr>`;
-    } else {
+   } else {
       let entryLocRaw = calculateEntryLocation(input).toUpperCase();
       let pickingLocRaw = input.toUpperCase();
 
@@ -894,10 +894,25 @@ function calcFixEfficient() {
               <td style="background:rgba(0,150,57,0.1);text-align:center;">${isVar ? 'ZIE AFM' : Math.ceil(match.c/3)}</td>
             </tr>
             <tr style="background: var(--surface-2);">
-              <td colspan="7" style="padding: 20px 14px;">
-                <div style="display:flex; flex-direction:column; gap:15px; font-family: monospace; letter-spacing: 2px;">
-                   <div style="font-size: 1.4rem;"><strong>PICKING:</strong> <span style="background:#eee; color:#000; padding:2px 8px; border-radius:4px;">${formatLoc(pickingLocRaw)}</span></div>
-                   <div style="font-size: 1.4rem; color:var(--accent);"><strong>ENTRY:</strong> <span style="background:var(--accent); color:#fff; padding:4px 12px; border-radius:4px;">${formatLoc(entryLocRaw)}</span></div>
+              <td colspan="7" style="padding: 25px 20px;">
+                <div style="display:flex; flex-direction:column; gap:12px; font-family: 'Courier New', monospace; font-weight: bold;">
+                   
+                   <!-- Picking Rij -->
+                   <div style="display:flex; align-items:center; font-size: 1.2rem;">
+                     <span style="width: 120px; display: inline-block; color: var(--text-main);">PICKING:</span>
+                     <span style="background:rgba(200,200,200,0.2); padding:4px 12px; border-radius:6px; letter-spacing: 1px;">
+                       ${formatLoc(pickingLocRaw)}
+                     </span>
+                   </div>
+
+                   <!-- Entry Rij -->
+                   <div style="display:flex; align-items:center; font-size: 1.2rem;">
+                     <span style="width: 120px; display: inline-block; color: var(--accent);">ENTRY:</span>
+                     <span style="background:var(--accent); color:#fff; padding:6px 15px; border-radius:6px; letter-spacing: 1px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                       ${formatLoc(entryLocRaw)}
+                     </span>
+                   </div>
+
                 </div>
               </td>
             </tr>
