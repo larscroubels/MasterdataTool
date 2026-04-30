@@ -728,12 +728,13 @@
                   <div class="form-grid">
                      <div class="form-group">
                         <label>Zone</label>
-                        <select id="gvZone">
+                        <<select id="gvZone">
    <option value="">Kies zone...</option>
    <option value="7000-7010">7000-7010</option>
    <option value="7050-7070">7050-7070</option>
    <option value="7100-7150">7100-7150</option>
    <option value="DISPLAYS">Displays</option>
+   <option value="PLOFKOT">Plofkot</option>
 </select>
                      </div>
                   </div>
@@ -1024,6 +1025,7 @@ function calcAfm() {
 
 // === 4. GROTE VOLUMES ===
 // === 4. GROTE VOLUMES ===
+// === 4. GROTE VOLUMES ===
 function calcGV() {
   showLoading('gv', () => {
     const z = document.getElementById('gvZone').value;
@@ -1034,31 +1036,40 @@ function calcGV() {
 
     let sGroup = "";
     let pZone = "";
-    let locSize = "CRT"; // Standaardwaarde voor de andere zones
+    let iGroup = ""; // Nieuwe variabele voor Item Group
+    let locSize = "CRT"; // Standaardwaarde
 
     if (z === '7000-7010') { 
       sGroup = "023"; 
       pZone = "GV1"; 
+      iGroup = "GV1";
     } else if (z === '7050-7070') { 
       sGroup = "074"; 
       pZone = "GV2"; 
+      iGroup = "GV2";
     } else if (z === '7100-7150') { 
       sGroup = "062"; 
       pZone = "GV2"; 
+      iGroup = "GV2";
     } else if (z === 'DISPLAYS') {
       sGroup = "051";
       pZone = "GV2";
-      locSize = "PAL"; // Specifieke Location Size voor Displays
+      iGroup = "GV2";
+      locSize = "PAL";
+    } else if (z === 'PLOFKOT') {
+      sGroup = "069";
+      pZone = "HAZ"; // Prep Zone
+      iGroup = "HAZ"; // Item Group
+      locSize = "PAL";
     }
 
-    // LV Code (30) en HD Type (LAB / 300) blijven momenteel statisch in deze tabel
     document.getElementById('res-gv').innerHTML = `
       <tr>
         <td>30</td>
         <td>LAB / 300</td>
         <td style="font-weight:700;">${locSize}</td>
         <td>${sGroup}</td>
-        <td>${pZone}</td> 
+        <td>${iGroup}</td> 
         <td><span class="badge badge-green">${pZone}</span></td>
       </tr>`;
       
