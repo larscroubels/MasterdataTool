@@ -729,11 +729,12 @@
                      <div class="form-group">
                         <label>Zone</label>
                         <select id="gvZone">
-                           <option value="">Kies zone...</option>
-                           <option value="7000-7010">7000-7010</option>
-                           <option value="7050-7070">7050-7070</option>
-                           <option value="7100-7150">7100-7150</option>
-                        </select>
+   <option value="">Kies zone...</option>
+   <option value="7000-7010">7000-7010</option>
+   <option value="7050-7070">7050-7070</option>
+   <option value="7100-7150">7100-7150</option>
+   <option value="DISPLAYS">Displays</option>
+</select>
                      </div>
                   </div>
                   <button class="btn-primary" onclick="calcGV()">Gegevens Genereren</button>
@@ -1022,6 +1023,7 @@ function calcAfm() {
 }
 
 // === 4. GROTE VOLUMES ===
+// === 4. GROTE VOLUMES ===
 function calcGV() {
   showLoading('gv', () => {
     const z = document.getElementById('gvZone').value;
@@ -1032,6 +1034,7 @@ function calcGV() {
 
     let sGroup = "";
     let pZone = "";
+    let locSize = "CRT"; // Standaardwaarde voor de andere zones
 
     if (z === '7000-7010') { 
       sGroup = "023"; 
@@ -1042,7 +1045,29 @@ function calcGV() {
     } else if (z === '7100-7150') { 
       sGroup = "062"; 
       pZone = "GV2"; 
+    } else if (z === 'DISPLAYS') {
+      sGroup = "051";
+      pZone = "GV2";
+      locSize = "PAL"; // Specifieke Location Size voor Displays
     }
+
+    // LV Code (30) en HD Type (LAB / 300) blijven momenteel statisch in deze tabel
+    document.getElementById('res-gv').innerHTML = `
+      <tr>
+        <td>30</td>
+        <td>LAB / 300</td>
+        <td style="font-weight:700;">${locSize}</td>
+        <td>${sGroup}</td>
+        <td>${pZone}</td> 
+        <td><span class="badge badge-green">${pZone}</span></td>
+      </tr>`;
+      
+    document.getElementById('out-gv').classList.add('show');
+    
+    const tipGv = document.getElementById('tip-gv');
+    if(tipGv) tipGv.classList.add('show');
+  });
+}
 
     document.getElementById('res-gv').innerHTML = `
       <tr>
