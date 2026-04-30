@@ -760,15 +760,15 @@ const afmData = {
 
 function getMasterZone(zoneCode) {
   if (!zoneCode) return "";
-  if (zoneCode.startsWith("22") || zoneCode.startsWith("23") || zoneCode.startsWith("24") || zoneCode.startsWith("25") || zoneCode.startsWith("26") || zoneCode.startsWith("27")) {
-    if (zoneCode.includes("b")) {
-      let gang = parseInt(zoneCode.substring(0, 2));
-      return (gang <= 23) ? "2200B-2300B" : "2400B-2700B";
+  // Check voor de 2000 en 3000 reeksen
+  if (zoneCode.startsWith("2") || zoneCode.startsWith("3")) {
+    if (zoneCode.startsWith("2")) {
+      return zoneCode.includes("b") ? (parseInt(zoneCode.substring(0, 2)) <= 23 ? "2200B-2300B" : "2400B-2700B") : "2200A-2700A";
     }
-    return "2200A-2700A";
-  } else if (zoneCode.startsWith("37") || zoneCode.startsWith("36") || zoneCode.startsWith("35") || zoneCode.startsWith("34") || zoneCode.startsWith("33") || zoneCode.startsWith("32")) {
     return zoneCode.includes("b") ? "3700B-3200B" : "3700A-3200A";
-  } else if (zoneCode.startsWith("42") || zoneCode.startsWith("52")) {
+  } 
+  // FIX: Verruimd zodat alles tussen 4200 en 5200 (zoals jouw 4400) wordt gepakt
+  else if (parseInt(zoneCode.substring(0, 2)) >= 42 && parseInt(zoneCode.substring(0, 2)) <= 52) {
     return "4200A-5200A";
   }
   return "";
