@@ -866,10 +866,18 @@ function calcFixEfficient() {
     if (!match) {
       table.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">❌ GEEN MATCH</td></tr>`;
     } else {
-      let entryLoc = calculateEntryLocation(input);
-      let locSizeCode = (kleur === "BLAUW") ? "BLU" : (kleur === "ROOD") ? "RED" : "CRT";
-      let isVar = type.includes("LSL") || type.includes("SSL") || kleur === "CRT";
+      let entryLocRaw = calculateEntryLocation(input).toUpperCase();
+      let pickingLocRaw = input.toUpperCase();
+
+      // Functie om de string te splitsen zoals op het fysieke label: 0000 X 000 00 00
+      const formatLoc = (loc) => {
+        if(loc.length < 12) return loc;
+        return `${loc.substring(0,4)} ${loc.substring(4,5)} ${loc.substring(5,8)} ${loc.substring(8,10)} ${loc.substring(10,12)}`;
+      };
+
       let hdCode = hdMapping[type] || "300";
+      let isVar = type.includes("LSL") || type.includes("SSL") || kleur === "CRT";
+      let locSizeCode = (kleur === "BLAUW") ? "BLU" : (kleur === "ROOD") ? "RED" : "CRT";
 
       table.innerHTML = `
         <thead>
@@ -886,10 +894,10 @@ function calcFixEfficient() {
               <td style="background:rgba(0,150,57,0.1);text-align:center;">${isVar ? 'ZIE AFM' : Math.ceil(match.c/3)}</td>
             </tr>
             <tr style="background: var(--surface-2);">
-              <td colspan="7" style="padding: 10px 14px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                   <span><strong>Picking Locatie:</strong> ${input.toUpperCase()}</span>
-                   <span style="color:var(--accent); font-weight:800;"><strong>Entry Locatie:</strong> ${entryLoc.toUpperCase()}</span>
+              <td colspan="7" style="padding: 20px 14px;">
+                <div style="display:flex; flex-direction:column; gap:15px; font-family: monospace; letter-spacing: 2px;">
+                   <div style="font-size: 1.4rem;"><strong>PICKING:</strong> <span style="background:#eee; color:#000; padding:2px 8px; border-radius:4px;">${formatLoc(pickingLocRaw)}</span></div>
+                   <div style="font-size: 1.8rem; color:var(--accent);"><strong>ENTRY:</strong> <span style="background:var(--accent); color:#fff; padding:4px 12px; border-radius:4px;">${formatLoc(entryLocRaw)}</span></div>
                 </div>
               </td>
             </tr>
@@ -897,7 +905,7 @@ function calcFixEfficient() {
     }
     document.getElementById('out-fix').classList.add('show');
   });
-} 
+}
 
 // === 3. AFMETINGEN ===
 function calcAfm() {
