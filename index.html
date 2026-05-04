@@ -70,7 +70,7 @@
         transition:
           background 0.35s ease,
           color 0.35s ease;
-        font-size: 16px;
+        font-size: 18px;
         line-height: 1.6;
       }
       body::before {
@@ -147,7 +147,7 @@
         color: var(--text-muted);
       }
       h1 {
-        font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+        font-size: clamp(2.2rem, 4vw, 3rem);
         font-weight: 900;
         letter-spacing: -1.5px;
         line-height: 1.1;
@@ -158,7 +158,7 @@
       }
       .tagline {
         margin-top: 8px;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         font-weight: 600;
         color: var(--text-muted);
         text-transform: uppercase;
@@ -190,7 +190,7 @@
         background: transparent;
         color: var(--text-muted);
         font-family: inherit;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.8px;
@@ -266,7 +266,7 @@
       }
       .form-group label {
         display: block;
-        font-size: 0.72rem;
+        font-size: 0.82rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 1.2px;
@@ -283,7 +283,7 @@
         border-radius: var(--radius-inner);
         color: var(--text);
         font-family: inherit;
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 600;
         transition:
           border-color 0.18s ease,
@@ -334,7 +334,7 @@
         border: none;
         border-radius: var(--radius-btn);
         font-family: inherit;
-        font-size: 0.85rem;
+        font-size: 1.05rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 1.8px;
@@ -418,7 +418,7 @@
       th {
         padding: 13px 16px;
         text-align: left;
-        font-size: 0.72rem;
+        font-size: 0.82rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -431,7 +431,7 @@
         padding: 15px 16px;
         text-align: left;
         border-bottom: 1px solid var(--border);
-        font-size: 0.95rem;
+        font-size: 1.05rem;
         font-weight: 500;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -575,7 +575,7 @@
         border: 1.5px solid var(--border-strong);
         background: var(--surface);
         color: var(--text);
-        font-size: 1.25rem;
+        font-size: 1.35rem;
         cursor: pointer;
         box-shadow: 0 3px 12px var(--shadow-md);
         display: flex;
@@ -620,14 +620,14 @@
         border-bottom: 1.5px solid var(--border);
       }
       .printer-row-label {
-        font-size: 0.65rem;
+        font-size: 0.85rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 1px;
         color: var(--text-muted);
       }
       .printer-row-code {
-        font-size: 1.15rem;
+        font-size: 1.35rem;
         font-weight: 800;
         color: var(--accent);
         font-family: "SF Mono", "Fira Code", monospace;
@@ -644,7 +644,7 @@
           padding: 16px 12px 100px;
         }
         h1 {
-          font-size: 1.5rem;
+          font-size: 1.6rem;
         }
         .card {
           border-radius: 14px;
@@ -658,7 +658,7 @@
           gap: 3px;
         }
         .tab-btn {
-          font-size: 0.62rem;
+          font-size: 0.72rem;
           padding: 10px 6px 11px;
           letter-spacing: 0.4px;
         }
@@ -678,7 +678,7 @@
         th,
         td {
           padding: 10px 10px;
-          font-size: 0.75rem;
+          font-size: 0.85rem;
         }
         .loc-grid {
           grid-template-columns: 1fr;
@@ -695,14 +695,14 @@
           font-size: 1.1rem;
         }
         .button-label {
-          font-size: 0.55rem;
+          font-size: 0.65rem;
         }
         .printer-popup {
           width: 220px;
           padding: 16px;
         }
         .info-tip {
-          font-size: 0.7rem;
+          font-size: 0.9rem;
           padding: 12px 14px;
         }
       }
@@ -868,10 +868,11 @@
               <div class="form-group">
                 <label>2. Gewenste LV</label>
                 <select id="fixTypeManual">
-                  <option value="RED">RED</option>
-                  <option value="BLU">BLU</option>
-                  <option value="LSL">LSL</option>
-                  <option value="SSL">SSL</option>
+                  <option value="RED">RODE BAK</option>
+                  <option value="BLU">BLAUWE BAK</option>
+                  <option value="LSL">KORTE KANT CRT</option>
+                  <option value="SSL">LANGE KANT CRT</option>
+                  <option value="BLU FRIGO">DEPOTBOX BLAUW</option>
                 </select>
               </div>
             </div>
@@ -1012,7 +1013,7 @@
         ROOD: "110",
         BLU: "120",
         BLAUW: "120",
-        "BLU FRIGO": "130",
+        BLUFRIGO: "130",
         "DEPOT BOX": "270",
         LABEL: "300",
         "APOBOX LAAG": "400",
@@ -1258,6 +1259,20 @@
         if (input.length < 10) return;
 
         let zoneCode = input.substring(0, 5);
+
+        // --- NIEUWE CHECK VOOR 6000a ---
+        if (zoneCode === "6000a") {
+          document.getElementById("fixZoneManual").style.borderColor =
+            "var(--accent)";
+          let rekNum = parseInt(input.substring(5, 8));
+          // Automatisch BLU FRIGO selecteren
+          if ((rekNum >= 1 && rekNum <= 6) || (rekNum >= 14 && rekNum <= 24)) {
+            document.getElementById("fixTypeManual").value = "BLU FRIGO";
+          }
+          return;
+        }
+        // -------------------------------
+
         let liggerNr = parseInt(input.substring(8, 10)).toString();
         let mZone = getMasterZone(zoneCode);
 
@@ -1335,7 +1350,7 @@
           const cls = b === "ja" ? "badge-green" : "badge-red";
 
           document.getElementById("res-dyn").innerHTML = `
-      <tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${z === "R600" ? "COO" : "CON"}</td><td><span class="badge ${cls}">${d.id}</span></td></tr>`;
+            <tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${z === "R600" ? "COO" : "CON"}</td><td><span class="badge ${cls}">${d.id}</span></td></tr>`;
           document.getElementById("out-dyn").classList.add("show");
         });
       }
@@ -1351,28 +1366,102 @@
           if (input.length < 10) return;
 
           let zoneCode = input.substring(0, 5);
-          let masterZone = getMasterZone(zoneCode);
+          const table = document.getElementById("table-fix");
 
+          let entryLocRaw = calculateEntryLocation(input).toUpperCase();
+          let pickingLocRaw = input.toUpperCase();
+
+          const formatLoc = (loc) => {
+            if (loc.length < 12) return loc;
+            return `${loc.substring(0, 4)} ${loc.substring(4, 5)} ${loc.substring(5, 8)} ${loc.substring(8, 10)} ${loc.substring(10, 12)}`;
+          };
+
+          // --- NIEUWE 6000a LOGICA (GEECORRIGEERD) ---
+          if (zoneCode === "6000a") {
+            let rekNum = parseInt(input.substring(5, 8));
+
+            if (rekNum >= 1 && rekNum <= 24) {
+              let lvCode,
+                hdCodeDisplay,
+                locSizeCode,
+                storageGroup,
+                itemGroup,
+                ceiling,
+                tresh;
+
+              if (
+                (rekNum >= 1 && rekNum <= 6) ||
+                (rekNum >= 14 && rekNum <= 24)
+              ) {
+                // Specifieke waarden voor deze secties
+                lvCode = "13";
+                hdCodeDisplay = "BLF / 130"; // Afgekort naar BLF voor weergave
+                locSizeCode = "CRT"; // Loc Size CRT ipv BLU
+                storageGroup = "021";
+                itemGroup = "COO";
+                ceiling = "3"; // Ceiling naar 3
+                tresh = "1"; // Math.ceil(3/3)
+              } else if (rekNum >= 7 && rekNum <= 13) {
+                // Variabele waarden voor 007-013
+                let mappedHd = hdMapping[type] || "300";
+                lvCode = mappedHd.substring(0, 2);
+                // Gebruik "BLF" weergave als Blu Frigo geselecteerd is
+                let displayName = type === "BLU FRIGO" ? "BLF" : type;
+                hdCodeDisplay = `${displayName} / ${mappedHd}`;
+                locSizeCode = "CRT";
+                storageGroup = "021";
+                itemGroup = "COO";
+                ceiling = "—";
+                tresh = "—";
+              }
+
+              // Render de tabel (Identiek aan vorig bericht, maar met de nieuwe variabelen)
+              table.innerHTML = `
+      <thead>
+          <tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td style="font-weight:700;">${lvCode}</td>
+            <td style="font-weight:600;">${hdCodeDisplay}</td>
+            <td style="font-weight:700;">${locSizeCode}</td>
+            <td style="font-weight:600;">${storageGroup}</td>
+            <td style="font-weight:600;">${itemGroup}</td>
+            <td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${ceiling}</span></td>
+            <td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${tresh}</span></td>
+          </tr>
+          <tr>
+            <td colspan="7" style="padding:20px;background:var(--surface-2);border-top:1.5px solid var(--border);">
+              <div class="loc-grid">
+                <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
+                  <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div>
+                  <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(pickingLocRaw)}</div>
+                </div>
+                <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
+                  <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div>
+                  <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(entryLocRaw)}</div>
+                </div>
+              </div>
+            </td>
+          </tr>
+      </tbody>`;
+              document.getElementById("out-fix").classList.add("show");
+              return;
+            }
+          }
+          // --- EINDE 6000a LOGICA ---
+
+          // De rest van de originele code (voor de andere zones) blijft hieronder staan
+          let masterZone = getMasterZone(zoneCode);
           let match = fixData.find(
             (d) =>
               d.z === masterZone &&
               (d.k === kleur || (kleur === "CRT" && d.k === "BLAUW")),
           );
 
-          const table = document.getElementById("table-fix");
-
           if (!match) {
             table.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">❌ GEEN MATCH</td></tr>`;
           } else {
-            let entryLocRaw = calculateEntryLocation(input).toUpperCase();
-            let pickingLocRaw = input.toUpperCase();
-
-            // Functie om de string te splitsen zoals op het fysieke label: 0000 X 000 00 00
-            const formatLoc = (loc) => {
-              if (loc.length < 12) return loc;
-              return `${loc.substring(0, 4)} ${loc.substring(4, 5)} ${loc.substring(5, 8)} ${loc.substring(8, 10)} ${loc.substring(10, 12)}`;
-            };
-
             let hdCode = hdMapping[type] || "300";
             let isVar =
               type.includes("LSL") || type.includes("SSL") || kleur === "CRT";
@@ -1380,39 +1469,34 @@
               kleur === "BLAUW" ? "BLU" : kleur === "ROOD" ? "RED" : "CRT";
 
             table.innerHTML = `
-        <thead>
-            <tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td style="font-weight:700;">${hdCode.substring(0, 2)}</td>
-              <td style="font-weight:600;">${type} / ${hdCode}</td>
-              <td style="font-weight:700;">${locSizeCode}</td>
-              <td style="font-weight:600;">${match.s.toString().padStart(3, "0")}</td>
-              <td style="font-weight:600;">CON</td>
-              <td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${isVar ? "—" : match.c}</span></td>
-              <td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${isVar ? "—" : Math.ceil(match.c / 3)}</span></td>
-            </tr>
-            <tr>
-              <td colspan="7" style="padding:20px;background:var(--surface-2);border-top:1.5px solid var(--border);">
-                <div class="loc-grid">
-
-                  <!-- Picking Card -->
-                  <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
-                    <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div>
-                    <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(pickingLocRaw)}</div>
-                  </div>
-
-                  <!-- Entry Card -->
-                  <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
-                    <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div>
-                    <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(entryLocRaw)}</div>
-                  </div>
-
-                </div>
-              </td>
-            </tr>
-        </tbody>`;
+              <thead>
+                  <tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td style="font-weight:700;">${hdCode.substring(0, 2)}</td>
+                    <td style="font-weight:600;">${type} / ${hdCode}</td>
+                    <td style="font-weight:700;">${locSizeCode}</td>
+                    <td style="font-weight:600;">${match.s.toString().padStart(3, "0")}</td>
+                    <td style="font-weight:600;">CON</td>
+                    <td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${isVar ? "—" : match.c}</span></td>
+                    <td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${isVar ? "—" : Math.ceil(match.c / 3)}</span></td>
+                  </tr>
+                  <tr>
+                    <td colspan="7" style="padding:20px;background:var(--surface-2);border-top:1.5px solid var(--border);">
+                      <div class="loc-grid">
+                        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
+                          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div>
+                          <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(pickingLocRaw)}</div>
+                        </div>
+                        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
+                          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div>
+                          <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(entryLocRaw)}</div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+              </tbody>`;
           }
           document.getElementById("out-fix").classList.add("show");
         });
@@ -1434,12 +1518,12 @@
           const cap = Math.floor(parseInt(afmData[zk].liggers[lk]) / val);
 
           document.getElementById("res-afm").innerHTML = `
-      <tr>
-        <td>${afmData[zk].name}</td>
-        <td>${lk}</td>
-        <td style="color:var(--accent);font-weight:800;">${cap}</td>
-        <td>${Math.ceil(cap / 3)}</td>
-      </tr>`;
+            <tr>
+              <td>${afmData[zk].name}</td>
+              <td>${lk}</td>
+              <td style="color:var(--accent);font-weight:800;">${cap}</td>
+              <td>${Math.ceil(cap / 3)}</td>
+            </tr>`;
 
           document.getElementById("out-afm").classList.add("show");
         });
@@ -1483,14 +1567,14 @@
           }
 
           document.getElementById("res-gv").innerHTML = `
-      <tr>
-        <td>30</td>
-        <td>LAB / 300</td>
-        <td style="font-weight:700;">${locSize}</td>
-        <td>${sGroup}</td>
-        <td>${iGroup}</td> 
-        <td><span class="badge badge-green">${pZone}</span></td>
-      </tr>`;
+            <tr>
+              <td>30</td>
+              <td>LAB / 300</td>
+              <td style="font-weight:700;">${locSize}</td>
+              <td>${sGroup}</td>
+              <td>${iGroup}</td>
+              <td><span class="badge badge-green">${pZone}</span></td>
+            </tr>`;
 
           document.getElementById("out-gv").classList.add("show");
 
