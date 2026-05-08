@@ -178,7 +178,7 @@
 
       .nav-tabs {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         background: var(--surface-2);
         border-bottom: 1.5px solid var(--border);
         padding: 10px 10px 0;
@@ -790,10 +790,13 @@
             Flow Racks
           </button>
           <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">
-            Afmetingen voor crt
+            Afmetingen
           </button>
           <button class="tab-btn" data-tab="gv" onclick="switchTab('gv')">
             Grote Volumes
+          </button>
+          <button class="tab-btn" data-tab="rec" onclick="switchTab('rec')">
+            Receptie
           </button>
         </nav>
         <div class="card-body">
@@ -831,7 +834,6 @@
             <div class="progress-container" id="prog-dyn">
               <div class="progress-bar"></div>
             </div>
-            <!-- Doe dit ook voor id="prog-fix", id="prog-afm" en id="prog-gv" -->
             <div id="out-dyn" class="results">
               <table>
                 <thead>
@@ -849,6 +851,7 @@
               </table>
             </div>
           </section>
+
           <section id="sec-fix" class="section">
             <select id="fixKleurManual" style="display: none">
               <option value="BLAUW">BLU</option>
@@ -883,15 +886,10 @@
               <div class="progress-bar"></div>
             </div>
             <div id="out-fix" class="results">
-              <table id="table-fix">
-                <!-- Dynamically filled -->
-              </table>
-            </div>
-            <div id="tip-fix" class="info-tip show">
-              ℹ️ Geef de volledige locatie; de tool herkent de ligger
-              automatisch.
+              <table id="table-fix"></table>
             </div>
           </section>
+
           <section id="sec-afm" class="section">
             <div class="form-grid">
               <div class="form-group">
@@ -933,6 +931,7 @@
               </table>
             </div>
           </section>
+
           <section id="sec-gv" class="section">
             <div class="form-grid">
               <div class="form-group">
@@ -968,13 +967,94 @@
                 <tbody id="res-gv"></tbody>
               </table>
             </div>
-            <div id="tip-gv" class="info-tip">
-              ℹ️ Vergeet niet naar Rack Locations (HFEMS0) te gaan.
+          </section>
+
+          <section id="sec-rec" class="section">
+            <div style="display: flex; flex-direction: column; gap: 32px">
+              <div>
+                <h3
+                  style="
+                    font-size: 0.9rem;
+                    margin-bottom: 12px;
+                    color: var(--accent);
+                  "
+                >
+                  Overstock op verkeerde Kar, geef de OVS locatie in en krijg de
+                  juiste kar.
+                </h3>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>Overstock-Locatie</label>
+                    <input
+                      type="text"
+                      id="recLoc1"
+                      placeholder="Bv: 9942B..."
+                    />
+                  </div>
+                </div>
+                <button class="btn-primary" onclick="calcRec1()">
+                  Bepaal Kar
+                </button>
+                <div class="progress-container" id="prog-rec1">
+                  <div class="progress-bar"></div>
+                </div>
+                <div id="out-rec1" class="results">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Input</th>
+                        <th>Resultaat</th>
+                      </tr>
+                    </thead>
+                    <tbody id="res-rec1"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <h3
+                  style="
+                    font-size: 0.9rem;
+                    margin-bottom: 12px;
+                    color: var(--accent);
+                  "
+                >
+                  Op welke kar moet mijn HD?
+                </h3>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>Locatie (Flow Racks)</label>
+                    <input
+                      type="text"
+                      id="recLoc2"
+                      placeholder="Bv: 3700a..."
+                    />
+                  </div>
+                </div>
+                <button class="btn-primary" onclick="calcRec2()">
+                  Bepaal Kar
+                </button>
+                <div class="progress-container" id="prog-rec2">
+                  <div class="progress-bar"></div>
+                </div>
+                <div id="out-rec2" class="results">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Zone</th>
+                        <th>Resultaat</th>
+                      </tr>
+                    </thead>
+                    <tbody id="res-rec2"></tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </section>
         </div>
       </div>
     </div>
+
     <script>
       function toggleTheme() {
         const html = document.documentElement;
@@ -1006,6 +1086,51 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
+      // --- RECEPTIE LOGICA ---
+      function calcRec1() {
+        showLoading("rec1", () => {
+          const val = document
+            .getElementById("recLoc1")
+            .value.toUpperCase()
+            .trim();
+          let res = "ONBEKEND";
+          const kar5 = ["9942B", "9300A", "9310A", "9330A", "9320A"];
+          const kar6 = ["9400A", "9400B", "9020A"];
+
+          if (kar5.some((prefix) => val.startsWith(prefix))) res = "KAR5";
+          else if (kar6.some((prefix) => val.startsWith(prefix))) res = "KAR6";
+
+          const cls = res !== "ONBEKEND" ? "badge-green" : "badge-red";
+          document.getElementById("res-rec1").innerHTML =
+            `<tr><td>${val}</td><td><span class="badge ${cls}">${res}</span></td></tr>`;
+          document.getElementById("out-rec1").classList.add("show");
+        });
+      }
+
+      function calcRec2() {
+        showLoading("rec2", () => {
+          const val = document
+            .getElementById("recLoc2")
+            .value.toLowerCase()
+            .trim();
+          const zoneCode = val.substring(0, 5);
+          const mZone = getMasterZone(zoneCode);
+          let res = "ONBEKEND";
+
+          const kar2Zones = ["3700A-3200A", "4200B-5200B"];
+          const kar3Zones = ["3200B-3700B", "2100A-2700A"];
+
+          if (kar2Zones.includes(mZone)) res = "KAR2";
+          else if (kar3Zones.includes(mZone)) res = "KAR3";
+
+          const cls = res !== "ONBEKEND" ? "badge-green" : "badge-red";
+          document.getElementById("res-rec2").innerHTML =
+            `<tr><td>${mZone || "Geen Zone Match"}</td><td><span class="badge ${cls}">${res}</span></td></tr>`;
+          document.getElementById("out-rec2").classList.add("show");
+        });
+      }
+
+      // --- ORIGINELE LOGICA HIERONDER ---
       const hdMapping = {
         UNIT: "001",
         SUPCAR: "100",
@@ -1231,7 +1356,6 @@
 
       function getMasterZone(zoneCode) {
         if (!zoneCode) return "";
-        // Check voor de 2000 en 3000 reeksen
         if (zoneCode.startsWith("2") || zoneCode.startsWith("3")) {
           if (zoneCode.startsWith("2")) {
             return zoneCode.includes("b")
@@ -1245,7 +1369,7 @@
           parseInt(zoneCode.substring(0, 2)) >= 42 &&
           parseInt(zoneCode.substring(0, 2)) <= 52
         ) {
-          return "4200A-5200A";
+          return zoneCode.includes("b") ? "4200B-5200B" : "4200A-5200A";
         }
         return "";
       }
@@ -1257,25 +1381,17 @@
           .trim();
         let kleurSelect = document.getElementById("fixKleurManual");
         if (input.length < 10) return;
-
         let zoneCode = input.substring(0, 5);
-
-        // --- NIEUWE CHECK VOOR 6000a ---
         if (zoneCode === "6000a") {
           document.getElementById("fixZoneManual").style.borderColor =
             "var(--accent)";
           let rekNum = parseInt(input.substring(5, 8));
-          // Automatisch BLU FRIGO selecteren
-          if ((rekNum >= 1 && rekNum <= 6) || (rekNum >= 14 && rekNum <= 24)) {
+          if ((rekNum >= 1 && rekNum <= 6) || (rekNum >= 14 && rekNum <= 24))
             document.getElementById("fixTypeManual").value = "BLU FRIGO";
-          }
           return;
         }
-        // -------------------------------
-
         let liggerNr = parseInt(input.substring(8, 10)).toString();
         let mZone = getMasterZone(zoneCode);
-
         let match = fixData.find(
           (d) =>
             d.z === mZone &&
@@ -1287,10 +1403,8 @@
         if (
           mZone.includes("b") &&
           (mZone.startsWith("22") || mZone.startsWith("24"))
-        ) {
+        )
           match = { k: "CRT" };
-        }
-
         if (match) {
           kleurSelect.value = match.k;
           document.getElementById("fixZoneManual").style.borderColor =
@@ -1306,9 +1420,7 @@
         let gang = pickLoc.substring(0, 2);
         let type = pickLoc.substring(2, 5);
         let rest = pickLoc.substring(5);
-        let newType = type;
-        if (type === "00b") newType = "02a";
-        else if (type === "00a") newType = "01b";
+        let newType = type === "00b" ? "02a" : type === "00a" ? "01b" : type;
         return gang + newType + rest;
       }
 
@@ -1328,11 +1440,9 @@
         const container = document.getElementById("prog-" + type);
         const bar = container.querySelector(".progress-bar");
         const results = document.getElementById("out-" + type);
-
         if (results) results.classList.remove("show");
         container.classList.add("active");
         bar.style.width = "0%";
-
         setTimeout(() => {
           bar.style.width = "100%";
           setTimeout(() => {
@@ -1348,9 +1458,8 @@
           const b = document.getElementById("dynBBD").value;
           const d = dynData[z][b];
           const cls = b === "ja" ? "badge-green" : "badge-red";
-
-          document.getElementById("res-dyn").innerHTML = `
-            <tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${z === "R600" ? "COO" : "CON"}</td><td><span class="badge ${cls}">${d.id}</span></td></tr>`;
+          document.getElementById("res-dyn").innerHTML =
+            `<tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${z === "R600" ? "COO" : "CON"}</td><td><span class="badge ${cls}">${d.id}</span></td></tr>`;
           document.getElementById("out-dyn").classList.add("show");
         });
       }
@@ -1364,167 +1473,114 @@
           let kleur = document.getElementById("fixKleurManual").value;
           let type = document.getElementById("fixTypeManual").value;
           if (input.length < 10) return;
-
-          let zoneCode = input.substring(0, 5);
           const table = document.getElementById("table-fix");
-
           let entryLocRaw = calculateEntryLocation(input).toUpperCase();
           let pickingLocRaw = input.toUpperCase();
+          const formatLoc = (loc) =>
+            loc.length < 12
+              ? loc
+              : `${loc.substring(0, 4)} ${loc.substring(4, 5)} ${loc.substring(5, 8)} ${loc.substring(8, 10)} ${loc.substring(10, 12)}`;
 
-          const formatLoc = (loc) => {
-            if (loc.length < 12) return loc;
-            return `${loc.substring(0, 4)} ${loc.substring(4, 5)} ${loc.substring(5, 8)} ${loc.substring(8, 10)} ${loc.substring(10, 12)}`;
-          };
-
-          // --- NIEUWE 6000a LOGICA (GEECORRIGEERD) ---
-          if (zoneCode === "6000a") {
+          if (input.substring(0, 5) === "6000a") {
             let rekNum = parseInt(input.substring(5, 8));
-
             if (rekNum >= 1 && rekNum <= 24) {
-              let lvCode,
-                hdCodeDisplay,
-                locSizeCode,
-                storageGroup,
-                itemGroup,
-                ceiling,
-                tresh;
-
+              let lvCode, hdDisplay, size, storage, item, ceil, tresh;
               if (
                 (rekNum >= 1 && rekNum <= 6) ||
                 (rekNum >= 14 && rekNum <= 24)
               ) {
-                // Specifieke waarden voor deze secties
                 lvCode = "13";
-                hdCodeDisplay = "BLF / 130"; // Afgekort naar BLF voor weergave
-                locSizeCode = "CRT"; // Loc Size CRT ipv BLU
-                storageGroup = "021";
-                itemGroup = "COO";
-                ceiling = "3"; // Ceiling naar 3
-                tresh = "1"; // Math.ceil(3/3)
-              } else if (rekNum >= 7 && rekNum <= 13) {
-                // Variabele waarden voor 007-013
-                let mappedHd = hdMapping[type] || "300";
-                lvCode = mappedHd.substring(0, 2);
-                // Gebruik "BLF" weergave als Blu Frigo geselecteerd is
-                let displayName = type === "BLU FRIGO" ? "BLF" : type;
-                hdCodeDisplay = `${displayName} / ${mappedHd}`;
-                locSizeCode = "CRT";
-                storageGroup = "021";
-                itemGroup = "COO";
-                ceiling = "—";
+                hdDisplay = "BLF / 130";
+                size = "CRT";
+                storage = "021";
+                item = "COO";
+                ceil = "3";
+                tresh = "1";
+              } else {
+                let mHd = hdMapping[type] || "300";
+                lvCode = mHd.substring(0, 2);
+                hdDisplay = `${type === "BLU FRIGO" ? "BLF" : type} / ${mHd}`;
+                size = "CRT";
+                storage = "021";
+                item = "COO";
+                ceil = "—";
                 tresh = "—";
               }
-
-              // Render de tabel (Identiek aan vorig bericht, maar met de nieuwe variabelen)
-              table.innerHTML = `
-      <thead>
-          <tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr>
-      </thead>
-      <tbody>
-          <tr>
-            <td style="font-weight:700;">${lvCode}</td>
-            <td style="font-weight:600;">${hdCodeDisplay}</td>
-            <td style="font-weight:700;">${locSizeCode}</td>
-            <td style="font-weight:600;">${storageGroup}</td>
-            <td style="font-weight:600;">${itemGroup}</td>
-            <td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${ceiling}</span></td>
-            <td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${tresh}</span></td>
-          </tr>
-          <tr>
-            <td colspan="7" style="padding:20px;background:var(--surface-2);border-top:1.5px solid var(--border);">
-              <div class="loc-grid">
-                <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
-                  <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div>
-                  <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(pickingLocRaw)}</div>
-                </div>
-                <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
-                  <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div>
-                  <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(entryLocRaw)}</div>
-                </div>
-              </div>
-            </td>
-          </tr>
-      </tbody>`;
-              document.getElementById("out-fix").classList.add("show");
+              renderFixTable(
+                table,
+                lvCode,
+                hdDisplay,
+                size,
+                storage,
+                item,
+                ceil,
+                tresh,
+                pickingLocRaw,
+                entryLocRaw,
+                formatLoc,
+              );
               return;
             }
           }
-          // --- EINDE 6000a LOGICA ---
 
-          // De rest van de originele code (voor de andere zones) blijft hieronder staan
-          let masterZone = getMasterZone(zoneCode);
+          let mZone = getMasterZone(input.substring(0, 5));
           let match = fixData.find(
             (d) =>
-              d.z === masterZone &&
+              d.z === mZone &&
               (d.k === kleur || (kleur === "CRT" && d.k === "BLAUW")),
           );
-
-          if (!match) {
+          if (!match)
             table.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">❌ GEEN MATCH</td></tr>`;
-          } else {
-            let hdCode = hdMapping[type] || "300";
-            let isVar =
+          else {
+            let mHd = hdMapping[type] || "300";
+            let isV =
               type.includes("LSL") || type.includes("SSL") || kleur === "CRT";
-            let locSizeCode =
-              kleur === "BLAUW" ? "BLU" : kleur === "ROOD" ? "RED" : "CRT";
-
-            table.innerHTML = `
-              <thead>
-                  <tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr>
-              </thead>
-              <tbody>
-                  <tr>
-                    <td style="font-weight:700;">${hdCode.substring(0, 2)}</td>
-                    <td style="font-weight:600;">${type} / ${hdCode}</td>
-                    <td style="font-weight:700;">${locSizeCode}</td>
-                    <td style="font-weight:600;">${match.s.toString().padStart(3, "0")}</td>
-                    <td style="font-weight:600;">CON</td>
-                    <td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${isVar ? "—" : match.c}</span></td>
-                    <td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${isVar ? "—" : Math.ceil(match.c / 3)}</span></td>
-                  </tr>
-                  <tr>
-                    <td colspan="7" style="padding:20px;background:var(--surface-2);border-top:1.5px solid var(--border);">
-                      <div class="loc-grid">
-                        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
-                          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div>
-                          <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(pickingLocRaw)}</div>
-                        </div>
-                        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
-                          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div>
-                          <div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${formatLoc(entryLocRaw)}</div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-              </tbody>`;
+            renderFixTable(
+              table,
+              mHd.substring(0, 2),
+              `${type} / ${mHd}`,
+              kleur === "BLAUW" ? "BLU" : kleur === "ROOD" ? "RED" : "CRT",
+              match.s.toString().padStart(3, "0"),
+              "CON",
+              isV ? "—" : match.c,
+              isV ? "—" : Math.ceil(match.c / 3),
+              pickingLocRaw,
+              entryLocRaw,
+              formatLoc,
+            );
           }
           document.getElementById("out-fix").classList.add("show");
         });
+      }
+
+      function renderFixTable(
+        table,
+        lv,
+        hd,
+        sz,
+        st,
+        it,
+        ce,
+        tr,
+        pLoc,
+        eLoc,
+        fmt,
+      ) {
+        table.innerHTML = `<thead><tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr></thead>
+          <tbody><tr><td style="font-weight:700;">${lv}</td><td style="font-weight:600;">${hd}</td><td style="font-weight:700;">${sz}</td><td style="font-weight:600;">${st}</td><td style="font-weight:600;">${it}</td><td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${ce}</span></td><td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${tr}</span></td></tr>
+          <tr><td colspan="7" style="padding:20px;background:var(--surface-2);border-top:1.5px solid var(--border);"><div class="loc-grid"><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(pLoc)}</div></div><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(eLoc)}</div></div></div></td></tr></tbody>`;
       }
 
       function calcAfm() {
         showLoading("afm", () => {
           const zk = document.getElementById("afmZone").value;
           const lk = document.getElementById("afmLigger").value;
-
-          if (!zk || !lk) {
-            alert("Selecteer eerst een zone en een ligger.");
-            return;
-          }
-
+          if (!zk || !lk) return;
           const val = parseFloat(prompt("Breedte karton (cm)?"));
           if (!val || isNaN(val)) return;
-
           const cap = Math.floor(parseInt(afmData[zk].liggers[lk]) / val);
-
-          document.getElementById("res-afm").innerHTML = `
-            <tr>
-              <td>${afmData[zk].name}</td>
-              <td>${lk}</td>
-              <td style="color:var(--accent);font-weight:800;">${cap}</td>
-              <td>${Math.ceil(cap / 3)}</td>
-            </tr>`;
-
+          document.getElementById("res-afm").innerHTML =
+            `<tr><td>${afmData[zk].name}</td><td>${lk}</td><td style="color:var(--accent);font-weight:800;">${cap}</td><td>${Math.ceil(cap / 3)}</td></tr>`;
           document.getElementById("out-afm").classList.add("show");
         });
       }
@@ -1532,54 +1588,37 @@
       function calcGV() {
         showLoading("gv", () => {
           const z = document.getElementById("gvZone").value;
-          if (!z) {
-            alert("Selecteer een zone.");
-            return;
-          }
-
-          let sGroup = "";
-          let pZone = "";
-          let iGroup = ""; // Nieuwe variabele voor Item Group
-          let locSize = "CRT"; // Standaardwaarde
-
+          if (!z) return;
+          let sG = "",
+            pZ = "",
+            iG = "",
+            lS = "CRT";
           if (z === "7000-7010") {
-            sGroup = "023";
-            pZone = "GV1";
-            iGroup = "GV1";
+            sG = "023";
+            pZ = "GV1";
+            iG = "GV1";
           } else if (z === "7050-7070") {
-            sGroup = "074";
-            pZone = "GV2";
-            iGroup = "GV2";
+            sG = "074";
+            pZ = "GV2";
+            iG = "GV2";
           } else if (z === "7100-7150") {
-            sGroup = "062";
-            pZone = "GV2";
-            iGroup = "GV2";
+            sG = "062";
+            pZ = "GV2";
+            iG = "GV2";
           } else if (z === "DISPLAYS") {
-            sGroup = "051";
-            pZone = "GV2";
-            iGroup = "GV2";
-            locSize = "PAL";
+            sG = "051";
+            pZ = "GV2";
+            iG = "GV2";
+            lS = "PAL";
           } else if (z === "PLOFKOT") {
-            sGroup = "069";
-            pZone = "HAZ"; // Prep Zone
-            iGroup = "HAZ"; // Item Group
-            locSize = "PAL";
+            sG = "069";
+            pZ = "HAZ";
+            iG = "HAZ";
+            lS = "PAL";
           }
-
-          document.getElementById("res-gv").innerHTML = `
-            <tr>
-              <td>30</td>
-              <td>LAB / 300</td>
-              <td style="font-weight:700;">${locSize}</td>
-              <td>${sGroup}</td>
-              <td>${iGroup}</td>
-              <td><span class="badge badge-green">${pZone}</span></td>
-            </tr>`;
-
+          document.getElementById("res-gv").innerHTML =
+            `<tr><td>30</td><td>LAB / 300</td><td style="font-weight:700;">${lS}</td><td>${sG}</td><td>${iG}</td><td><span class="badge badge-green">${pZ}</span></td></tr>`;
           document.getElementById("out-gv").classList.add("show");
-
-          const tipGv = document.getElementById("tip-gv");
-          if (tipGv) tipGv.classList.add("show");
         });
       }
     </script>
