@@ -1094,8 +1094,18 @@
             .value.toUpperCase()
             .trim();
           let res = "ONBEKEND";
-          const kar5 = ["9942B", "9300A", "9310A", "9330A", "9320A"];
-          const kar6 = ["9400A", "9400B", "9020A"];
+          const kar5 = [
+            "9942B",
+            "9300A",
+            "9300B",
+            "9320B",
+            "9340A",
+            "9310A",
+            "9310B",
+            "9330A",
+            "9320A",
+          ];
+          const kar6 = ["9400A", "9401A", "9400B", "9020A"];
 
           if (kar5.some((prefix) => val.startsWith(prefix))) res = "KAR5";
           else if (kar6.some((prefix) => val.startsWith(prefix))) res = "KAR6";
