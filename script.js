@@ -41,10 +41,11 @@ function calcRec1() {
       "9310B",
       "9330A",
       "9320A",
+      "9944B",
     ];
     const kar6 = ["9400A", "9401A", "9400B", "9020A"];
 
-    // Nieuwe lijst voor PALOV locaties (automatisch in hoofdletters gezet voor de match)
+    // Nieuwe lijst voor PALOV locaties (inclusief correctie voor typfouten)
     const palov = [
       "9000A",
       "9000B",
@@ -60,12 +61,13 @@ function calcRec1() {
       "9710B",
       "9711A",
       "9712B",
+      "9040A",
     ];
 
-    // Controleer de prefixes
+    // Controleer met welke prefix de ingevoerde locatie begint
     if (kar5.some((prefix) => val.startsWith(prefix))) res = "KAR5";
     else if (kar6.some((prefix) => val.startsWith(prefix))) res = "KAR6";
-    else if (palov.some((prefix) => val.startsWith(prefix))) res = "PALOV"; // Extra controle voor PALOV
+    else if (palov.some((prefix) => val.startsWith(prefix))) res = "PALOV";
 
     const cls = res !== "ONBEKEND" ? "badge-green" : "badge-red";
     document.getElementById("res-rec1").innerHTML =
