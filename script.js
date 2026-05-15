@@ -30,6 +30,7 @@ function calcRec1() {
   showLoading("rec1", () => {
     const val = document.getElementById("recLoc1").value.toUpperCase().trim();
     let res = "ONBEKEND";
+
     const kar5 = [
       "9942B",
       "9300A",
@@ -43,8 +44,26 @@ function calcRec1() {
     ];
     const kar6 = ["9400A", "9401A", "9400B", "9020A"];
 
+    const palov = [
+      "9000A",
+      "9000B",
+      "9010A",
+      "9010B",
+      "9050A",
+      "9050B",
+      "9060B",
+      "9060A",
+      "9080B",
+      "9080A",
+      "9710A",
+      "9710B",
+      "9711A",
+      "9712B",
+    ];
+
     if (kar5.some((prefix) => val.startsWith(prefix))) res = "KAR5";
     else if (kar6.some((prefix) => val.startsWith(prefix))) res = "KAR6";
+    else if (palov.some((prefix) => val.startsWith(prefix))) res = "PALOV";
 
     const cls = res !== "ONBEKEND" ? "badge-green" : "badge-red";
     document.getElementById("res-rec1").innerHTML =
@@ -52,7 +71,6 @@ function calcRec1() {
     document.getElementById("out-rec1").classList.add("show");
   });
 }
-
 function calcRec2() {
   showLoading("rec2", () => {
     const val = document.getElementById("recLoc2").value.toLowerCase().trim();
