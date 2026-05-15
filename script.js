@@ -22,19 +22,14 @@ function switchTab(tab) {
     .querySelectorAll(".tab-btn")
     .forEach((b) => b.classList.remove("active"));
   document.getElementById("sec-" + tab).classList.add("active");
-  document
-    .querySelector('[data-tab="' + tab + '"]')
-    .classList.add("active");
+  document.querySelector('[data-tab="' + tab + '"]').classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 // --- RECEPTIE LOGICA ---
 function calcRec1() {
   showLoading("rec1", () => {
-    const val = document
-      .getElementById("recLoc1")
-      .value.toUpperCase()
-      .trim();
+    const val = document.getElementById("recLoc1").value.toUpperCase().trim();
     let res = "ONBEKEND";
     const kar5 = [
       "9942B",
@@ -61,10 +56,7 @@ function calcRec1() {
 
 function calcRec2() {
   showLoading("rec2", () => {
-    const val = document
-      .getElementById("recLoc2")
-      .value.toLowerCase()
-      .trim();
+    const val = document.getElementById("recLoc2").value.toLowerCase().trim();
 
     if (!val || val.length < 5) {
       document.getElementById("res-rec2").innerHTML =
@@ -411,18 +403,14 @@ function autoSelectKleur() {
         .map((s) => s.trim())
         .includes(liggerNr),
   );
-  if (
-    mZone.includes("b") &&
-    (mZone.startsWith("22") || mZone.startsWith("24"))
-  )
+  if (mZone.includes("b") && (mZone.startsWith("22") || mZone.startsWith("24")))
     match = { k: "CRT" };
   if (match) {
     kleurSelect.value = match.k;
     document.getElementById("fixZoneManual").style.borderColor =
       "var(--accent)";
   } else {
-    document.getElementById("fixZoneManual").style.borderColor =
-      "#ef4444";
+    document.getElementById("fixZoneManual").style.borderColor = "#ef4444";
   }
 }
 
@@ -496,10 +484,7 @@ function calcFixEfficient() {
       let rekNum = parseInt(input.substring(5, 8));
       if (rekNum >= 1 && rekNum <= 24) {
         let lvCode, hdDisplay, size, storage, item, ceil, tresh;
-        if (
-          (rekNum >= 1 && rekNum <= 6) ||
-          (rekNum >= 14 && rekNum <= 24)
-        ) {
+        if ((rekNum >= 1 && rekNum <= 6) || (rekNum >= 14 && rekNum <= 24)) {
           lvCode = "13";
           hdDisplay = "BLF / 130";
           size = "CRT";
@@ -545,8 +530,7 @@ function calcFixEfficient() {
       table.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">❌ GEEN MATCH</td></tr>`;
     else {
       let mHd = hdMapping[type] || "300";
-      let isV =
-        type.includes("LSL") || type.includes("SSL") || kleur === "CRT";
+      let isV = type.includes("LSL") || type.includes("SSL") || kleur === "CRT";
       renderFixTable(
         table,
         mHd.substring(0, 2),

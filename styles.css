@@ -60,11 +60,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(
-    circle,
-    var(--border) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
   background-size: 28px 28px;
   opacity: 0.5;
   pointer-events: none;
@@ -78,11 +74,7 @@ body::after {
   transform: translateX(-50%);
   width: 700px;
   height: 420px;
-  background: radial-gradient(
-    ellipse,
-    var(--accent-glow) 0%,
-    transparent 68%
-  );
+  background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 68%);
   pointer-events: none;
   z-index: 0;
   transition: background 0.35s ease;
