@@ -1,8 +1,8 @@
 :root {
-  --accent: #009639;
-  --accent-light: #00b844;
-  --accent-dim: #006d29;
-  --accent-glow: rgba(0, 150, 57, 0.18);
+  --accent: #0066cc;
+  --accent-light: #0080ff;
+  --accent-dim: #003d99;
+  --accent-glow: rgba(0, 102, 204, 0.18);
   --bg: #eef2f7;
   --surface: #ffffff;
   --surface-2: #f4f7fb;
@@ -13,16 +13,16 @@
   --border-strong: #c8d0de;
   --shadow-sm: rgba(13, 27, 42, 0.06);
   --shadow-md: rgba(13, 27, 42, 1);
-  --shadow-accent: rgba(0, 150, 57, 0.22);
+  --shadow-accent: rgba(0, 102, 204, 0.22);
   --radius-card: 20px;
   --radius-inner: 12px;
   --radius-btn: 10px;
 }
 [data-theme="dark"] {
-  --accent: #00d45a;
-  --accent-light: #00f068;
-  --accent-dim: #009640;
-  --accent-glow: rgba(0, 212, 90, 0.12);
+  --accent: #0099ff;
+  --accent-light: #1ab3ff;
+  --accent-dim: #0066cc;
+  --accent-glow: rgba(0, 153, 255, 0.12);
   --bg: #111518;
   --surface: #181d22;
   --surface-2: #1e252d;
@@ -443,9 +443,9 @@ td:last-child {
   letter-spacing: 0.5px;
 }
 .badge-green {
-  background: rgba(0, 150, 57, 0.1);
+  background: rgba(0, 102, 204, 0.1);
   color: var(--accent);
-  border: 1.5px solid rgba(0, 150, 57, 0.25);
+  border: 1.5px solid rgba(0, 102, 204, 0.25);
 }
 .badge-red {
   background: rgba(220, 38, 38, 0.08);
@@ -460,7 +460,7 @@ td:last-child {
   margin-top: 18px;
   padding: 14px 18px;
   background: var(--accent-glow);
-  border: 1.5px solid rgba(0, 150, 57, 0.25);
+  border: 1.5px solid rgba(0, 102, 204, 0.25);
   border-radius: var(--radius-inner);
   font-size: 0.78rem;
   font-weight: 700;
