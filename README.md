@@ -1,5 +1,6 @@
-Lars Croubels – @larscroubels
+## ✉️ Contact
 
-Project Link: https://github.com/larscroubels/MasterdataTool
+Lars Croubels – [@larscroubels](https://github.com/larscroubels)  
 
-Website: larscroubels.github.io/MasterdataTool/
+**Project Link:** [https://github.com/larscroubels/MasterdataTool](https://github.com/larscroubels/MasterdataTool)  
+**Website:** [https://larscroubels.github.io/MasterdataTool/](https://larscroubels.github.io/MasterdataTool/)
