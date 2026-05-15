@@ -204,7 +204,12 @@ h1 {
 .card-body {
   padding: 32px;
 }
-
+.custom-dropdown,
+.custom-dropdown option {
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.5px;
+}
 .section {
   display: none;
 }
