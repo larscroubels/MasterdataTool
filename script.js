@@ -26,7 +26,6 @@ function switchTab(tab) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// --- RECEPTIE LOGICA ---
 function calcRec1() {
   showLoading("rec1", () => {
     const val = document.getElementById("recLoc1").value.toUpperCase().trim();
@@ -69,7 +68,6 @@ function calcRec2() {
     const mZone = getMasterZone(zoneCode);
     const kar = getKar(mZone);
 
-    // Bepaal details van de zone
     let details = "";
     switch (mZone) {
       case "2200A-2700A":
@@ -107,7 +105,6 @@ function calcRec2() {
   });
 }
 
-// --- ORIGINELE LOGICA HIERONDER ---
 const hdMapping = {
   UNIT: "001",
   SUPCAR: "100",
