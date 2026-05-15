@@ -91,10 +91,10 @@ function calcRec2() {
         details = "Blauwe en Rode Bakken";
         break;
       case "AFRAME-LS":
-        details = "1000a001-1000a020";
+        details = "Lange schacht";
         break;
       case "AFRAME-KS":
-        details = "1001a-1019b (A&B kant)";
+        details = "Korte schacht";
         break;
       default:
         details = "Onbekende zone";
@@ -565,9 +565,9 @@ function renderFixTable(
   kar,
 ) {
   table.innerHTML = `<thead><tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr></thead>
-    <tbody><tr><td style="font-weight:700;">${lv}</td><td style="font-weight:600;">${hd}</td><td style="font-weight:700;">${sz}</td><td style="font-weight:600;">${st}</td><td style="font-weight:600;">${it}</td><td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${ce}</span></td><td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${tr}</span></td></tr>
-    <tr><td colspan="7" style="padding:15px 20px; background:var(--surface-3); border-top:1.5px solid var(--border); border-bottom:1.5px solid var(--border);"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Receptie:</span><span class="badge badge-green" style="font-size:1rem; padding:6px 20px;">${kar}</span></div></td></tr>
-    <tr><td colspan="7" style="padding:20px;background:var(--surface-2);"><div class="loc-grid"><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(pLoc)}</div></div><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(eLoc)}</div></div></div></td></tr></tbody>`;
+          <tbody><tr><td style="font-weight:700;">${lv}</td><td style="font-weight:600;">${hd}</td><td style="font-weight:700;">${sz}</td><td style="font-weight:600;">${st}</td><td style="font-weight:600;">${it}</td><td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${ce}</span></td><td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${tr}</span></td></tr>
+          <tr><td colspan="7" style="padding:15px 20px; background:var(--surface-3); border-top:1.5px solid var(--border); border-bottom:1.5px solid var(--border);"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Receptie:</span><span class="badge badge-green" style="font-size:1rem; padding:6px 20px;">${kar}</span></div></td></tr>
+          <tr><td colspan="7" style="padding:20px;background:var(--surface-2);"><div class="loc-grid"><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(pLoc)}</div></div><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(eLoc)}</div></div></div></td></tr></tbody>`;
 }
 
 function calcAfm() {
