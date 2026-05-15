@@ -59,6 +59,7 @@ function calcRec1() {
       "9710B",
       "9711A",
       "9712B",
+      "9040A",
     ];
 
     if (kar5.some((prefix) => val.startsWith(prefix))) res = "KAR5";
