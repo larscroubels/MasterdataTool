@@ -409,7 +409,7 @@
       table {
         width: 100%;
         border-collapse: collapse;
-        table-layout: fixed;
+        table-layout: auto;
       }
       thead tr {
         background: var(--surface-2);
@@ -433,9 +433,10 @@
         border-bottom: 1px solid var(--border);
         font-size: 1.05rem;
         font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: normal;
+        word-wrap: break-word;
       }
       tbody tr:last-child td {
         border-bottom: none;
@@ -445,7 +446,8 @@
       }
       th:last-child,
       td:last-child {
-        width: 140px;
+        width: auto;
+        max-width: 300px;
         overflow: visible;
         text-overflow: clip;
       }
@@ -970,18 +972,35 @@
           </section>
 
           <section id="sec-rec" class="section">
-            <div style="display: flex; flex-direction: column; gap: 32px">
-              <div>
+            <div style="display: flex; flex-direction: column; gap: 40px">
+              <!-- Sectie 1: Overstock -->
+              <div
+                style="
+                  padding: 24px;
+                  background: var(--surface-2);
+                  border-radius: var(--radius-inner);
+                  border: 1.5px solid var(--border);
+                "
+              >
                 <h3
                   style="
-                    font-size: 0.9rem;
-                    margin-bottom: 12px;
-                    color: var(--accent);
+                    font-size: 1rem;
+                    margin-bottom: 8px;
+                    color: var(--text);
+                    font-weight: 700;
                   "
                 >
-                  Overstock op verkeerde Kar, geef de OVS locatie in en krijg de
-                  juiste kar.
+                  &#128230; Overstock op Verkeerde Kar
                 </h3>
+                <p
+                  style="
+                    font-size: 0.85rem;
+                    color: var(--text-muted);
+                    margin-bottom: 20px;
+                  "
+                >
+                  Geef de OVS locatie in en krijg de juiste kar.
+                </p>
                 <div class="form-grid">
                   <div class="form-group">
                     <label>Overstock-Locatie</label>
@@ -1011,16 +1030,34 @@
                 </div>
               </div>
 
-              <div>
+              <!-- Sectie 2: Flow Racks -->
+              <div
+                style="
+                  padding: 24px;
+                  background: var(--surface-2);
+                  border-radius: var(--radius-inner);
+                  border: 1.5px solid var(--border);
+                "
+              >
                 <h3
                   style="
-                    font-size: 0.9rem;
-                    margin-bottom: 12px;
-                    color: var(--accent);
+                    font-size: 1rem;
+                    margin-bottom: 8px;
+                    color: var(--text);
+                    font-weight: 700;
                   "
                 >
-                  Op welke kar moet mijn HD?
+                  &#128722; Flow Racks - Kar Bepaling
                 </h3>
+                <p
+                  style="
+                    font-size: 0.85rem;
+                    color: var(--text-muted);
+                    margin-bottom: 20px;
+                  "
+                >
+                  Vul een flow rack locatie in om de juiste kar te bepalen.
+                </p>
                 <div class="form-grid">
                   <div class="form-group">
                     <label>Locatie (Flow Racks)</label>
@@ -1042,7 +1079,8 @@
                     <thead>
                       <tr>
                         <th>Zone</th>
-                        <th>Resultaat</th>
+                        <th>Kar</th>
+                        <th>Details</th>
                       </tr>
                     </thead>
                     <tbody id="res-rec2"></tbody>
@@ -1123,19 +1161,52 @@
             .getElementById("recLoc2")
             .value.toLowerCase()
             .trim();
+
+          if (!val || val.length < 5) {
+            document.getElementById("res-rec2").innerHTML =
+              `<tr><td colspan="3" style="color:#ef4444;text-align:center;font-weight:700;">Voer minstens 5 tekens in (bv: 3700a)</td></tr>`;
+            document.getElementById("out-rec2").classList.add("show");
+            return;
+          }
+
           const zoneCode = val.substring(0, 5);
           const mZone = getMasterZone(zoneCode);
-          let res = "ONBEKEND";
+          const kar = getKar(mZone);
 
-          const kar2Zones = ["3700A-3200A", "4200B-5200B"];
-          const kar3Zones = ["3200B-3700B", "2100A-2700A"];
+          // Bepaal details van de zone
+          let details = "";
+          switch (mZone) {
+            case "2200A-2700A":
+              details = "Blauwe en Rode Bakken";
+              break;
+            case "2200B-2300B":
+              details = "CRT zone";
+              break;
+            case "2400B-2700B":
+              details = "CRT zone";
+              break;
+            case "3700B-3200B":
+              details = "Blauwe en Rode Bakken";
+              break;
+            case "3700A-3200A":
+              details = "Blauwe en Rode Bakken";
+              break;
+            case "4200A-5200A":
+              details = "Blauwe en Rode Bakken";
+              break;
+            case "AFRAME-LS":
+              details = "Lange schacht";
+              break;
+            case "AFRAME-KS":
+              details = "Korte schacht";
+              break;
+            default:
+              details = "Onbekende zone";
+          }
 
-          if (kar2Zones.includes(mZone)) res = "KAR2";
-          else if (kar3Zones.includes(mZone)) res = "KAR3";
-
-          const cls = res !== "ONBEKEND" ? "badge-green" : "badge-red";
+          const cls = kar !== "ONBEKEND" ? "badge-green" : "badge-red";
           document.getElementById("res-rec2").innerHTML =
-            `<tr><td>${mZone || "Geen Zone Match"}</td><td><span class="badge ${cls}">${res}</span></td></tr>`;
+            `<tr><td>${mZone || "Geen Match"}</td><td><span class="badge ${cls}">${kar}</span></td><td>${details}</td></tr>`;
           document.getElementById("out-rec2").classList.add("show");
         });
       }
@@ -1366,6 +1437,21 @@
 
       function getMasterZone(zoneCode) {
         if (!zoneCode) return "";
+        if (zoneCode.startsWith("1000a")) return "AFRAME-LS";
+        if (
+          zoneCode.startsWith("1001") ||
+          zoneCode.startsWith("1002") ||
+          zoneCode.startsWith("1003") ||
+          zoneCode.startsWith("1004") ||
+          zoneCode.startsWith("1005") ||
+          zoneCode.startsWith("1006") ||
+          zoneCode.startsWith("1007") ||
+          zoneCode.startsWith("1008") ||
+          zoneCode.startsWith("1009") ||
+          zoneCode.startsWith("101") ||
+          zoneCode.startsWith("102")
+        )
+          return "AFRAME-KS";
         if (zoneCode.startsWith("2") || zoneCode.startsWith("3")) {
           if (zoneCode.startsWith("2")) {
             return zoneCode.includes("b")
@@ -1390,6 +1476,8 @@
         if (mZone === "3700B-3200B") return "KAR2";
         if (mZone === "3700A-3200A") return "KAR3";
         if (mZone === "4200A-5200A") return "KAR3";
+        if (mZone === "AFRAME-LS") return "PAL1";
+        if (mZone === "AFRAME-KS") return "KAR1";
         return "ONBEKEND";
       }
 
