@@ -301,6 +301,7 @@ const dynData = {
       storage: "049",
       id: "R600NOTBBD",
     },
+
     ja: {
       code: "27",
       type: "270",
