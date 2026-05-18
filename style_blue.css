@@ -106,7 +106,7 @@ body::after {
 .header-icon {
   width: 30px;
   height: 30px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  background: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
