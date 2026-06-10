@@ -10,15 +10,12 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" href="imgs/Febelco.png" />
     <link
-      rel="icon"
-      href="imgs/Febelco.png"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="style_v2.css" />
-
-  </head>
-  <body>
+    <link rel="stylesheet" href="style_v2.css" />
   </head>
   <body>
     <div class="printer-hub" id="printerHub">
@@ -84,7 +81,7 @@
       <header class="header">
         <div class="header-badge">
           <div class="header-icon">
-            <img src="imgs/Febelco.png" height="15px" alt="">
+            <img src="imgs/Febelco.png" height="15px" alt="" />
           </div>
           <span class="header-badge-text">febelco Izegem</span>
         </div>
@@ -92,7 +89,7 @@
         <p class="tagline">Masterdata en locatiebeheer</p>
       </header>
       <div class="card">
-<nav class="nav-tabs">
+        <nav class="nav-tabs">
           <button
             class="tab-btn active"
             data-tab="dyn"
@@ -106,38 +103,43 @@
           <button class="tab-btn" data-tab="gv" onclick="switchTab('gv')">
             Grote Volumes
           </button>
-                    <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">
+          <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">
             Afmetingen
           </button>
 
-          <button 
-            class="tab-btn" 
-            data-tab="rec" 
+          <button
+            class="tab-btn"
+            data-tab="rec"
             onclick="switchTab('rec')"
             style="
-              background-color: var(--border, #d1d5db); 
+              background-color: var(--border, #d1d5db);
               border-top-left-radius: var(--radius-inner, 8px);
               border-top-right-radius: var(--radius-inner, 8px);
             "
           >
-            <i class="fa-solid fa-circle-info" style="color: #2198e8; font-size: 20px;"></i>
+            <i
+              class="fa-solid fa-circle-info"
+              style="color: #2198e8; font-size: 20px"
+            ></i>
           </button>
-        </nav>        <div class="card-body">
+        </nav>
+        <div class="card-body">
           <section id="sec-dyn" class="section active">
             <div class="form-grid">
               <div class="form-group">
                 <label>Zone</label>
-<select id="dynZone" class="custom-dropdown">
-  <option value="D420">APO CYTOSTATICA (D420)</option>
-  <option value="D421">APO BOIRON (D421)</option>
-  <option value="D422">APO HOOG (D422)</option>
-  <option value="D423">APO LAAG (D423)</option>
-  <option value="R440">DEP HOOG (R440)</option>
-  <option value="R441">DEP LAAG (R441)</option>
-  <option value="R442">DEP HOOG (R442)</option>
-  <option value="R443">DEP LAAG (R443)</option>
-  <option value="R600">DEP COOL (R600)</option>
-</select>              </div>
+                <select id="dynZone" class="custom-dropdown">
+                  <option value="D420">APO CYTOSTATICA (D420)</option>
+                  <option value="D421">APO BOIRON (D421)</option>
+                  <option value="D422">APO HOOG (D422)</option>
+                  <option value="D423">APO LAAG (D423)</option>
+                  <option value="R440">DEP HOOG (R440)</option>
+                  <option value="R441">DEP LAAG (R441)</option>
+                  <option value="R442">DEP HOOG (R442)</option>
+                  <option value="R443">DEP LAAG (R443)</option>
+                  <option value="R600">DEP COOL (R600)</option>
+                </select>
+              </div>
               <div class="form-group">
                 <label>Vervaldatum</label>
                 <select id="dynBBD">
@@ -178,7 +180,7 @@
             </select>
             <div class="form-grid">
               <div class="form-group">
-                <label>1. Locatie</label>
+                <label>1. Pick-Locatie</label>
                 <input
                   type="text"
                   id="fixZoneManual"
@@ -287,37 +289,51 @@
             </div>
           </section>
 
-         <section id="sec-rec" class="section">
+          <section id="sec-rec" class="section">
             <div style="display: flex; flex-direction: column; gap: 20px">
-              
-              <details style="
-                background: var(--surface-2);
-                border-radius: var(--radius-inner);
-                border: 1.5px solid var(--border);
-                overflow: hidden;
-              ">
-                <summary style="
-                  list-style: none;
-                  padding: 20px 24px;
-                  font-size: 1rem;
-                  font-weight: 700;
-                  color: var(--text);
-                  cursor: pointer;
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  user-select: none;
-                ">
+              <details
+                style="
+                  background: var(--surface-2);
+                  border-radius: var(--radius-inner);
+                  border: 1.5px solid var(--border);
+                  overflow: hidden;
+                "
+              >
+                <summary
+                  style="
+                    list-style: none;
+                    padding: 20px 24px;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: var(--text);
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    user-select: none;
+                  "
+                >
                   <span>&#128230; Overstock op Verkeerde Clip of Trolley</span>
-                  <i class="fa-solid fa-chevron-down" style="font-size: 0.85rem; color: var(--text-muted);"></i>
+                  <i
+                    class="fa-solid fa-chevron-down"
+                    style="font-size: 0.85rem; color: var(--text-muted)"
+                  ></i>
                 </summary>
-                
-                <div style="padding: 0 24px 24px 24px; border-top: 1px solid var(--border); padding-top: 20px;">
-                  <p style="
-                    font-size: 0.85rem;
-                    color: var(--text-muted);
-                    margin-bottom: 20px;
-                  ">
+
+                <div
+                  style="
+                    padding: 0 24px 24px 24px;
+                    border-top: 1px solid var(--border);
+                    padding-top: 20px;
+                  "
+                >
+                  <p
+                    style="
+                      font-size: 0.85rem;
+                      color: var(--text-muted);
+                      margin-bottom: 20px;
+                    "
+                  >
                     Geef de OVS locatie in en krijg de juiste kar.
                   </p>
                   <div class="form-grid">
@@ -350,35 +366,51 @@
                 </div>
               </details>
 
-              <details style="
-                background: var(--surface-2);
-                border-radius: var(--radius-inner);
-                border: 1.5px solid var(--border);
-                overflow: hidden;
-              ">
-                <summary style="
-                  list-style: none;
-                  padding: 20px 24px;
-                  font-size: 1rem;
-                  font-weight: 700;
-                  color: var(--text);
-                  cursor: pointer;
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  user-select: none;
-                ">
+              <details
+                style="
+                  background: var(--surface-2);
+                  border-radius: var(--radius-inner);
+                  border: 1.5px solid var(--border);
+                  overflow: hidden;
+                "
+              >
+                <summary
+                  style="
+                    list-style: none;
+                    padding: 20px 24px;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: var(--text);
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    user-select: none;
+                  "
+                >
                   <span>&#128722; TROL/CLIP Bepaling</span>
-                  <i class="fa-solid fa-chevron-down" style="font-size: 0.85rem; color: var(--text-muted);"></i>
+                  <i
+                    class="fa-solid fa-chevron-down"
+                    style="font-size: 0.85rem; color: var(--text-muted)"
+                  ></i>
                 </summary>
-                
-                <div style="padding: 0 24px 24px 24px; border-top: 1px solid var(--border); padding-top: 20px;">
-                  <p style="
-                    font-size: 0.85rem;
-                    color: var(--text-muted);
-                    margin-bottom: 20px;
-                  ">
-                    Vul een flow rack locatie in om de juiste kar/pallet te bepalen.
+
+                <div
+                  style="
+                    padding: 0 24px 24px 24px;
+                    border-top: 1px solid var(--border);
+                    padding-top: 20px;
+                  "
+                >
+                  <p
+                    style="
+                      font-size: 0.85rem;
+                      color: var(--text-muted);
+                      margin-bottom: 20px;
+                    "
+                  >
+                    Vul een flow rack locatie in om de juiste kar/pallet te
+                    bepalen.
                   </p>
                   <div class="form-grid">
                     <div class="form-group">
@@ -410,7 +442,6 @@
                   </div>
                 </div>
               </details>
-
             </div>
           </section>
         </div>
