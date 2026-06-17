@@ -180,7 +180,7 @@
             </select>
             <div class="form-grid">
               <div class="form-group">
-                <label>1. Pick-Locatie</label>
+                <label>Pick of Entry Loc</label>
                 <input
                   type="text"
                   id="fixZoneManual"
@@ -189,7 +189,7 @@
                 />
               </div>
               <div class="form-group">
-                <label>2. Gewenste LV</label>
+                <label>Gewenste LV</label>
                 <select id="fixTypeManual">
                   <option value="RED">RODE BAK</option>
                   <option value="BLU">BLAUWE BAK</option>
@@ -213,7 +213,7 @@
           <section id="sec-afm" class="section">
             <div class="form-grid">
               <div class="form-group">
-                <label>1. Zone</label>
+                <label>Zone</label>
                 <select id="afmZone" onchange="updateAfmLiggers()">
                   <option value="">Kies zone...</option>
                   <option value="2200A-2700A">2200A-2700A</option>
@@ -225,7 +225,7 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>2. Ligger(s)</label>
+                <label>Ligger(s)</label>
                 <select id="afmLigger" disabled>
                   <option value="">...</option>
                 </select>
@@ -253,6 +253,34 @@
           </section>
 
           <section id="sec-gv" class="section">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Locatie</label>
+                <input
+                  type="text"
+                  id="gvLocManual"
+                  placeholder="Bv: 7000a0040201"
+                />
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                margin: 20px 0;
+                color: var(--text-muted);
+                font-weight: 600;
+              "
+            >
+              <div
+                style="flex: 1; height: 1px; background: var(--border)"
+              ></div>
+              <span>OF</span>
+              <div
+                style="flex: 1; height: 1px; background: var(--border)"
+              ></div>
+            </div>
             <div class="form-grid">
               <div class="form-group">
                 <label>Zone</label>

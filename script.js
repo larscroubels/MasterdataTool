@@ -351,37 +351,78 @@ const afmData = {
   AFRAME: { name: "Aframe", liggers: { "1-5": "394" } },
 };
 
+function getWidthForZoneAndLigger(zone, location) {
+  // Extraheer de ligger uit de locatie (karakters 8-9 in 0-indexed)
+  if (location.length < 10) return 147;
+  const ligger = parseInt(location.substring(8, 10)).toString();
+
+  // Map Flow Racks zones naar afmData zones
+  let afmZone = zone;
+  if (zone === "2200A-2700A") afmZone = "2200A-2700A";
+  if (zone === "2200B-2300B" || zone === "2400B-2700B") afmZone = "20DOZEN"; // Alle 2X00B zones zijn 20 Dozen Aisle
+  if (zone === "3700B-3200B") afmZone = "3700B-3200B";
+  if (zone === "3700A-3200A") afmZone = "3700A-3200A";
+  if (zone === "4200A-5200A") afmZone = "4200A-5200A";
+
+  // Haal afmData op voor deze zone
+  if (!afmData[afmZone]) return 147;
+
+  const liggers = afmData[afmZone].liggers;
+
+  // Zoek de juiste ligger in afmData
+  for (const [liggerRange, width] of Object.entries(liggers)) {
+    if (liggerRange.includes(",")) {
+      // "1, 3, 5" -> check of ligger in deze lijst staat
+      const liggerList = liggerRange.split(",").map((l) => l.trim());
+      if (liggerList.includes(ligger)) return parseInt(width);
+    } else if (liggerRange.includes("-")) {
+      // "1-6" or "2-5" -> check range
+      const [start, end] = liggerRange
+        .split("-")
+        .map((l) => parseInt(l.trim()));
+      const liggerNum = parseInt(ligger);
+      if (liggerNum >= start && liggerNum <= end) return parseInt(width);
+    } else {
+      // Exact match "1"
+      if (parseInt(liggerRange) === parseInt(ligger)) return parseInt(width);
+    }
+  }
+
+  return 147; // Default fallback
+}
+
 function getMasterZone(zoneCode) {
   if (!zoneCode) return "";
-  if (zoneCode.startsWith("1000a")) return "AFRAME-LS";
+  const lowerZone = zoneCode.toLowerCase();
+  if (lowerZone.startsWith("1000a")) return "AFRAME-LS";
   if (
-    zoneCode.startsWith("1001") ||
-    zoneCode.startsWith("1002") ||
-    zoneCode.startsWith("1003") ||
-    zoneCode.startsWith("1004") ||
-    zoneCode.startsWith("1005") ||
-    zoneCode.startsWith("1006") ||
-    zoneCode.startsWith("1007") ||
-    zoneCode.startsWith("1008") ||
-    zoneCode.startsWith("1009") ||
-    zoneCode.startsWith("101") ||
-    zoneCode.startsWith("102")
+    lowerZone.startsWith("1001") ||
+    lowerZone.startsWith("1002") ||
+    lowerZone.startsWith("1003") ||
+    lowerZone.startsWith("1004") ||
+    lowerZone.startsWith("1005") ||
+    lowerZone.startsWith("1006") ||
+    lowerZone.startsWith("1007") ||
+    lowerZone.startsWith("1008") ||
+    lowerZone.startsWith("1009") ||
+    lowerZone.startsWith("101") ||
+    lowerZone.startsWith("102")
   )
     return "AFRAME-KS";
-  if (zoneCode.startsWith("2") || zoneCode.startsWith("3")) {
-    if (zoneCode.startsWith("2")) {
-      return zoneCode.includes("b")
-        ? parseInt(zoneCode.substring(0, 2)) <= 23
+  if (lowerZone.startsWith("2") || lowerZone.startsWith("3")) {
+    if (lowerZone.startsWith("2")) {
+      return lowerZone.includes("b")
+        ? parseInt(lowerZone.substring(0, 2)) <= 23
           ? "2200B-2300B"
           : "2400B-2700B"
         : "2200A-2700A";
     }
-    return zoneCode.includes("b") ? "3700B-3200B" : "3700A-3200A";
+    return lowerZone.includes("b") ? "3700B-3200B" : "3700A-3200A";
   } else if (
-    parseInt(zoneCode.substring(0, 2)) >= 42 &&
-    parseInt(zoneCode.substring(0, 2)) <= 52
+    parseInt(lowerZone.substring(0, 2)) >= 42 &&
+    parseInt(lowerZone.substring(0, 2)) <= 52
   ) {
-    return zoneCode.includes("b") ? "4200B-5200B" : "4200A-5200A";
+    return lowerZone.includes("b") ? "4200B-5200B" : "4200A-5200A";
   }
   return "";
 }
@@ -404,16 +445,17 @@ function autoSelectKleur() {
     .trim();
   let kleurSelect = document.getElementById("fixKleurManual");
   if (input.length < 10) return;
-  let zoneCode = input.substring(0, 5);
+  let normalizedInput = normalizeToPickLocation(input);
+  let zoneCode = normalizedInput.substring(0, 5);
   if (zoneCode === "6000a") {
     document.getElementById("fixZoneManual").style.borderColor =
       "var(--accent)";
-    let rekNum = parseInt(input.substring(5, 8));
+    let rekNum = parseInt(normalizedInput.substring(5, 8));
     if ((rekNum >= 1 && rekNum <= 6) || (rekNum >= 14 && rekNum <= 24))
       document.getElementById("fixTypeManual").value = "BLU FRIGO";
     return;
   }
-  let liggerNr = parseInt(input.substring(8, 10)).toString();
+  let liggerNr = parseInt(normalizedInput.substring(8, 10)).toString();
   let mZone = getMasterZone(zoneCode);
   let match = fixData.find(
     (d) =>
@@ -437,10 +479,28 @@ function autoSelectKleur() {
 function calculateEntryLocation(pickLoc) {
   if (pickLoc.length < 12) return "-";
   let gang = pickLoc.substring(0, 2);
-  let type = pickLoc.substring(2, 5);
+  let type = pickLoc.substring(2, 5).toLowerCase();
   let rest = pickLoc.substring(5);
   let newType = type === "00b" ? "02a" : type === "00a" ? "01b" : type;
   return gang + newType + rest;
+}
+
+function getPickLocationFromEntry(entryLoc) {
+  if (entryLoc.length < 12) return entryLoc;
+  let gang = entryLoc.substring(0, 2);
+  let type = entryLoc.substring(2, 5).toLowerCase();
+  let rest = entryLoc.substring(5);
+  let pickType = type === "02a" ? "00b" : type === "01b" ? "00a" : type;
+  return gang + pickType + rest;
+}
+
+function normalizeToPickLocation(input) {
+  if (input.length < 12) return input;
+  let type = input.substring(2, 5).toLowerCase();
+  if (type === "01b" || type === "02a") {
+    return getPickLocationFromEntry(input);
+  }
+  return input;
 }
 
 function updateAfmLiggers() {
@@ -493,15 +553,17 @@ function calcFixEfficient() {
     let type = document.getElementById("fixTypeManual").value;
     if (input.length < 10) return;
     const table = document.getElementById("table-fix");
-    let entryLocRaw = calculateEntryLocation(input).toUpperCase();
-    let pickingLocRaw = input.toUpperCase();
+    let pickingLocRaw = normalizeToPickLocation(input);
+    let entryLocRaw = calculateEntryLocation(pickingLocRaw);
+    pickingLocRaw = pickingLocRaw.toUpperCase();
+    entryLocRaw = entryLocRaw.toUpperCase();
     const formatLoc = (loc) =>
       loc.length < 12
         ? loc
         : `${loc.substring(0, 4)} ${loc.substring(4, 5)} ${loc.substring(5, 8)} ${loc.substring(8, 10)} ${loc.substring(10, 12)}`;
 
-    if (input.substring(0, 5) === "6000a") {
-      let rekNum = parseInt(input.substring(5, 8));
+    if (pickingLocRaw.substring(0, 5) === "6000A") {
+      let rekNum = parseInt(pickingLocRaw.substring(5, 8));
       if (rekNum >= 1 && rekNum <= 24) {
         let lvCode, hdDisplay, size, storage, item, ceil, tresh;
         if ((rekNum >= 1 && rekNum <= 6) || (rekNum >= 14 && rekNum <= 24)) {
@@ -540,7 +602,7 @@ function calcFixEfficient() {
       }
     }
 
-    let mZone = getMasterZone(input.substring(0, 5));
+    let mZone = getMasterZone(pickingLocRaw.substring(0, 5));
     let match = fixData.find(
       (d) =>
         d.z === mZone &&
@@ -551,6 +613,29 @@ function calcFixEfficient() {
     else {
       let mHd = hdMapping[type] || "300";
       let isV = type.includes("LSL") || type.includes("SSL") || kleur === "CRT";
+      let ceil = "—";
+      let tresh = "—";
+
+      // Voor CRT types, vraag om breedte in popup
+      if (isV) {
+        const breedte = parseFloat(prompt("Breedte karton (cm)?"));
+        if (!breedte || isNaN(breedte)) {
+          table.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">❌ BEREKENING GEANNULEERD</td></tr>`;
+          document.getElementById("out-fix").classList.add("show");
+          return;
+        }
+        // Bereken ceiling/tresh op basis van breedte en zone+ligger
+        const width = getWidthForZoneAndLigger(
+          mZone,
+          pickingLocRaw.toLowerCase(),
+        );
+        ceil = Math.floor(width / breedte);
+        tresh = Math.ceil(ceil / 3);
+      } else {
+        ceil = match.c;
+        tresh = Math.ceil(match.c / 3);
+      }
+
       renderFixTable(
         table,
         mHd.substring(0, 2),
@@ -558,8 +643,8 @@ function calcFixEfficient() {
         kleur === "BLAUW" ? "BLU" : kleur === "ROOD" ? "RED" : "CRT",
         match.s.toString().padStart(3, "0"),
         "CON",
-        isV ? "—" : match.c,
-        isV ? "—" : Math.ceil(match.c / 3),
+        ceil,
+        tresh,
         pickingLocRaw,
         entryLocRaw,
         formatLoc,
@@ -568,6 +653,14 @@ function calcFixEfficient() {
     }
     document.getElementById("out-fix").classList.add("show");
   });
+}
+
+function transformKar(kar) {
+  if (kar === "PAL1") return "PAL1/PALOV";
+  if (kar === "KAR1") return "KAR1";
+  if (kar === "KAR2") return "KAR2/KAR6";
+  if (kar === "KAR3") return "KAR3/KAR5";
+  return kar;
 }
 
 function renderFixTable(
@@ -584,9 +677,18 @@ function renderFixTable(
   fmt,
   kar,
 ) {
+  const transformedKar = transformKar(kar);
+
+  // Split kar voor styling (eerste deel normaal, tweede deel kleiner en lichter blauw)
+  let karDisplay = transformedKar;
+  if (transformedKar.includes("/")) {
+    const [part1, part2] = transformedKar.split("/");
+    karDisplay = `${part1}<span style="font-size:1rem;color:#5ba3d0;font-weight:600;margin-left:4px;">/${part2}</span>`;
+  }
+
   table.innerHTML = `<thead><tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr></thead>
           <tbody><tr><td style="font-weight:700;">${lv}</td><td style="font-weight:600;">${hd}</td><td style="font-weight:700;">${sz}</td><td style="font-weight:600;">${st}</td><td style="font-weight:600;">${it}</td><td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${ce}</span></td><td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${tr}</span></td></tr>
-          <tr><td colspan="7" style="padding:15px 20px; background:var(--surface-3); border-top:1.5px solid var(--border); border-bottom:1.5px solid var(--border);"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Receptie:</span><span class="badge badge-green" style="font-size:1rem; padding:6px 20px;">${kar}</span></div></td></tr>
+          <tr><td colspan="7" style="padding:15px 20px; background:var(--surface-3); border-top:1.5px solid var(--border); border-bottom:1.5px solid var(--border);"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Receptie:</span><span class="badge badge-green" style="font-size:1rem; padding:6px 20px;">${karDisplay}</span></div></td></tr>
           <tr><td colspan="7" style="padding:20px;background:var(--surface-2);"><div class="loc-grid"><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(pLoc)}</div></div><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(eLoc)}</div></div></div></td></tr></tbody>`;
 }
 
@@ -604,10 +706,44 @@ function calcAfm() {
   });
 }
 
+function getGVZone(zoneCode) {
+  if (!zoneCode || zoneCode.length < 4) return "";
+  const prefix = parseInt(zoneCode.substring(0, 4));
+  if (prefix >= 7000 && prefix <= 7010) return "7000-7010";
+  if (prefix >= 7050 && prefix <= 7070) return "7050-7070";
+  if (prefix >= 7100 && prefix <= 7150) return "7100-7150";
+  return "";
+}
+
 function calcGV() {
   showLoading("gv", () => {
-    const z = document.getElementById("gvZone").value;
-    if (!z) return;
+    let input = document
+      .getElementById("gvLocManual")
+      .value.toLowerCase()
+      .trim();
+
+    let z = "";
+
+    // Optie 1: Locatie intypen
+    if (input.length >= 4) {
+      z = getGVZone(input);
+      if (!z) {
+        document.getElementById("res-gv").innerHTML =
+          `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:700;">❌ GEEN GELDIGE ZONE GEVONDEN</td></tr>`;
+        document.getElementById("out-gv").classList.add("show");
+        return;
+      }
+    } else {
+      // Optie 2: Dropdown
+      z = document.getElementById("gvZone").value;
+      if (!z) {
+        document.getElementById("res-gv").innerHTML =
+          `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:700;">Voer een locatie in of kies een zone</td></tr>`;
+        document.getElementById("out-gv").classList.add("show");
+        return;
+      }
+    }
+
     let sG = "",
       pZ = "",
       iG = "",
