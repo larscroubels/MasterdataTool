@@ -688,3 +688,153 @@ td:last-child {
     padding: 12px 14px;
   }
 }
+
+.modal-overlay {
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay[style*="display: flex"] {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-secondary {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 1.5px solid var(--border) !important;
+}
+
+.btn-secondary:hover {
+  background: var(--surface-3) !important;
+}
+
+button[onclick*="copyToClipboard"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+button[onclick*="copyToClipboard"]:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.shortcut-hint {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.tab-btn:hover .shortcut-hint {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px 8px 80px;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .nav-tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .tab-btn {
+    font-size: 0.6rem;
+    padding: 8px 4px 9px;
+  }
+
+  .btn-primary {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    letter-spacing: 1.2px;
+  }
+
+  th,
+  td {
+    padding: 8px 8px;
+    font-size: 0.75rem;
+  }
+
+  .printer-fab,
+  .theme-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
+
+  .button-label {
+    font-size: 0.5rem;
+  }
+
+  .modal-content {
+    min-width: 240px;
+    max-width: 90vw;
+  }
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

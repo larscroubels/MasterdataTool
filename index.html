@@ -66,6 +66,18 @@
         /></a>
         <span class="button-label">Reflex</span>
       </div>
+      <div class="button-item">
+        <button
+          class="theme-btn"
+          onclick="toggleShortcuts()"
+          id="helpBtn"
+          title="Toetsenbord sneltoetsen"
+          style="font-size: 1.2rem"
+        >
+          ⌨️
+        </button>
+        <span class="button-label">Sneltoetsen</span>
+      </div>
       <div class="printer-popup">
         <div class="printer-row">
           <span class="printer-row-label">Receptie Masterdata</span>
@@ -472,6 +484,169 @@
               </details>
             </div>
           </section>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="shortcutsModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: var(--surface);
+          border-radius: 16px;
+          padding: 30px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          max-width: 500px;
+          max-height: 80vh;
+          overflow-y: auto;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+          "
+        >
+          <h2 style="margin: 0; color: var(--text)">
+            ⌨️ Toetsenbord Sneltoetsen
+          </h2>
+          <button
+            onclick="toggleShortcuts()"
+            style="
+              background: none;
+              border: none;
+              font-size: 1.5rem;
+              cursor: pointer;
+              color: var(--text-muted);
+            "
+          >
+            ✕
+          </button>
+        </div>
+        <div
+          id="shortcutsList"
+          style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px"
+        ></div>
+        <div
+          style="
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+          "
+        >
+          <p style="margin: 8px 0">
+            <strong>💡 Tip:</strong> Open deze hulp met de ⌨️ knop of druk op
+            <span id="helpKeyLabel">Cmd+?</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="inputModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: var(--surface);
+          border-radius: 16px;
+          padding: 30px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          min-width: 300px;
+          max-width: 400px;
+        "
+      >
+        <h3
+          id="inputModalTitle"
+          style="margin: 0 0 12px 0; color: var(--text); font-size: 1.1rem"
+        ></h3>
+        <p
+          id="inputModalMessage"
+          style="
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+          "
+        ></p>
+        <input
+          type="number"
+          id="inputModalField"
+          placeholder="Voer waarde in..."
+          step="0.01"
+          style="
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            background: var(--surface-2);
+            color: var(--text);
+            font-weight: 600;
+          "
+        />
+        <div style="display: flex; gap: 12px; justify-content: flex-end">
+          <button
+            id="inputModalCancel"
+            onclick="cancelInputModal()"
+            style="
+              padding: 10px 16px;
+              background: var(--surface-2);
+              border: 1.5px solid var(--border);
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: 600;
+              color: var(--text);
+              transition: all 0.2s;
+            "
+          >
+            Annuleren
+          </button>
+          <button
+            id="inputModalOk"
+            onclick="confirmInputModal()"
+            style="
+              padding: 10px 16px;
+              background: var(--accent);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: 600;
+              transition: all 0.2s;
+            "
+          >
+            OK
+          </button>
         </div>
       </div>
     </div>

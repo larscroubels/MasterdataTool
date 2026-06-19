@@ -1,106 +1,8 @@
-function saveValue(key, val) {
-  try {
-    localStorage.setItem(`md_${key}`, JSON.stringify(val));
-  } catch (e) {
-    console.warn("localStorage unavailable");
-  }
-}
-
-function getValue(key, fallback = "") {
-  try {
-    const v = localStorage.getItem(`md_${key}`);
-    return v ? JSON.parse(v) : fallback;
-  } catch (e) {
-    return fallback;
-  }
-}
-
-function notify(msg, type = "success") {
-  const n = document.createElement("div");
-  n.style.cssText = `position:fixed;top:16px;right:16px;padding:12px 20px;background:${type === "error" ? "#ef4444" : "#059669"};color:white;border-radius:8px;font-weight:600;z-index:10000;animation:slideIn 0.3s ease-out;`;
-  n.textContent = msg;
-  document.body.appendChild(n);
-  setTimeout(() => {
-    n.style.animation = "slideOut 0.3s ease-out";
-    setTimeout(() => n.remove(), 300);
-  }, 2500);
-}
-
-let inputModalResolver = null;
-
-function showInputModal(title, message) {
-  return new Promise((resolve) => {
-    inputModalResolver = resolve;
-    document.getElementById("inputModalTitle").textContent = title;
-    document.getElementById("inputModalMessage").textContent = message;
-    const input = document.getElementById("inputModalField");
-    input.value = "";
-    document.getElementById("inputModal").style.display = "flex";
-    input.focus();
-  });
-}
-
-function confirmInputModal() {
-  const val = document.getElementById("inputModalField").value;
-  document.getElementById("inputModal").style.display = "none";
-  if (inputModalResolver) {
-    inputModalResolver(val ? parseFloat(val) : null);
-    inputModalResolver = null;
-  }
-}
-
-function cancelInputModal() {
-  document.getElementById("inputModal").style.display = "none";
-  if (inputModalResolver) {
-    inputModalResolver(null);
-    inputModalResolver = null;
-  }
-}
-
-const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
-const modKey = isMac ? "⌘" : "Alt";
-const modKeyName = isMac ? "Command" : "Alt";
-
-function toggleShortcuts() {
-  const modal = document.getElementById("shortcutsModal");
-  modal.style.display = modal.style.display === "none" ? "flex" : "none";
-}
-
-function populateShortcuts() {
-  const list = document.getElementById("shortcutsList");
-  const shortcuts = [
-    { key: `${modKey}+1`, action: "Dynamisch Tab", desc: "Zone gegevens" },
-    { key: `${modKey}+2`, action: "Flow Racks", desc: "Locatie berekenen" },
-    { key: `${modKey}+3`, action: "Grote Volumes", desc: "GV zones" },
-    { key: `${modKey}+4`, action: "Afmetingen", desc: "Afm berekening" },
-    { key: `${modKey}+5`, action: "Receptie", desc: "Lokatie lookup" },
-    { key: isMac ? "⌘+T" : "Ctrl+T", action: "Thema", desc: "Licht/Donker" },
-    { key: isMac ? "⌘+?" : "Ctrl+?", action: "Hulp", desc: "Dit scherm" },
-  ];
-
-  list.innerHTML = shortcuts
-    .map(
-      (s) => `
-    <div style="background:var(--surface-2);padding:14px;border-radius:8px;border:1px solid var(--border);">
-      <div style="font-family:monospace;font-weight:700;color:var(--accent);font-size:0.95rem;margin-bottom:4px;">${s.key}</div>
-      <div style="font-weight:600;color:var(--text);font-size:0.9rem;">${s.action}</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);">${s.desc}</div>
-    </div>
-  `,
-    )
-    .join("");
-
-  document.getElementById("helpKeyLabel").textContent = isMac
-    ? "⌘+?"
-    : "Ctrl+?";
-}
-
 function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute("data-theme") === "dark";
   html.setAttribute("data-theme", isDark ? "light" : "dark");
   document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙";
-  saveValue("theme", isDark ? "light" : "dark");
 }
 
 function togglePrinter() {
@@ -122,7 +24,6 @@ function switchTab(tab) {
   document.getElementById("sec-" + tab).classList.add("active");
   document.querySelector('[data-tab="' + tab + '"]').classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
-  saveValue("lastTab", tab);
 }
 
 function calcRec1() {
@@ -144,6 +45,7 @@ function calcRec1() {
     ];
     const kar6 = ["9400A", "9401A", "9400B", "9020A"];
 
+    // Nieuwe lijst voor PALOV locaties (inclusief correctie voor typfouten)
     const palov = [
       "9000A",
       "9000B",
@@ -162,6 +64,7 @@ function calcRec1() {
       "9040A",
     ];
 
+    // Controleer met welke prefix de ingevoerde locatie begint
     if (kar5.some((prefix) => val.startsWith(prefix))) res = "KAR5";
     else if (kar6.some((prefix) => val.startsWith(prefix))) res = "KAR6";
     else if (palov.some((prefix) => val.startsWith(prefix))) res = "PALOV";
@@ -449,35 +352,43 @@ const afmData = {
 };
 
 function getWidthForZoneAndLigger(zone, location) {
+  // Extraheer de ligger uit de locatie (karakters 8-9 in 0-indexed)
   if (location.length < 10) return 147;
   const ligger = parseInt(location.substring(8, 10)).toString();
+
+  // Map Flow Racks zones naar afmData zones
   let afmZone = zone;
   if (zone === "2200A-2700A") afmZone = "2200A-2700A";
-  if (zone === "2200B-2300B" || zone === "2400B-2700B") afmZone = "20DOZEN";
+  if (zone === "2200B-2300B" || zone === "2400B-2700B") afmZone = "20DOZEN"; // Alle 2X00B zones zijn 20 Dozen Aisle
   if (zone === "3700B-3200B") afmZone = "3700B-3200B";
   if (zone === "3700A-3200A") afmZone = "3700A-3200A";
   if (zone === "4200A-5200A") afmZone = "4200A-5200A";
 
+  // Haal afmData op voor deze zone
   if (!afmData[afmZone]) return 147;
 
   const liggers = afmData[afmZone].liggers;
 
+  // Zoek de juiste ligger in afmData
   for (const [liggerRange, width] of Object.entries(liggers)) {
     if (liggerRange.includes(",")) {
+      // "1, 3, 5" -> check of ligger in deze lijst staat
       const liggerList = liggerRange.split(",").map((l) => l.trim());
       if (liggerList.includes(ligger)) return parseInt(width);
     } else if (liggerRange.includes("-")) {
+      // "1-6" or "2-5" -> check range
       const [start, end] = liggerRange
         .split("-")
         .map((l) => parseInt(l.trim()));
       const liggerNum = parseInt(ligger);
       if (liggerNum >= start && liggerNum <= end) return parseInt(width);
     } else {
+      // Exact match "1"
       if (parseInt(liggerRange) === parseInt(ligger)) return parseInt(width);
     }
   }
 
-  return 147;
+  return 147; // Default fallback
 }
 
 function getMasterZone(zoneCode) {
@@ -629,29 +540,18 @@ function calcDyn() {
     document.getElementById("res-dyn").innerHTML =
       `<tr><td>${d.code}</td><td>${d.type}</td><td>${d.hd}</td><td>${d.size}</td><td>${d.storage}</td><td>${z === "R600" ? "COO" : "CON"}</td><td><span class="badge ${cls}">${d.id}</span></td></tr>`;
     document.getElementById("out-dyn").classList.add("show");
-    saveValue("lastDynZone", z);
-    saveValue("lastDynBBD", b);
-    notify("✓ Gegevens gegenereerd");
   });
 }
 
 function calcFixEfficient() {
-  showLoading("fix", async () => {
+  showLoading("fix", () => {
     let input = document
       .getElementById("fixZoneManual")
       .value.toLowerCase()
       .trim();
     let kleur = document.getElementById("fixKleurManual").value;
     let type = document.getElementById("fixTypeManual").value;
-
-    if (input.length < 10) {
-      document.getElementById("table-fix").innerHTML =
-        `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">❌ GELDIGE LOCATIE NODIG</td></tr>`;
-      document.getElementById("out-fix").classList.add("show");
-      notify("Voer geldige locatie in", "error");
-      return;
-    }
-
+    if (input.length < 10) return;
     const table = document.getElementById("table-fix");
     let pickingLocRaw = normalizeToPickLocation(input);
     let entryLocRaw = calculateEntryLocation(pickingLocRaw);
@@ -698,9 +598,6 @@ function calcFixEfficient() {
           formatLoc,
           "COO",
         );
-        document.getElementById("out-fix").classList.add("show");
-        saveValue("lastFixZone", input);
-        notify("✓ Flow Racks berekend");
         return;
       }
     }
@@ -719,17 +616,15 @@ function calcFixEfficient() {
       let ceil = "—";
       let tresh = "—";
 
+      // Voor CRT types, vraag om breedte in popup
       if (isV) {
-        const breedte = await showInputModal(
-          "Breedte karton",
-          "Voer de breedte van het karton in (cm):",
-        );
+        const breedte = parseFloat(prompt("Breedte karton (cm)?"));
         if (!breedte || isNaN(breedte)) {
           table.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">❌ BEREKENING GEANNULEERD</td></tr>`;
           document.getElementById("out-fix").classList.add("show");
-          notify("Berekening geannuleerd", "error");
           return;
         }
+        // Bereken ceiling/tresh op basis van breedte en zone+ligger
         const width = getWidthForZoneAndLigger(
           mZone,
           pickingLocRaw.toLowerCase(),
@@ -757,8 +652,6 @@ function calcFixEfficient() {
       );
     }
     document.getElementById("out-fix").classList.add("show");
-    saveValue("lastFixZone", input);
-    if (match) notify("✓ Flow Racks berekend");
   });
 }
 
@@ -786,6 +679,7 @@ function renderFixTable(
 ) {
   const transformedKar = transformKar(kar);
 
+  // Split kar voor styling (eerste deel normaal, tweede deel kleiner en lichter blauw)
   let karDisplay = transformedKar;
   if (transformedKar.includes("/")) {
     const [part1, part2] = transformedKar.split("/");
@@ -799,37 +693,16 @@ function renderFixTable(
 }
 
 function calcAfm() {
-  showLoading("afm", async () => {
+  showLoading("afm", () => {
     const zk = document.getElementById("afmZone").value;
     const lk = document.getElementById("afmLigger").value;
-
-    if (!zk || !lk) {
-      document.getElementById("res-afm").innerHTML =
-        `<tr><td colspan="4" style="color:#ef4444;text-align:center;font-weight:700;">⚠️ Kies zone en ligger</td></tr>`;
-      document.getElementById("out-afm").classList.add("show");
-      notify("Selecteer zone en ligger", "error");
-      return;
-    }
-
-    const val = await showInputModal(
-      "Breedte karton",
-      "Voer de breedte van het karton in (cm):",
-    );
-    if (!val || isNaN(val)) {
-      document.getElementById("res-afm").innerHTML =
-        `<tr><td colspan="4" style="color:#ef4444;text-align:center;font-weight:700;">❌ BEREKENING GEANNULEERD</td></tr>`;
-      document.getElementById("out-afm").classList.add("show");
-      notify("Berekening geannuleerd", "error");
-      return;
-    }
-
+    if (!zk || !lk) return;
+    const val = parseFloat(prompt("Breedte karton (cm)?"));
+    if (!val || isNaN(val)) return;
     const cap = Math.floor(parseInt(afmData[zk].liggers[lk]) / val);
     document.getElementById("res-afm").innerHTML =
       `<tr><td>${afmData[zk].name}</td><td>${lk}</td><td style="color:var(--accent);font-weight:800;">${cap}</td><td>${Math.ceil(cap / 3)}</td></tr>`;
     document.getElementById("out-afm").classList.add("show");
-    saveValue("lastAfmZone", zk);
-    saveValue("lastAfmLigger", lk);
-    notify("✓ Afmetingen berekend");
   });
 }
 
@@ -851,22 +724,22 @@ function calcGV() {
 
     let z = "";
 
+    // Optie 1: Locatie intypen
     if (input.length >= 4) {
       z = getGVZone(input);
       if (!z) {
         document.getElementById("res-gv").innerHTML =
           `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:700;">❌ GEEN GELDIGE ZONE GEVONDEN</td></tr>`;
         document.getElementById("out-gv").classList.add("show");
-        notify("Zone niet gevonden", "error");
         return;
       }
     } else {
+      // Optie 2: Dropdown
       z = document.getElementById("gvZone").value;
       if (!z) {
         document.getElementById("res-gv").innerHTML =
           `<tr><td colspan="6" style="color:#ef4444;text-align:center;font-weight:700;">Voer een locatie in of kies een zone</td></tr>`;
         document.getElementById("out-gv").classList.add("show");
-        notify("Voer locatie in of kies zone", "error");
         return;
       }
     }
@@ -901,87 +774,5 @@ function calcGV() {
     document.getElementById("res-gv").innerHTML =
       `<tr><td>30</td><td>LAB / 300</td><td style="font-weight:700;">${lS}</td><td>${sG}</td><td>${iG}</td><td><span class="badge badge-green">${pZ}</span></td></tr>`;
     document.getElementById("out-gv").classList.add("show");
-    saveValue("lastGvZone", z);
-    notify("✓ Grote Volumes gevonden");
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("inputModalField")
-    .addEventListener("keydown", (e) => {
-      if (e.key === "Enter") confirmInputModal();
-      if (e.key === "Escape") cancelInputModal();
-    });
-
-  document.getElementById("inputModal").addEventListener("click", (e) => {
-    if (e.target.id === "inputModal") cancelInputModal();
-  });
-
-  const savedTheme = getValue("theme", "light");
-  document.documentElement.setAttribute("data-theme", savedTheme);
-  document.getElementById("themeBtn").textContent =
-    savedTheme === "dark" ? "🌙" : "☀️";
-
-  const lastTab = getValue("lastTab", "dyn");
-  setTimeout(() => switchTab(lastTab), 50);
-
-  populateShortcuts();
-
-  const modal = document.getElementById("shortcutsModal");
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) toggleShortcuts();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    const isModKey = isMac ? e.metaKey : e.altKey;
-
-    if (isModKey && !e.ctrlKey) {
-      if (e.key === "1") {
-        e.preventDefault();
-        switchTab("dyn");
-      }
-      if (e.key === "2") {
-        e.preventDefault();
-        switchTab("fix");
-      }
-      if (e.key === "3") {
-        e.preventDefault();
-        switchTab("gv");
-      }
-      if (e.key === "4") {
-        e.preventDefault();
-        switchTab("afm");
-      }
-      if (e.key === "5") {
-        e.preventDefault();
-        switchTab("rec");
-      }
-    }
-
-    if (isMac && e.metaKey && e.key === "t") {
-      e.preventDefault();
-      toggleTheme();
-    }
-    if (!isMac && e.ctrlKey && e.key === "t") {
-      e.preventDefault();
-      toggleTheme();
-    }
-
-    if (isMac && e.metaKey && e.shiftKey && e.key === "?") {
-      e.preventDefault();
-      toggleShortcuts();
-    }
-    if (!isMac && e.ctrlKey && e.shiftKey && e.key === "?") {
-      e.preventDefault();
-      toggleShortcuts();
-    }
-  });
-
-  const style = document.createElement("style");
-  style.textContent = `
-    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
-  `;
-  document.head.appendChild(style);
-});
