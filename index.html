@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" href="imgs/Febelco.png" />
@@ -21,62 +21,75 @@
     <div class="printer-hub" id="printerHub">
       <div class="button-item">
         <button
-          class="theme-btn"
-          onclick="toggleTheme()"
-          id="themeBtn"
-          title="Thema wisselen"
+          class="theme-btn toggle-hub-btn"
+          onclick="toggleHubCollapse()"
+          id="toggleHubBtn"
+          title="Menu in/uit schuiven"
         >
-          ☀️
+          ⟨
         </button>
-        <span class="button-label">Thema</span>
+        <span class="button-label">Menu</span>
       </div>
-      <div class="button-item">
-        <button
-          class="printer-fab"
-          onclick="togglePrinter()"
-          title="Labelprinters"
-        >
-          🖨️
-        </button>
-        <span class="button-label">Printers</span>
-      </div>
-      <div class="button-item">
-        <a
-          href="https://erp-warehouse.febelco.be"
-          target="_blank"
-          class="printer-fab"
-          title="iCore"
-          ><img
-            src="imgs/icore.png"
-            alt="iCore"
-            style="width: 24px; height: 24px"
-        /></a>
-        <span class="button-label">iCore</span>
-      </div>
-      <div class="button-item">
-        <a
-          href="https://reflex.febelco.be/reflex/env/production"
-          target="_blank"
-          class="printer-fab"
-          title="Reflex"
-          ><img
-            src="imgs/reflex.ico"
-            alt="Reflex"
-            style="width: 24px; height: 24px"
-        /></a>
-        <span class="button-label">Reflex</span>
-      </div>
-      <div class="button-item">
-        <button
-          class="theme-btn"
-          onclick="toggleShortcuts()"
-          id="helpBtn"
-          title="Toetsenbord sneltoetsen"
-          style="font-size: 1.2rem"
-        >
-          ⌨️
-        </button>
-        <span class="button-label">Sneltoetsen</span>
+      <div class="hub-items" id="hubItems">
+        <div class="button-item">
+          <button
+            class="theme-btn"
+            onclick="toggleTheme()"
+            id="themeBtn"
+            title="Thema wisselen"
+          >
+            ☀️
+          </button>
+          <span class="button-label">Thema</span>
+        </div>
+        <div class="button-item">
+          <button
+            class="printer-fab"
+            onclick="togglePrinter()"
+            title="Labelprinters"
+          >
+            🖨️
+          </button>
+          <span class="button-label">Printers</span>
+        </div>
+        <div class="button-item">
+          <a
+            href="https://erp-warehouse.febelco.be"
+            target="_blank"
+            class="printer-fab"
+            title="iCore"
+            ><img
+              src="imgs/icore.png"
+              alt="iCore"
+              style="width: 24px; height: 24px"
+          /></a>
+          <span class="button-label">iCore</span>
+        </div>
+        <div class="button-item">
+          <a
+            href="https://reflex.febelco.be/reflex/env/production"
+            target="_blank"
+            class="printer-fab"
+            title="Reflex"
+            ><img
+              src="imgs/reflex.ico"
+              alt="Reflex"
+              style="width: 24px; height: 24px"
+          /></a>
+          <span class="button-label">Reflex</span>
+        </div>
+        <div class="button-item">
+          <button
+            class="theme-btn"
+            onclick="toggleShortcuts()"
+            id="helpBtn"
+            title="Toetsenbord sneltoetsen"
+            style="font-size: 1.2rem"
+          >
+            ⌨️
+          </button>
+          <span class="button-label">Sneltoetsen</span>
+        </div>
       </div>
       <div class="printer-popup">
         <div class="printer-row">
@@ -160,9 +173,18 @@
                 </select>
               </div>
             </div>
-            <button class="btn-primary" onclick="calcDyn()">
-              Gegevens Genereren
-            </button>
+            <div class="btn-group">
+              <button class="btn-primary" onclick="calcDyn()">
+                Gegevens Genereren
+              </button>
+              <button
+                class="btn-reset"
+                onclick="resetTab('dyn')"
+                title="Herladen"
+              >
+                🔄
+              </button>
+            </div>
             <div class="progress-container" id="prog-dyn">
               <div class="progress-bar"></div>
             </div>
@@ -211,9 +233,18 @@
                 </select>
               </div>
             </div>
-            <button class="btn-primary" onclick="calcFixEfficient()">
-              Genereer
-            </button>
+            <div class="btn-group">
+              <button class="btn-primary" onclick="calcFixEfficient()">
+                Genereer
+              </button>
+              <button
+                class="btn-reset"
+                onclick="resetTab('fix')"
+                title="Herladen"
+              >
+                🔄
+              </button>
+            </div>
             <div class="progress-container" id="prog-fix">
               <div class="progress-bar"></div>
             </div>
@@ -243,9 +274,18 @@
                 </select>
               </div>
             </div>
-            <button class="btn-primary" onclick="calcAfm()">
-              Bereken Afmeting
-            </button>
+            <div class="btn-group">
+              <button class="btn-primary" onclick="calcAfm()">
+                Bereken Afmeting
+              </button>
+              <button
+                class="btn-reset"
+                onclick="resetTab('afm')"
+                title="Herladen"
+              >
+                🔄
+              </button>
+            </div>
             <div class="progress-container" id="prog-afm">
               <div class="progress-bar"></div>
             </div>
@@ -306,9 +346,18 @@
                 </select>
               </div>
             </div>
-            <button class="btn-primary" onclick="calcGV()">
-              Gegevens Genereren
-            </button>
+            <div class="btn-group">
+              <button class="btn-primary" onclick="calcGV()">
+                Gegevens Genereren
+              </button>
+              <button
+                class="btn-reset"
+                onclick="resetTab('gv')"
+                title="Herladen"
+              >
+                🔄
+              </button>
+            </div>
             <div class="progress-container" id="prog-gv">
               <div class="progress-bar"></div>
             </div>
@@ -386,9 +435,18 @@
                       />
                     </div>
                   </div>
-                  <button class="btn-primary" onclick="calcRec1()">
-                    Genereer
-                  </button>
+                  <div class="btn-group">
+                    <button class="btn-primary" onclick="calcRec1()">
+                      Genereer
+                    </button>
+                    <button
+                      class="btn-reset"
+                      onclick="resetTab('rec')"
+                      title="Herladen"
+                    >
+                      🔄
+                    </button>
+                  </div>
                   <div class="progress-container" id="prog-rec1">
                     <div class="progress-bar"></div>
                   </div>
@@ -462,9 +520,18 @@
                       />
                     </div>
                   </div>
-                  <button class="btn-primary" onclick="calcRec2()">
-                    Geneereer
-                  </button>
+                  <div class="btn-group">
+                    <button class="btn-primary" onclick="calcRec2()">
+                      Geneereer
+                    </button>
+                    <button
+                      class="btn-reset"
+                      onclick="resetTab('rec')"
+                      title="Herladen"
+                    >
+                      🔄
+                    </button>
+                  </div>
                   <div class="progress-container" id="prog-rec2">
                     <div class="progress-bar"></div>
                   </div>
@@ -488,32 +555,8 @@
       </div>
     </div>
 
-    <div
-      id="shortcutsModal"
-      style="
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 9999;
-        align-items: center;
-        justify-content: center;
-      "
-    >
-      <div
-        style="
-          background: var(--surface);
-          border-radius: 16px;
-          padding: 30px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-          max-width: 500px;
-          max-height: 80vh;
-          overflow-y: auto;
-        "
-      >
+    <div id="shortcutsModal" class="modal">
+      <div class="modal-content">
         <div
           style="
             display: flex;
@@ -559,31 +602,8 @@
       </div>
     </div>
 
-    <div
-      id="inputModal"
-      style="
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 9998;
-        align-items: center;
-        justify-content: center;
-      "
-    >
-      <div
-        style="
-          background: var(--surface);
-          border-radius: 16px;
-          padding: 30px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-          min-width: 300px;
-          max-width: 400px;
-        "
-      >
+    <div id="inputModal" class="modal modal-input">
+      <div class="modal-content">
         <h3
           id="inputModalTitle"
           style="margin: 0 0 12px 0; color: var(--text); font-size: 1.1rem"

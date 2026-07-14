@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MASTERDATA TOOL IZEGEM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="imgs/Febelco.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style_v2.css" />
+  </head>
+  <body>
+    <div class="printer-hub" id="printerHub">
+      <div class="button-item">
+        <button
+          class="theme-btn"
+          onclick="toggleTheme()"
+          id="themeBtn"
+          title="Thema wisselen"
+        >
+          ☀️
+        </button>
+        <span class="button-label">Thema</span>
+      </div>
+      <div class="button-item">
+        <button
+          class="printer-fab"
+          onclick="togglePrinter()"
+          title="Labelprinters"
+        >
+          🖨️
+        </button>
+        <span class="button-label">Printers</span>
+      </div>
+      <div class="button-item">
+        <a
+          href="https://erp-warehouse.febelco.be"
+          target="_blank"
+          class="printer-fab"
+          title="iCore"
+          ><img
+            src="imgs/icore.png"
+            alt="iCore"
+            style="width: 24px; height: 24px"
+        /></a>
+        <span class="button-label">iCore</span>
+      </div>
+      <div class="button-item">
+        <a
+          href="https://reflex.febelco.be/reflex/env/production"
+          target="_blank"
+          class="printer-fab"
+          title="Reflex"
+          ><img
+            src="imgs/reflex.ico"
+            alt="Reflex"
+            style="width: 24px; height: 24px"
+        /></a>
+        <span class="button-label">Reflex</span>
+      </div>
+      <div class="button-item">
+        <button
+          class="theme-btn"
+          onclick="toggleShortcuts()"
+          id="helpBtn"
+          title="Toetsenbord sneltoetsen"
+          style="font-size: 1.2rem"
+        >
+          ⌨️
+        </button>
+        <span class="button-label">Sneltoetsen</span>
+      </div>
+      <div class="printer-popup">
+        <div class="printer-row">
+          <span class="printer-row-label">Receptie Masterdata</span>
+          <span class="printer-row-code">LT-0471</span>
+        </div>
+        <div class="printer-row">
+          <span class="printer-row-label">Bureau Kurt</span>
+          <span class="printer-row-code">PC-0455</span>
+        </div>
+      </div>
+    </div>
+    <div class="page-wrapper">
+      <header class="header">
+        <div class="header-badge">
+          <div class="header-icon">
+            <img src="imgs/Febelco.png" height="15px" alt="" />
+          </div>
+          <span class="header-badge-text">febelco Izegem</span>
+        </div>
+        <h1>Masterdata Tool</h1>
+        <p class="tagline">Masterdata en locatiebeheer</p>
+      </header>
+      <div class="card">
+        <nav class="nav-tabs">
+          <button
+            class="tab-btn active"
+            data-tab="dyn"
+            onclick="switchTab('dyn')"
+          >
+            Dynamisch
+          </button>
+          <button class="tab-btn" data-tab="fix" onclick="switchTab('fix')">
+            Flow Racks
+          </button>
+          <button class="tab-btn" data-tab="gv" onclick="switchTab('gv')">
+            Grote Volumes
+          </button>
+          <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">
+            Afmetingen
+          </button>
+
+          <button
+            class="tab-btn"
+            data-tab="rec"
+            onclick="switchTab('rec')"
+            style="
+              background-color: var(--border, #d1d5db);
+              border-top-left-radius: var(--radius-inner, 8px);
+              border-top-right-radius: var(--radius-inner, 8px);
+            "
+          >
+            <i
+              class="fa-solid fa-circle-info"
+              style="color: #2198e8; font-size: 20px"
+            ></i>
+          </button>
+        </nav>
+        <div class="card-body">
+          <section id="sec-dyn" class="section active">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Zone</label>
+                <select id="dynZone" class="custom-dropdown">
+                  <option value="D420">APO CYTOSTATICA (D420)</option>
+                  <option value="D421">APO BOIRON (D421)</option>
+                  <option value="D422">APO HOOG (D422)</option>
+                  <option value="D423">APO LAAG (D423)</option>
+                  <option value="R440">DEP HOOG (R440)</option>
+                  <option value="R441">DEP LAAG (R441)</option>
+                  <option value="R442">DEP HOOG (R442)</option>
+                  <option value="R443">DEP LAAG (R443)</option>
+                  <option value="R600">DEP COOL (R600)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Vervaldatum</label>
+                <select id="dynBBD">
+                  <option value="nee">Nee</option>
+                  <option value="ja">Ja</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="calcDyn()">
+              Gegevens Genereren
+            </button>
+            <div class="progress-container" id="prog-dyn">
+              <div class="progress-bar"></div>
+            </div>
+            <div id="out-dyn" class="results">
+              <table>
+                <thead>
+                  <tr>
+                    <th>LV Code</th>
+                    <th>LV Type</th>
+                    <th>HD Type</th>
+                    <th>Location Size</th>
+                    <th>Storage group</th>
+                    <th>Item Group</th>
+                    <th>Pick Zone</th>
+                  </tr>
+                </thead>
+                <tbody id="res-dyn"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="sec-fix" class="section">
+            <select id="fixKleurManual" style="display: none">
+              <option value="BLAUW">BLU</option>
+              <option value="ROOD">RED</option>
+              <option value="CRT">CRT</option>
+            </select>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Pick of Entry Loc</label>
+                <input
+                  type="text"
+                  id="fixZoneManual"
+                  oninput="autoSelectKleur()"
+                  placeholder="Bv: 3600a0040201"
+                />
+              </div>
+              <div class="form-group">
+                <label>Gewenste LV</label>
+                <select id="fixTypeManual">
+                  <option value="RED">RODE BAK</option>
+                  <option value="BLU">BLAUWE BAK</option>
+                  <option value="LSL">LANGE KANT CRT</option>
+                  <option value="SSL">KORTE KANT CRT</option>
+                  <option value="BLU FRIGO">DEPOTBOX BLAUW</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="calcFixEfficient()">
+              Genereer
+            </button>
+            <div class="progress-container" id="prog-fix">
+              <div class="progress-bar"></div>
+            </div>
+            <div id="out-fix" class="results">
+              <table id="table-fix"></table>
+            </div>
+          </section>
+
+          <section id="sec-afm" class="section">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Zone</label>
+                <select id="afmZone" onchange="updateAfmLiggers()">
+                  <option value="">Kies zone...</option>
+                  <option value="2200A-2700A">2200A-2700A</option>
+                  <option value="3700B-3200B">3700B-3200B</option>
+                  <option value="3700A-3200A">3700A-3200A</option>
+                  <option value="4200A-5200A">4200A-5200A</option>
+                  <option value="20DOZEN">20 Dozen Aisle</option>
+                  <option value="AFRAME">Aframe</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Ligger(s)</label>
+                <select id="afmLigger" disabled>
+                  <option value="">...</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="calcAfm()">
+              Bereken Afmeting
+            </button>
+            <div class="progress-container" id="prog-afm">
+              <div class="progress-bar"></div>
+            </div>
+            <div id="out-afm" class="results">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Zone</th>
+                    <th>Ligger(s)</th>
+                    <th>Aantal in rek</th>
+                    <th>Tresh</th>
+                  </tr>
+                </thead>
+                <tbody id="res-afm"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="sec-gv" class="section">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Locatie</label>
+                <input
+                  type="text"
+                  id="gvLocManual"
+                  placeholder="Bv: 7000a0040201"
+                />
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                margin: 20px 0;
+                color: var(--text-muted);
+                font-weight: 600;
+              "
+            >
+              <div
+                style="flex: 1; height: 1px; background: var(--border)"
+              ></div>
+              <span>OF</span>
+              <div
+                style="flex: 1; height: 1px; background: var(--border)"
+              ></div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Zone</label>
+                <select id="gvZone">
+                  <option value="">Kies zone...</option>
+                  <option value="7000-7010">7000-7010</option>
+                  <option value="7050-7070">7050-7070</option>
+                  <option value="7100-7150">7100-7150</option>
+                  <option value="DISPLAYS">Displays</option>
+                  <option value="PLOFKOT">Plofkot</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="calcGV()">
+              Gegevens Genereren
+            </button>
+            <div class="progress-container" id="prog-gv">
+              <div class="progress-bar"></div>
+            </div>
+            <div id="out-gv" class="results">
+              <table>
+                <thead>
+                  <tr>
+                    <th>LV Code</th>
+                    <th>HD Type</th>
+                    <th>Location Size</th>
+                    <th>Storage group</th>
+                    <th>Item Group</th>
+                    <th>Prep Zone</th>
+                  </tr>
+                </thead>
+                <tbody id="res-gv"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="sec-rec" class="section">
+            <div style="display: flex; flex-direction: column; gap: 20px">
+              <details
+                style="
+                  background: var(--surface-2);
+                  border-radius: var(--radius-inner);
+                  border: 1.5px solid var(--border);
+                  overflow: hidden;
+                "
+              >
+                <summary
+                  style="
+                    list-style: none;
+                    padding: 20px 24px;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: var(--text);
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    user-select: none;
+                  "
+                >
+                  <span>&#128230; Overstock op Verkeerde Clip of Trolley</span>
+                  <i
+                    class="fa-solid fa-chevron-down"
+                    style="font-size: 0.85rem; color: var(--text-muted)"
+                  ></i>
+                </summary>
+
+                <div
+                  style="
+                    padding: 0 24px 24px 24px;
+                    border-top: 1px solid var(--border);
+                    padding-top: 20px;
+                  "
+                >
+                  <p
+                    style="
+                      font-size: 0.85rem;
+                      color: var(--text-muted);
+                      margin-bottom: 20px;
+                    "
+                  >
+                    Geef de OVS locatie in en krijg de juiste kar.
+                  </p>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label>Overstock-Locatie</label>
+                      <input
+                        type="text"
+                        id="recLoc1"
+                        placeholder="Bv: 9942B..."
+                      />
+                    </div>
+                  </div>
+                  <button class="btn-primary" onclick="calcRec1()">
+                    Genereer
+                  </button>
+                  <div class="progress-container" id="prog-rec1">
+                    <div class="progress-bar"></div>
+                  </div>
+                  <div id="out-rec1" class="results">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Input</th>
+                          <th>Resultaat</th>
+                        </tr>
+                      </thead>
+                      <tbody id="res-rec1"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                style="
+                  background: var(--surface-2);
+                  border-radius: var(--radius-inner);
+                  border: 1.5px solid var(--border);
+                  overflow: hidden;
+                "
+              >
+                <summary
+                  style="
+                    list-style: none;
+                    padding: 20px 24px;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: var(--text);
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    user-select: none;
+                  "
+                >
+                  <span>&#128722; TROL/CLIP Bepaling</span>
+                  <i
+                    class="fa-solid fa-chevron-down"
+                    style="font-size: 0.85rem; color: var(--text-muted)"
+                  ></i>
+                </summary>
+
+                <div
+                  style="
+                    padding: 0 24px 24px 24px;
+                    border-top: 1px solid var(--border);
+                    padding-top: 20px;
+                  "
+                >
+                  <p
+                    style="
+                      font-size: 0.85rem;
+                      color: var(--text-muted);
+                      margin-bottom: 20px;
+                    "
+                  >
+                    Vul een flow rack locatie in om de juiste kar/pallet te
+                    bepalen.
+                  </p>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label>Locatie (Flow Racks)</label>
+                      <input
+                        type="text"
+                        id="recLoc2"
+                        placeholder="Bv: 3700a..."
+                      />
+                    </div>
+                  </div>
+                  <button class="btn-primary" onclick="calcRec2()">
+                    Geneereer
+                  </button>
+                  <div class="progress-container" id="prog-rec2">
+                    <div class="progress-bar"></div>
+                  </div>
+                  <div id="out-rec2" class="results">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Zone</th>
+                          <th>Kar</th>
+                          <th>Details</th>
+                        </tr>
+                      </thead>
+                      <tbody id="res-rec2"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="shortcutsModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: var(--surface);
+          border-radius: 16px;
+          padding: 30px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          max-width: 500px;
+          max-height: 80vh;
+          overflow-y: auto;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+          "
+        >
+          <h2 style="margin: 0; color: var(--text)">
+            ⌨️ Toetsenbord Sneltoetsen
+          </h2>
+          <button
+            onclick="toggleShortcuts()"
+            style="
+              background: none;
+              border: none;
+              font-size: 1.5rem;
+              cursor: pointer;
+              color: var(--text-muted);
+            "
+          >
+            ✕
+          </button>
+        </div>
+        <div
+          id="shortcutsList"
+          style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px"
+        ></div>
+        <div
+          style="
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+          "
+        >
+          <p style="margin: 8px 0">
+            <strong>💡 Tip:</strong> Open deze hulp met de ⌨️ knop of druk op
+            <span id="helpKeyLabel">Cmd+?</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="inputModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: var(--surface);
+          border-radius: 16px;
+          padding: 30px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          min-width: 300px;
+          max-width: 400px;
+        "
+      >
+        <h3
+          id="inputModalTitle"
+          style="margin: 0 0 12px 0; color: var(--text); font-size: 1.1rem"
+        ></h3>
+        <p
+          id="inputModalMessage"
+          style="
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+          "
+        ></p>
+        <input
+          type="number"
+          id="inputModalField"
+          placeholder="Voer waarde in..."
+          step="0.01"
+          style="
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            background: var(--surface-2);
+            color: var(--text);
+            font-weight: 600;
+          "
+        />
+        <div style="display: flex; gap: 12px; justify-content: flex-end">
+          <button
+            id="inputModalCancel"
+            onclick="cancelInputModal()"
+            style="
+              padding: 10px 16px;
+              background: var(--surface-2);
+              border: 1.5px solid var(--border);
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: 600;
+              color: var(--text);
+              transition: all 0.2s;
+            "
+          >
+            Annuleren
+          </button>
+          <button
+            id="inputModalOk"
+            onclick="confirmInputModal()"
+            style="
+              padding: 10px 16px;
+              background: var(--accent);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: 600;
+              transition: all 0.2s;
+            "
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

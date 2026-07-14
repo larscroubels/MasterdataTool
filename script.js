@@ -107,6 +107,67 @@ function togglePrinter() {
   document.getElementById("printerHub").classList.toggle("active");
 }
 
+function toggleHubCollapse() {
+  const hubItems = document.getElementById("hubItems");
+  const toggleBtn = document.getElementById("toggleHubBtn");
+  hubItems.classList.toggle("collapsed");
+  toggleBtn.classList.toggle("collapsed");
+  saveValue("hubCollapsed", hubItems.classList.contains("collapsed"));
+}
+
+function resetPage() {
+  // Clear all input fields
+  const inputs = document.querySelectorAll("input[type='text'], select");
+  inputs.forEach((input) => {
+    input.value = "";
+    input.style.borderColor = "";
+  });
+
+  // Hide all result containers
+  document.querySelectorAll(".results").forEach((el) => {
+    el.classList.remove("show");
+  });
+
+  // Hide progress bars
+  document.querySelectorAll(".progress-container").forEach((el) => {
+    el.classList.remove("active");
+  });
+
+  // Reset to first tab
+  switchTab("dyn");
+
+  // Show notification
+  notify("✓ Pagina herladen");
+}
+
+function resetTab(tabName) {
+  // Get the current section
+  const section = document.getElementById("sec-" + tabName);
+  if (!section) return;
+
+  // Clear all input fields in this section
+  const inputs = section.querySelectorAll("input[type='text'], select");
+  inputs.forEach((input) => {
+    input.value = "";
+    input.style.borderColor = "";
+  });
+
+  // Hide result container in this section
+  const results = section.querySelector(".results");
+  if (results) {
+    results.classList.remove("show");
+  }
+
+  // Hide progress bar in this section
+  const progressContainers = section.querySelectorAll(".progress-container");
+  progressContainers.forEach((pc) => {
+    pc.classList.remove("active");
+  });
+
+  // Show notification
+  notify("✓ Tablad herladen");
+}
+
 document.addEventListener("click", (e) => {
   const hub = document.getElementById("printerHub");
   if (!hub.contains(e.target)) hub.classList.remove("active");
@@ -917,6 +978,15 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("inputModal").addEventListener("click", (e) => {
     if (e.target.id === "inputModal") cancelInputModal();
   });
+
+  // Restore hub collapse state
+  const hubCollapsed = getValue("hubCollapsed", false);
+  if (hubCollapsed) {
+    const hubItems = document.getElementById("hubItems");
+    const toggleBtn = document.getElementById("toggleHubBtn");
+    hubItems.classList.add("collapsed");
+    toggleBtn.classList.add("collapsed");
+  }
 
   const savedTheme = getValue("theme", "light");
   document.documentElement.setAttribute("data-theme", savedTheme);
