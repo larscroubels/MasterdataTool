@@ -1,3 +1,5 @@
+This is a tool that my colleagues and I use at our company to work more efficiently.
+
 ## ✉️ Contact
 
 Lars Croubels – [@larscroubels](https://github.com/larscroubels)
