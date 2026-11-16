@@ -15,7 +15,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="style_v2.css" />
+    <link rel="stylesheet" href="style_v3ss.css" />
   </head>
   <body>
     <!-- ============ BOVENBALK ============ -->
@@ -25,7 +25,7 @@
           <img src="imgs/Febelco.png" alt="Febelco" class="brand-logo" />
           <div class="brand-text">
             <span class="brand-title">Masterdata Tool</span>
-            <span class="brand-sub">Febelco Izegem · locatiebeheer</span>
+            <span class="brand-sub">Febelco Izegem</span>
           </div>
         </div>
 
@@ -63,11 +63,19 @@
             </button>
             <div class="printer-popup" role="menu">
               <div class="popup-title">Labelprinters</div>
-              <button class="printer-row" data-copy="LT-0471" title="Klik om te kopiëren">
+              <button
+                class="printer-row"
+                data-copy="LT-0471"
+                title="Klik om te kopiëren"
+              >
                 <span class="printer-row-label">Receptie Masterdata</span>
                 <span class="printer-row-code">LT-0471</span>
               </button>
-              <button class="printer-row" data-copy="PC-0455" title="Klik om te kopiëren">
+              <button
+                class="printer-row"
+                data-copy="PC-0455"
+                title="Klik om te kopiëren"
+              >
                 <span class="printer-row-label">Bureau Kurt</span>
                 <span class="printer-row-code">PC-0455</span>
               </button>
@@ -97,7 +105,11 @@
     <main class="page-wrapper">
       <!-- ============ TABBLADEN ============ -->
       <nav class="nav-tabs" role="tablist">
-        <button class="tab-btn active" data-tab="dyn" onclick="switchTab('dyn')">
+        <button
+          class="tab-btn active"
+          data-tab="dyn"
+          onclick="switchTab('dyn')"
+        >
           <i class="fa-solid fa-lock-open"></i>
           <span>Dynamisch</span>
         </button>
@@ -153,7 +165,9 @@
               <i class="fa-solid fa-rotate-left"></i><span>Wissen</span>
             </button>
           </div>
-          <div class="progress-container" id="prog-dyn"><div class="progress-bar"></div></div>
+          <div class="progress-container" id="prog-dyn">
+            <div class="progress-bar"></div>
+          </div>
           <div id="out-dyn" class="results">
             <div class="table-wrap">
               <table>
@@ -212,7 +226,9 @@
               <i class="fa-solid fa-rotate-left"></i><span>Wissen</span>
             </button>
           </div>
-          <div class="progress-container" id="prog-fix"><div class="progress-bar"></div></div>
+          <div class="progress-container" id="prog-fix">
+            <div class="progress-bar"></div>
+          </div>
           <div id="out-fix" class="results">
             <div class="table-wrap"><table id="table-fix"></table></div>
           </div>
@@ -252,7 +268,9 @@
               <i class="fa-solid fa-rotate-left"></i><span>Wissen</span>
             </button>
           </div>
-          <div class="progress-container" id="prog-gv"><div class="progress-bar"></div></div>
+          <div class="progress-container" id="prog-gv">
+            <div class="progress-bar"></div>
+          </div>
           <div id="out-gv" class="results">
             <div class="table-wrap">
               <table>
@@ -302,7 +320,9 @@
               <i class="fa-solid fa-rotate-left"></i><span>Wissen</span>
             </button>
           </div>
-          <div class="progress-container" id="prog-afm"><div class="progress-bar"></div></div>
+          <div class="progress-container" id="prog-afm">
+            <div class="progress-bar"></div>
+          </div>
           <div id="out-afm" class="results">
             <div class="table-wrap">
               <table>
@@ -344,11 +364,17 @@
                 <button class="btn-primary" onclick="calcRec1()">
                   Zoek kar
                 </button>
-                <button class="btn-reset" onclick="resetTab('rec', this)" title="Wissen">
+                <button
+                  class="btn-reset"
+                  onclick="resetTab('rec', this)"
+                  title="Wissen"
+                >
                   <i class="fa-solid fa-rotate-left"></i>
                 </button>
               </div>
-              <div class="progress-container" id="prog-rec1"><div class="progress-bar"></div></div>
+              <div class="progress-container" id="prog-rec1">
+                <div class="progress-bar"></div>
+              </div>
               <div id="out-rec1" class="results">
                 <div class="table-wrap">
                   <table>
@@ -368,7 +394,10 @@
               <div class="sub-head">
                 <div>
                   <h3>TROL/CLIP bepaling</h3>
-                  <p>Vul een flow rack locatie in om de juiste kar/pallet te bepalen.</p>
+                  <p>
+                    Vul een flow rack locatie in om de juiste kar/pallet te
+                    bepalen.
+                  </p>
                 </div>
               </div>
               <div class="form-group">
@@ -385,11 +414,17 @@
                 <button class="btn-primary" onclick="calcRec2()">
                   Zoek kar
                 </button>
-                <button class="btn-reset" onclick="resetTab('rec', this)" title="Wissen">
+                <button
+                  class="btn-reset"
+                  onclick="resetTab('rec', this)"
+                  title="Wissen"
+                >
                   <i class="fa-solid fa-rotate-left"></i>
                 </button>
               </div>
-              <div class="progress-container" id="prog-rec2"><div class="progress-bar"></div></div>
+              <div class="progress-container" id="prog-rec2">
+                <div class="progress-bar"></div>
+              </div>
               <div id="out-rec2" class="results">
                 <div class="table-wrap">
                   <table>
@@ -415,14 +450,18 @@
       <div class="modal-content">
         <div class="modal-head">
           <h2><i class="fa-regular fa-keyboard"></i> Sneltoetsen</h2>
-          <button class="modal-close" onclick="toggleShortcuts()" title="Sluiten">
+          <button
+            class="modal-close"
+            onclick="toggleShortcuts()"
+            title="Sluiten"
+          >
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
         <div id="shortcutsList" class="shortcuts-grid"></div>
         <p class="modal-foot">
-          <strong>Tip:</strong> open deze hulp met de toetsenbord-knop bovenaan of
-          druk op <span id="helpKeyLabel">Ctrl+?</span>
+          <strong>Tip:</strong> open deze hulp met de toetsenbord-knop bovenaan
+          of druk op <span id="helpKeyLabel">Ctrl+?</span>
         </p>
       </div>
     </div>
@@ -443,10 +482,18 @@
           <span>cm</span>
         </div>
         <div class="modal-actions">
-          <button id="inputModalCancel" class="btn-secondary" onclick="cancelInputModal()">
+          <button
+            id="inputModalCancel"
+            class="btn-secondary"
+            onclick="cancelInputModal()"
+          >
             Annuleren
           </button>
-          <button id="inputModalOk" class="btn-primary btn-small" onclick="confirmInputModal()">
+          <button
+            id="inputModalOk"
+            class="btn-primary btn-small"
+            onclick="confirmInputModal()"
+          >
             OK
           </button>
         </div>
