@@ -16,14 +16,89 @@ function getValue(key, fallback = "") {
 }
 
 function notify(msg, type = "success") {
+  const stack = document.getElementById("toastStack") || document.body;
   const n = document.createElement("div");
-  n.style.cssText = `position:fixed;top:16px;right:16px;padding:12px 20px;background:${type === "error" ? "#ef4444" : "#059669"};color:white;border-radius:8px;font-weight:600;z-index:10000;animation:slideIn 0.3s ease-out;`;
-  n.textContent = msg;
-  document.body.appendChild(n);
+  n.className = "toast" + (type === "error" ? " error" : "");
+  const icon = document.createElement("i");
+  icon.className =
+    type === "error"
+      ? "fa-solid fa-circle-exclamation"
+      : "fa-solid fa-circle-check";
+  const text = document.createElement("span");
+  text.textContent = String(msg).replace(/^✓\s*/, "");
+  n.append(icon, text);
+  stack.appendChild(n);
   setTimeout(() => {
-    n.style.animation = "slideOut 0.3s ease-out";
-    setTimeout(() => n.remove(), 300);
-  }, 2500);
+    n.classList.add("hide");
+    setTimeout(() => n.remove(), 250);
+  }, 2200);
+}
+
+/* Zet spaties in een locatie: 4-1-3-2-2 tekens */
+function formatLocInput(el) {
+  const caret = el.selectionStart ?? el.value.length;
+  const charsBeforeCaret = el.value.slice(0, caret).replace(/\s+/g, "").length;
+  const raw = el.value.replace(/\s+/g, "");
+  const groups = [4, 1, 3, 2, 2];
+  const parts = [];
+  let pos = 0;
+  for (const g of groups) {
+    if (pos >= raw.length) break;
+    parts.push(raw.slice(pos, pos + g));
+    pos += g;
+  }
+  if (pos < raw.length) parts.push(raw.slice(pos));
+  const formatted = parts.join(" ");
+  if (formatted === el.value) return;
+  el.value = formatted;
+  // Cursor op dezelfde plek houden
+  let count = 0;
+  let newCaret = formatted.length;
+  for (let i = 0; i < formatted.length; i++) {
+    if (count === charsBeforeCaret) {
+      newCaret = i;
+      break;
+    }
+    if (formatted[i] !== " ") count++;
+  }
+  try {
+    el.setSelectionRange(newCaret, newCaret);
+  } catch (e) {}
+}
+
+/* Kopieer tekst naar klembord (met fallback voor oudere browsers / file://) */
+function copyText(text, el) {
+  const value = String(text).trim();
+  if (!value) return;
+  const done = () => {
+    notify(`Gekopieerd: ${value}`);
+    if (el) {
+      el.classList.remove("copied");
+      void el.offsetWidth;
+      el.classList.add("copied");
+    }
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(value).then(done, () => fallbackCopy(value, done));
+  } else {
+    fallbackCopy(value, done);
+  }
+}
+
+function fallbackCopy(value, done) {
+  const ta = document.createElement("textarea");
+  ta.value = value;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+    done();
+  } catch (e) {
+    notify("Kopiëren lukte niet", "error");
+  }
+  ta.remove();
 }
 
 let inputModalResolver = null;
@@ -36,7 +111,7 @@ function showInputModal(title, message) {
     const input = document.getElementById("inputModalField");
     input.value = "";
     document.getElementById("inputModal").style.display = "flex";
-    input.focus();
+    setTimeout(() => input.focus(), 30);
   });
 }
 
@@ -62,8 +137,7 @@ const modKey = isMac ? "⌘" : "Alt";
 const modKeyName = isMac ? "Command" : "Alt";
 
 function toggleShortcuts() {
-  const modal = document.getElementById("shortcutsModal");
-  modal.style.display = modal.style.display === "none" ? "flex" : "none";
+  document.getElementById("shortcutsModal").classList.toggle("show");
 }
 
 function populateShortcuts() {
@@ -76,15 +150,17 @@ function populateShortcuts() {
     { key: `${modKey}+5`, action: "Receptie", desc: "Lokatie lookup" },
     { key: isMac ? "⌘+T" : "Ctrl+T", action: "Thema", desc: "Licht/Donker" },
     { key: isMac ? "⌘+?" : "Ctrl+?", action: "Hulp", desc: "Dit scherm" },
+    { key: "Enter", action: "Berekenen", desc: "In elk invulveld" },
+    { key: "Esc", action: "Sluiten", desc: "Venster of menu" },
   ];
 
   list.innerHTML = shortcuts
     .map(
       (s) => `
-    <div style="background:var(--surface-2);padding:14px;border-radius:8px;border:1px solid var(--border);">
-      <div style="font-family:monospace;font-weight:700;color:var(--accent);font-size:0.95rem;margin-bottom:4px;">${s.key}</div>
-      <div style="font-weight:600;color:var(--text);font-size:0.9rem;">${s.action}</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);">${s.desc}</div>
+    <div class="shortcut">
+      <kbd>${s.key}</kbd>
+      <div class="shortcut-action">${s.action}</div>
+      <div class="shortcut-desc">${s.desc}</div>
     </div>
   `,
     )
@@ -95,11 +171,18 @@ function populateShortcuts() {
     : "Ctrl+?";
 }
 
+function setThemeIcon(theme) {
+  document.getElementById("themeBtn").innerHTML =
+    theme === "dark"
+      ? '<i class="fa-solid fa-moon"></i>'
+      : '<i class="fa-solid fa-sun"></i>';
+}
+
 function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute("data-theme") === "dark";
   html.setAttribute("data-theme", isDark ? "light" : "dark");
-  document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙";
+  setThemeIcon(isDark ? "light" : "dark");
   saveValue("theme", isDark ? "light" : "dark");
 }
 
@@ -107,9 +190,11 @@ function togglePrinter() {
   document.getElementById("printerHub").classList.toggle("active");
 }
 
+// Oude zwevende menu: blijft bestaan voor compatibiliteit, doet niets als het menu er niet is
 function toggleHubCollapse() {
   const hubItems = document.getElementById("hubItems");
   const toggleBtn = document.getElementById("toggleHubBtn");
+  if (!hubItems || !toggleBtn) return;
   hubItems.classList.toggle("collapsed");
   toggleBtn.classList.toggle("collapsed");
   saveValue("hubCollapsed", hubItems.classList.contains("collapsed"));
@@ -140,32 +225,38 @@ function resetPage() {
   notify("✓ Pagina herladen");
 }
 
-function resetTab(tabName) {
-  // Get the current section
+function resetTab(tabName, btn) {
   const section = document.getElementById("sec-" + tabName);
   if (!section) return;
 
-  // Clear all input fields in this section
-  const inputs = section.querySelectorAll("input[type='text'], select");
-  inputs.forEach((input) => {
+  // Bij Receptie: alleen het paneel waarin op 'wissen' geklikt werd
+  const scope = (btn && btn.closest(".sub-panel")) || section;
+
+  // Tekstvelden leegmaken, keuzelijsten terug naar de eerste optie
+  scope.querySelectorAll("input[type='text']").forEach((input) => {
     input.value = "";
     input.style.borderColor = "";
   });
-
-  // Hide result container in this section
-  const results = section.querySelector(".results");
-  if (results) {
-    results.classList.remove("show");
-  }
-
-  // Hide progress bar in this section
-  const progressContainers = section.querySelectorAll(".progress-container");
-  progressContainers.forEach((pc) => {
-    pc.classList.remove("active");
+  scope.querySelectorAll("select").forEach((sel) => {
+    sel.selectedIndex = 0;
   });
 
-  // Show notification
-  notify("✓ Tablad herladen");
+  // Ligger-lijst bij Afmetingen opnieuw leeg en uitgeschakeld
+  const afmLigger = scope.querySelector("#afmLigger");
+  if (afmLigger) {
+    afmLigger.innerHTML = '<option value="">Kies eerst een zone</option>';
+    afmLigger.disabled = true;
+  }
+
+  scope.querySelectorAll(".results").forEach((r) => r.classList.remove("show"));
+  scope
+    .querySelectorAll(".progress-container")
+    .forEach((pc) => pc.classList.remove("active"));
+
+  const firstField = scope.querySelector("input[type='text'], select:not([hidden])");
+  if (firstField) firstField.focus();
+
+  notify("✓ Gewist");
 }
 
 document.addEventListener("click", (e) => {
@@ -180,15 +271,20 @@ function switchTab(tab) {
   document
     .querySelectorAll(".tab-btn")
     .forEach((b) => b.classList.remove("active"));
-  document.getElementById("sec-" + tab).classList.add("active");
+  const sec = document.getElementById("sec-" + tab) || document.getElementById("sec-dyn");
+  if (!document.getElementById("sec-" + tab)) tab = "dyn";
+  sec.classList.add("active");
   document.querySelector('[data-tab="' + tab + '"]').classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
   saveValue("lastTab", tab);
+  // Cursor meteen in het eerste invulveld
+  const first = sec.querySelector("input[type='text']");
+  if (first && window.matchMedia("(pointer: fine)").matches) first.focus();
 }
 
 function calcRec1() {
   showLoading("rec1", () => {
-    const val = document.getElementById("recLoc1").value.toUpperCase().trim();
+    const val = document.getElementById("recLoc1").value.replace(/\s+/g, "").toUpperCase().trim();
     let res = "ONBEKEND";
 
     const kar5 = [
@@ -235,7 +331,7 @@ function calcRec1() {
 }
 function calcRec2() {
   showLoading("rec2", () => {
-    const val = document.getElementById("recLoc2").value.toLowerCase().trim();
+    const val = document.getElementById("recLoc2").value.replace(/\s+/g, "").toLowerCase().trim();
 
     if (!val || val.length < 5) {
       document.getElementById("res-rec2").innerHTML =
@@ -591,7 +687,7 @@ function getKar(mZone) {
 function autoSelectKleur() {
   let input = document
     .getElementById("fixZoneManual")
-    .value.toLowerCase()
+    .value.replace(/\s+/g, "").toLowerCase()
     .trim();
   let kleurSelect = document.getElementById("fixKleurManual");
   if (input.length < 10) return;
@@ -662,6 +758,8 @@ function updateAfmLiggers() {
       lSel.add(new Option("Ligger(s) " + l, l)),
     );
     lSel.disabled = false;
+  } else {
+    lSel.disabled = true;
   }
 }
 
@@ -700,7 +798,7 @@ function calcFixEfficient() {
   showLoading("fix", async () => {
     let input = document
       .getElementById("fixZoneManual")
-      .value.toLowerCase()
+      .value.replace(/\s+/g, "").toLowerCase()
       .trim();
     let kleur = document.getElementById("fixKleurManual").value;
     let type = document.getElementById("fixTypeManual").value;
@@ -850,13 +948,13 @@ function renderFixTable(
   let karDisplay = transformedKar;
   if (transformedKar.includes("/")) {
     const [part1, part2] = transformedKar.split("/");
-    karDisplay = `${part1}<span style="font-size:1rem;color:#5ba3d0;font-weight:600;margin-left:4px;">/${part2}</span>`;
+    karDisplay = `${part1}<span class="kar-alt">/${part2}</span>`;
   }
 
-  table.innerHTML = `<thead><tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th style="border-left:2px solid var(--border-strong);">Ceiling</th><th>Tresh</th></tr></thead>
-          <tbody><tr><td style="font-weight:700;">${lv}</td><td style="font-weight:600;">${hd}</td><td style="font-weight:700;">${sz}</td><td style="font-weight:600;">${st}</td><td style="font-weight:600;">${it}</td><td style="border-left:2px solid var(--border-strong);"><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${ce}</span></td><td><span style="display:inline-block;background:var(--accent-glow);color:var(--accent);font-weight:800;padding:4px 12px;border-radius:6px;font-size:.88rem;border:1.5px solid rgba(0,150,57,.2);">${tr}</span></td></tr>
-          <tr><td colspan="7" style="padding:15px 20px; background:var(--surface-3); border-top:1.5px solid var(--border); border-bottom:1.5px solid var(--border);"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Receptie:</span><span class="badge badge-green" style="font-size:1rem; padding:6px 20px;">${karDisplay}</span></div></td></tr>
-          <tr><td colspan="7" style="padding:20px;background:var(--surface-2);"><div class="loc-grid"><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Picking</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(pLoc)}</div></div><div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;"><div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Entry</div><div style="font-family:'Inter',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:3px;color:var(--text);">${fmt(eLoc)}</div></div></div></td></tr></tbody>`;
+  table.innerHTML = `<thead><tr><th>LV</th><th>HD Type</th><th>Loc. Size</th><th>Storage</th><th>Item Group</th><th class="col-split">Ceiling</th><th>Tresh</th></tr></thead>
+          <tbody><tr><td>${lv}</td><td>${hd}</td><td>${sz}</td><td>${st}</td><td>${it}</td><td class="col-split"><span class="badge badge-green">${ce}</span></td><td><span class="badge badge-green">${tr}</span></td></tr>
+          <tr class="row-extra"><td colspan="7"><div class="extra-line"><span class="extra-label">Receptie</span><span class="badge badge-green badge-big" data-copy="${transformedKar}">${karDisplay}</span></div></td></tr>
+          <tr class="row-extra"><td colspan="7"><div class="loc-grid"><div class="loc-card" data-copy="${pLoc}" title="Klik om te kopiëren"><div class="extra-label"><span>Picking</span><i class="fa-regular fa-copy"></i></div><div class="loc-value">${fmt(pLoc)}</div></div><div class="loc-card" data-copy="${eLoc}" title="Klik om te kopiëren"><div class="extra-label"><span>Entry</span><i class="fa-regular fa-copy"></i></div><div class="loc-value">${fmt(eLoc)}</div></div></div></td></tr></tbody>`;
 }
 
 function calcAfm() {
@@ -907,7 +1005,7 @@ function calcGV() {
   showLoading("gv", () => {
     let input = document
       .getElementById("gvLocManual")
-      .value.toLowerCase()
+      .value.replace(/\s+/g, "").toLowerCase()
       .trim();
 
     let z = "";
@@ -979,19 +1077,71 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.id === "inputModal") cancelInputModal();
   });
 
-  // Restore hub collapse state
+  // Restore hub collapse state (alleen als het oude zwevende menu bestaat)
   const hubCollapsed = getValue("hubCollapsed", false);
-  if (hubCollapsed) {
-    const hubItems = document.getElementById("hubItems");
-    const toggleBtn = document.getElementById("toggleHubBtn");
-    hubItems.classList.add("collapsed");
-    toggleBtn.classList.add("collapsed");
+  const hubItemsEl = document.getElementById("hubItems");
+  const toggleBtnEl = document.getElementById("toggleHubBtn");
+  if (hubCollapsed && hubItemsEl && toggleBtnEl) {
+    hubItemsEl.classList.add("collapsed");
+    toggleBtnEl.classList.add("collapsed");
   }
 
-  const savedTheme = getValue("theme", "light");
+  // Thema: opgeslagen keuze, anders de instelling van het systeem
+  let systemDark = false;
+  try {
+    systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  } catch (e) {}
+  const savedTheme = getValue("theme", systemDark ? "dark" : "light");
   document.documentElement.setAttribute("data-theme", savedTheme);
-  document.getElementById("themeBtn").textContent =
-    savedTheme === "dark" ? "🌙" : "☀️";
+  setThemeIcon(savedTheme);
+
+  // Laatst gekozen waarden terugzetten
+  const restoreSelect = (id, key) => {
+    const el = document.getElementById(id);
+    const v = getValue(key, "");
+    if (el && v && [...el.options].some((o) => o.value === v)) el.value = v;
+  };
+  restoreSelect("dynZone", "lastDynZone");
+  restoreSelect("dynBBD", "lastDynBBD");
+
+  // Locatievelden: automatisch spaties (3600B0030204 -> 3600 B 003 02 04).
+  // De spaties zijn alleen voor de leesbaarheid; bij het berekenen worden ze weggehaald.
+  ["fixZoneManual", "gvLocManual", "recLoc1", "recLoc2"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", () => formatLocInput(el));
+  });
+
+  // Enter = berekenen (in elk veld van een tabblad)
+  document.querySelectorAll(".section input, .section select").forEach((el) => {
+    el.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      const block = el.closest(".sub-panel") || el.closest(".section");
+      const btn = block && block.querySelector(".btn-primary");
+      if (btn) {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+
+  // Klik op een resultaat = kopiëren
+  document.addEventListener("click", (e) => {
+    const tagged = e.target.closest("[data-copy]");
+    if (tagged) {
+      copyText(tagged.getAttribute("data-copy"), tagged);
+      return;
+    }
+    const cell = e.target.closest(".results td");
+    if (cell && !cell.hasAttribute("colspan")) copyText(cell.innerText, cell);
+  });
+
+  // Escape sluit vensters en menu's
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    document.getElementById("shortcutsModal").classList.remove("show");
+    document.getElementById("printerHub").classList.remove("active");
+  });
 
   const lastTab = getValue("lastTab", "dyn");
   setTimeout(() => switchTab(lastTab), 50);
@@ -1047,11 +1197,4 @@ document.addEventListener("DOMContentLoaded", () => {
       toggleShortcuts();
     }
   });
-
-  const style = document.createElement("style");
-  style.textContent = `
-    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
-  `;
-  document.head.appendChild(style);
 });
