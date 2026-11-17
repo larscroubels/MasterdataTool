@@ -101,12 +101,17 @@ kbd {
   z-index: 100;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .topbar {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .topbar-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 10px 20px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -116,18 +121,25 @@ kbd {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   min-width: 0;
 }
 
 .brand-logo {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: #fff;
-  padding: 4px;
-  border: 1px solid var(--border);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fff 0%, var(--surface-2) 100%);
+  padding: 6px;
+  border: 1.5px solid var(--border);
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.brand-logo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .brand-text {
@@ -139,46 +151,55 @@ kbd {
 
 .brand-title {
   font-weight: 800;
-  font-size: 1.05rem;
-  letter-spacing: -0.2px;
+  font-size: 1.08rem;
+  letter-spacing: -0.3px;
+  color: var(--text);
 }
 
 .brand-sub {
   font-size: 0.75rem;
   color: var(--text-muted);
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.3px;
 }
 
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .tool-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 38px;
-  padding: 0 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--surface);
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
   color: var(--text);
   font: inherit;
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
 .tool-btn:hover {
   background: var(--surface-3);
-  border-color: var(--border-strong);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tool-btn:active {
+  transform: translateY(0);
 }
 
 .tool-btn img {
@@ -189,10 +210,15 @@ kbd {
 .tool-btn i {
   font-size: 1rem;
   color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.tool-btn:hover i {
+  color: var(--accent);
 }
 
 .tool-btn.icon-only {
-  width: 38px;
+  width: 40px;
   padding: 0;
   justify-content: center;
 }
@@ -270,6 +296,21 @@ kbd {
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px 20px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  min-height: calc(100vh - 100px);
+}
+
+.page-wrapper .nav-tabs {
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 24px;
+}
+
+.page-wrapper .card {
+  width: 100%;
 }
 
 /* ---------- Tabbladen ---------- */
