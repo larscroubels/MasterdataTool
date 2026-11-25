@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" href="imgs/Febelco.png" />
@@ -105,6 +105,9 @@
     <main class="page-wrapper">
       <!-- ============ TABBLADEN ============ -->
       <nav class="nav-tabs" role="tablist">
+        <div class="tab-group" style="--n: 2">
+          <span class="tab-group-label">Magazijn</span>
+          <div class="tab-group-items">
         <button
           class="tab-btn active"
           data-tab="dyn"
@@ -117,10 +120,20 @@
           <i class="fa-solid fa-lock"></i>
           <span>Flow Racks</span>
         </button>
+          </div>
+        </div>
+        <div class="tab-group" style="--n: 1">
+          <span class="tab-group-label">Expeditie</span>
+          <div class="tab-group-items">
         <button class="tab-btn" data-tab="gv" onclick="switchTab('gv')">
           <i class="fa-solid fa-van-shuttle"></i>
           <span>Grote Volumes</span>
         </button>
+          </div>
+        </div>
+        <div class="tab-group" style="--n: 2">
+          <span class="tab-group-label">Tools</span>
+          <div class="tab-group-items">
         <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">
           <i class="fa-solid fa-ruler-horizontal"></i>
           <span>Afmetingen</span>
@@ -129,11 +142,14 @@
           <i class="fa-solid fa-truck-ramp-box"></i>
           <span>Receptie</span>
         </button>
+          </div>
+        </div>
       </nav>
 
       <div class="card">
         <!-- ============ DYNAMISCH ============ -->
         <section id="sec-dyn" class="section active">
+          <div class="section-head"><h2>Dynamische locaties</h2><p>Genereer de masterdata voor een dynamische zone.</p></div>
           <div class="form-grid">
             <div class="form-group">
               <label for="dynZone">Zone</label>
@@ -190,6 +206,7 @@
 
         <!-- ============ FLOW RACKS ============ -->
         <section id="sec-fix" class="section">
+          <div class="section-head"><h2>Flow Racks</h2><p>Bepaal LV, afmetingen en locaties voor een flow rack.</p></div>
           <select id="fixKleurManual" hidden>
             <option value="BLAUW">BLU</option>
             <option value="ROOD">RED</option>
@@ -236,6 +253,7 @@
 
         <!-- ============ GROTE VOLUMES ============ -->
         <section id="sec-gv" class="section">
+          <div class="section-head"><h2>Grote Volumes</h2><p>Zoek op locatie of kies een volledige zone.</p></div>
           <div class="form-grid gv-grid">
             <div class="form-group">
               <label for="gvLocManual">Locatie</label>
@@ -292,6 +310,7 @@
 
         <!-- ============ AFMETINGEN ============ -->
         <section id="sec-afm" class="section">
+          <div class="section-head"><h2>Afmetingen</h2><p>Bereken de afmeting per zone en ligger.</p></div>
           <div class="form-grid">
             <div class="form-group">
               <label for="afmZone">Zone</label>
@@ -342,6 +361,7 @@
 
         <!-- ============ RECEPTIE ============ -->
         <section id="sec-rec" class="section">
+          <div class="section-head"><h2>Receptie</h2><p>Vind de juiste kar, clip of trolley voor een locatie.</p></div>
           <div class="sub-grid">
             <div class="sub-panel">
               <div class="sub-head">
