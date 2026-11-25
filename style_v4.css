@@ -38,26 +38,26 @@
 
 [data-theme="dark"] {
   --accent: #5db88a;
-  --nav-bg: linear-gradient(180deg, rgba(23, 97, 58, 0.72) 0%, rgba(18, 77, 46, 0.64) 100%);
+  --nav-bg: linear-gradient(180deg, rgba(28, 112, 68, 0.78) 0%, rgba(22, 90, 54, 0.7) 100%);
   --nav-ink: #124d2e;
   --accent-hover: #75c69c;
-  --accent-soft: #112219;
-  --accent-border: #23503a;
+  --accent-soft: #1f3a2b;
+  --accent-border: #2e5c44;
   --on-accent: #ffffff;
 
-  --bg: #0b100d;
-  --surface: #121814;
-  --surface-2: #161d18;
-  --surface-3: #1d2720;
+  --bg: #1a211d;
+  --surface: #232c26;
+  --surface-2: #28332c;
+  --surface-3: #2f3c34;
   --text: #e7ece9;
-  --text-muted: #9aa59f;
-  --border: #212923;
-  --border-strong: #2f3a33;
+  --text-muted: #a3aea8;
+  --border: #35433a;
+  --border-strong: #46564b;
 
   --ok: #5db88a;
-  --ok-soft: #112219;
+  --ok-soft: #1f3a2b;
   --err: #ff7b7b;
-  --err-soft: #2a1717;
+  --err-soft: #3a2323;
 
   --btn-grad: linear-gradient(180deg, #2f7f58 0%, #266a48 100%);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -88,6 +88,17 @@ body {
   min-height: 100vh;
   font-size: 15px;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
 }
 
 kbd {
@@ -109,7 +120,7 @@ kbd {
   backdrop-filter: blur(16px) saturate(1.5);
   -webkit-backdrop-filter: blur(16px) saturate(1.5);
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 2px 12px rgba(10, 50, 25, 0.22);
+  box-shadow: 0 2px 12px rgba(10, 50, 25, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .topbar-inner {
@@ -183,13 +194,20 @@ kbd {
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 
 .tool-btn:hover {
   background: #fff;
   border-color: #fff;
   color: var(--nav-ink);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
+.tool-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .tool-btn img {
@@ -228,6 +246,15 @@ kbd {
 
 .printer-hub.active .printer-popup {
   display: block;
+  animation: popIn 0.16s ease-out;
+  transform-origin: top right;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
 }
 
 .popup-title {
@@ -250,6 +277,10 @@ kbd {
   color: var(--text);
   cursor: pointer;
   text-align: left;
+}
+
+.printer-row {
+  transition: background 0.12s;
 }
 
 .printer-row:hover {
@@ -333,11 +364,16 @@ kbd {
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
+  transition: color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+
+.tab-btn:active {
+  transform: scale(0.97);
 }
 
 .tab-btn i {
   font-size: 0.9rem;
+  transition: color 0.15s;
 }
 
 .tab-btn:hover:not(.active) {
@@ -355,6 +391,11 @@ kbd {
   color: var(--accent);
 }
 
+[data-theme="dark"] .tab-btn.active {
+  background: #3b4a41;
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--border-strong);
+}
+
 /* ---------- Kaart / secties ---------- */
 .card {
   background: var(--surface);
@@ -370,12 +411,36 @@ kbd {
 
 .section.active {
   display: block;
+  animation: sectionIn 0.28s ease-out;
+}
+
+@keyframes sectionIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 .section-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   margin-bottom: 26px;
-  padding-bottom: 20px;
+  padding-bottom: 22px;
   border-bottom: 1px solid var(--border);
+}
+
+.section-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 13px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-size: 1.1rem;
 }
 
 .section-head h2 {
@@ -437,7 +502,7 @@ input[type="number"] {
   font-family: inherit;
   font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.12s, box-shadow 0.12s;
+  transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
 
 input[type="text"] {
@@ -451,15 +516,15 @@ input::placeholder {
   text-transform: none;
 }
 
-select:hover,
+select:hover:not(:disabled),
 input:hover {
-  border-color: var(--text-muted);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border-strong));
 }
 
 select:focus,
 input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-soft);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 select {
@@ -575,6 +640,11 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
+.topbar button:focus-visible,
+.topbar a:focus-visible {
+  outline-color: #fff;
+}
+
 /* ---------- Voortgang ---------- */
 .progress-container {
   display: none;
@@ -644,6 +714,7 @@ td {
   font-family: var(--mono);
   font-size: 0.95rem;
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
@@ -1033,6 +1104,15 @@ td.msg-error {
   }
   .nav-tabs {
     gap: 10px;
+  }
+  .section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    font-size: 1rem;
+  }
+  .section-head {
+    gap: 12px;
   }
   .tab-group-items {
     gap: 2px;
