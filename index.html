@@ -15,7 +15,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="style_v3.css" />
+    <link rel="stylesheet" href="style_v4.css" />
   </head>
   <body>
     <!-- ============ BOVENBALK ============ -->
@@ -108,40 +108,40 @@
         <div class="tab-group" style="--n: 2">
           <span class="tab-group-label">Magazijn</span>
           <div class="tab-group-items">
-        <button
-          class="tab-btn active"
-          data-tab="dyn"
-          onclick="switchTab('dyn')"
-        >
-          <i class="fa-solid fa-lock-open"></i>
-          <span>Dynamisch</span>
-        </button>
-        <button class="tab-btn" data-tab="fix" onclick="switchTab('fix')">
-          <i class="fa-solid fa-lock"></i>
-          <span>Flow Racks</span>
-        </button>
+            <button
+              class="tab-btn active"
+              data-tab="dyn"
+              onclick="switchTab('dyn')"
+            >
+              <i class="fa-solid fa-lock-open"></i>
+              <span>Dynamisch</span>
+            </button>
+            <button class="tab-btn" data-tab="fix" onclick="switchTab('fix')">
+              <i class="fa-solid fa-lock"></i>
+              <span>Flow Racks</span>
+            </button>
           </div>
         </div>
         <div class="tab-group" style="--n: 1">
           <span class="tab-group-label">Expeditie</span>
           <div class="tab-group-items">
-        <button class="tab-btn" data-tab="gv" onclick="switchTab('gv')">
-          <i class="fa-solid fa-van-shuttle"></i>
-          <span>Grote Volumes</span>
-        </button>
+            <button class="tab-btn" data-tab="gv" onclick="switchTab('gv')">
+              <i class="fa-solid fa-van-shuttle"></i>
+              <span>Grote Volumes</span>
+            </button>
           </div>
         </div>
         <div class="tab-group" style="--n: 2">
           <span class="tab-group-label">Tools</span>
           <div class="tab-group-items">
-        <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">
-          <i class="fa-solid fa-ruler-horizontal"></i>
-          <span>Afmetingen</span>
-        </button>
-        <button class="tab-btn" data-tab="rec" onclick="switchTab('rec')">
-          <i class="fa-solid fa-truck-ramp-box"></i>
-          <span>Receptie</span>
-        </button>
+            <button class="tab-btn" data-tab="afm" onclick="switchTab('afm')">
+              <i class="fa-solid fa-ruler-horizontal"></i>
+              <span>Afmetingen</span>
+            </button>
+            <button class="tab-btn" data-tab="rec" onclick="switchTab('rec')">
+              <i class="fa-solid fa-truck-ramp-box"></i>
+              <span>Receptie</span>
+            </button>
           </div>
         </div>
       </nav>
@@ -149,7 +149,10 @@
       <div class="card">
         <!-- ============ DYNAMISCH ============ -->
         <section id="sec-dyn" class="section active">
-          <div class="section-head"><h2>Dynamische locaties</h2><p>Genereer de masterdata voor een dynamische zone.</p></div>
+          <div class="section-head">
+            <h2>Dynamische locaties</h2>
+            <p>Genereer de masterdata voor een dynamische zone.</p>
+          </div>
           <div class="form-grid">
             <div class="form-group">
               <label for="dynZone">Zone</label>
@@ -206,7 +209,10 @@
 
         <!-- ============ FLOW RACKS ============ -->
         <section id="sec-fix" class="section">
-          <div class="section-head"><h2>Flow Racks</h2><p>Bepaal LV, afmetingen en locaties voor een flow rack.</p></div>
+          <div class="section-head">
+            <h2>Flow Racks</h2>
+            <p>Bepaal LV, afmetingen en locaties voor een flow rack.</p>
+          </div>
           <select id="fixKleurManual" hidden>
             <option value="BLAUW">BLU</option>
             <option value="ROOD">RED</option>
@@ -253,7 +259,10 @@
 
         <!-- ============ GROTE VOLUMES ============ -->
         <section id="sec-gv" class="section">
-          <div class="section-head"><h2>Grote Volumes</h2><p>Zoek op locatie of kies een volledige zone.</p></div>
+          <div class="section-head">
+            <h2>Grote Volumes</h2>
+            <p>Zoek op locatie of kies een volledige zone.</p>
+          </div>
           <div class="form-grid gv-grid">
             <div class="form-group">
               <label for="gvLocManual">Locatie</label>
@@ -310,7 +319,10 @@
 
         <!-- ============ AFMETINGEN ============ -->
         <section id="sec-afm" class="section">
-          <div class="section-head"><h2>Afmetingen</h2><p>Bereken de afmeting per zone en ligger.</p></div>
+          <div class="section-head">
+            <h2>Afmetingen</h2>
+            <p>Bereken de afmeting per zone en ligger.</p>
+          </div>
           <div class="form-grid">
             <div class="form-group">
               <label for="afmZone">Zone</label>
@@ -361,7 +373,10 @@
 
         <!-- ============ RECEPTIE ============ -->
         <section id="sec-rec" class="section">
-          <div class="section-head"><h2>Receptie</h2><p>Vind de juiste kar, clip of trolley voor een locatie.</p></div>
+          <div class="section-head">
+            <h2>Receptie</h2>
+            <p>Vind de juiste kar, clip of trolley voor een locatie.</p>
+          </div>
           <div class="sub-grid">
             <div class="sub-panel">
               <div class="sub-head">
